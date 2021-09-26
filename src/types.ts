@@ -1,1 +1,1 @@
-export type Plan = 'cloud_free' | 'cloud_payg';
+export type Plan = 'cloud_free' | 'cloud_payg'

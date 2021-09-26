@@ -20,12 +20,13 @@ inputs:
   githubToken:
     description: 'GitHub token for Hasura Cloud to apply metadata/migrations'
     required: false
-    default: ${{ secrets.GITHUB_TOKEN }}
   hasuraCloudAccessToken:
     description: 'Hasura Cloud personal access token for contacting the Hasura Cloud APIs'
     required: true
+env:
+  repoToken: ${{ secrets.GITHUB_TOKEN }}
 outputs:
-  graphqlEndpoint: # id of output
+  graphqlEndpoint:
     description: 'GraphQL endpoint of the created preview app'
   consoleUrl:
     description: 'Console URL of the created preview app'

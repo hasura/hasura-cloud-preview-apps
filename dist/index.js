@@ -6789,61 +6789,16 @@ var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _
 };
 
 
-const params = {
-    PLAN: 'cloud_free',
-    REGION: 'us-east-2',
-    NAME: 'mah-app',
-    GITHUB_TOKEN: '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',
-    HASURA_CLOUD_PAT: 'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI',
-    CLOUD_DATA_GRAPHQL: 'http://data.lux-dev.hasura.me/v1/graphql'
-};
 const handler = (parameters) => handler_awaiter(void 0, void 0, void 0, function* () {
     const client = createGqlClient(parameters);
     const exists = yield doesProjectExist(parameters.NAME, client);
+    console.log(exists);
     return {
         graphQLEndpoint: 'fkld',
         consoleURL: 'af',
         jobId: 'something'
     };
 });
-handler(params);
-
-;// CONCATENATED MODULE: ./src/errors.ts
-const errors = {
-    validation: {
-        name: 'preview app name is mandatory; please provide it in the action inputs',
-        hasuraCloudPAT: 'hasura cloud personal access token is required for creating preview apps; please provide it in the action inputs',
-        githubToken: 'Github access token is required for Hasura Cloud to access metadata/migrations from your branch; please pass it in the GITHUB_TOKEN env var of the github action'
-    }
-};
-
-;// CONCATENATED MODULE: ./src/parameters.ts
-
-
-const parameters = {
-    PLAN: core.getInput('plan'),
-    REGION: core.getInput('region'),
-    NAME: core.getInput('name') || '',
-    GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
-    HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || '',
-    CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint')
-};
-const validateParameters = (params) => {
-    if (!params.NAME) {
-        throw new Error(errors.validation.name);
-    }
-    if (!params.HASURA_CLOUD_PAT) {
-        throw new Error(errors.validation.hasuraCloudPAT);
-    }
-    if (!params.GITHUB_TOKEN) {
-        throw new Error(errors.validation.githubToken);
-    }
-};
-const getParameters = () => {
-    validateParameters(parameters);
-    console.log(parameters);
-    return parameters;
-};
 
 ;// CONCATENATED MODULE: ./src/main.ts
 var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -6857,15 +6812,24 @@ var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 };
 
 
-
+// import { getParameters } from './parameters'
 function run() {
     return main_awaiter(this, void 0, void 0, function* () {
         try {
-            const parameters = getParameters();
-            const outputVars = yield handler(parameters);
-            Object.keys(outputVars).forEach(outputVar => {
-                core.setOutput(outputVar, outputVars[outputVar]);
-            });
+            //const parameters = getParameters();
+            const params = {
+                PLAN: 'cloud_free',
+                REGION: 'us-east-2',
+                NAME: 'mah-app',
+                GITHUB_TOKEN: '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',
+                HASURA_CLOUD_PAT: 'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI',
+                CLOUD_DATA_GRAPHQL: 'https://2a8e-106-51-72-39.ngrok.io/v1/graphql'
+            };
+            const outputVars = yield handler(params);
+            const outputVarKeys = Object.keys(outputVars);
+            for (let i = 0; i < outputVarKeys.length; i++) {
+                core.setOutput(outputVarKeys[i], outputVars[outputVarKeys[i]]);
+            }
         }
         catch (error) {
             console.error(error);

@@ -25,8 +25,7 @@
   ],
   "pre-commit": [
     "format",
-    "lint",
-    "package"
+    "lint"
   ],
   "author": "",
   "license": "MIT",

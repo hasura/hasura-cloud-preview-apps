@@ -556,7 +556,8 @@ var core = __nccwpck_require__(186);
 const errors = {
     validation: {
         name: 'preview app name is mandatory; please provide it in the action inputs',
-        hasuraCloudPAT: 'hasura cloud personal access token is required for creating preview apps; please provide it in the action inputs'
+        hasuraCloudPAT: 'hasura cloud personal access token is required for creating preview apps; please provide it in the action inputs',
+        githubToken: 'Github access token is required for Hasura Cloud to access metadata/migrations from your branch; please pass it in the GITHUB_TOKEN env var of the github action'
     }
 };
 
@@ -567,7 +568,7 @@ const parameters = {
     PLAN: core.getInput('plan'),
     REGION: core.getInput('region'),
     NAME: core.getInput('name') || '',
-    GITHUB_TOKEN: core.getInput('githubToken'),
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
     HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || '',
     CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint')
 };
@@ -577,6 +578,9 @@ const validateParameters = (params) => {
     }
     if (!params.HASURA_CLOUD_PAT) {
         throw new Error(errors.validation.hasuraCloudPAT);
+    }
+    if (!params.GITHUB_TOKEN) {
+        throw new Error(errors.validation.githubToken);
     }
 };
 const getParameters = () => {

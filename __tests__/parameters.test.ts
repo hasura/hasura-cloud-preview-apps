@@ -15,8 +15,18 @@ const paramsBase: Parameters = {
 }
 
 test('parameters validation', () => {
-  // throw error when name not provided
+
+  // throw error when github token is not provided
   let params = {
+    ...paramsBase,
+    GITHUB_TOKEN: ''
+  }
+  expect(() => {
+    validateParameters(params)
+  }).toThrow(errors.validation.githubToken)
+
+  // throw error when name not provided
+  params = {
     ...paramsBase,
     NAME: ''
   }
@@ -32,4 +42,6 @@ test('parameters validation', () => {
   expect(() => {
     validateParameters(params)
   }).toThrow(errors.validation.hasuraCloudPAT)
+
+
 })

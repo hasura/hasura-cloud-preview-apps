@@ -7,6 +7,7 @@ import {expect, test} from '@jest/globals'
 test('test runs', () => {
   process.env['INPUT_NAME'] = 'app-name'
   process.env['INPUT_HASURACLOUDACCESSTOKEN'] = 'app-name'
+  process.env['GITHUB_TOKEN'] = 'github token'
   const np = process.execPath
   const ip = path.join(__dirname, '..', 'dist', 'index.js')
   const options: cp.ExecFileSyncOptions = {

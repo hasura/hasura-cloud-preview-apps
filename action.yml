@@ -17,9 +17,6 @@ inputs:
     description: 'GraphQL endpoint of Hasura Cloud data service'
     required: false
     default: 'https://data.pro.hasura.io/v1/graphql'
-  githubToken:
-    description: 'GitHub token for Hasura Cloud to apply metadata/migrations'
-    required: false
   hasuraCloudAccessToken:
     description: 'Hasura Cloud personal access token for contacting the Hasura Cloud APIs'
     required: true
@@ -32,5 +29,3 @@ outputs:
 runs:
   using: 'node12'
   main: 'dist/index.js'
-  env: 
-    REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

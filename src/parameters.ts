@@ -5,7 +5,7 @@ export const parameters = {
   PLAN: core.getInput('plan'),
   REGION: core.getInput('region'),
   NAME: core.getInput('name') || '',
-  GITHUB_TOKEN: core.getInput('githubToken'),
+  GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
   HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || '',
   CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint')
 }
@@ -18,6 +18,9 @@ export const validateParameters = (params: Parameters): void => {
   }
   if (!params.HASURA_CLOUD_PAT) {
     throw new Error(errors.validation.hasuraCloudPAT)
+  }
+  if (!params.GITHUB_TOKEN) {
+    throw new Error(errors.validation.githubToken)
   }
 }
 

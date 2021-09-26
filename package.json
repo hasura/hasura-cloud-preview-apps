@@ -30,18 +30,17 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.4.0",
-    "node-fetch": "^3.0.0"
+    "node-fetch": "^3.0.0",
+    "@actions/core": "^1.5.0"
   },
   "devDependencies": {
-    "@types/node": "^16.3.3",
+    "@types/node": "^16.10.1",
     "@typescript-eslint/parser": "^4.28.3",
     "@vercel/ncc": "^0.29.0",
-    "eslint": "^7.31.0",
+    "eslint": "^7.32.0",
     "eslint-plugin-github": "^4.1.1",
     "eslint-plugin-jest": "^24.3.6",
-    "esm": "^3.2.25",
-    "jest": "^27.0.6",
+    "jest": "^27.2.2",
     "js-yaml": "^4.1.0",
     "pre-commit": "^1.2.2",
     "prettier": "2.2.1",

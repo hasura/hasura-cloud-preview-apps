@@ -4914,7 +4914,10 @@ const createPreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 
             payload: {
               githubPersonalAccessToken: $githubPAT,
               githubRepoDetails: {
-                directory: $githubDir
+                  branch:$githubBranch
+                  owner: $githubRepoOwner
+                  repo: $githubRepo,
+                  directory: $githubDir
               },
               projectOptions: {
                 cloud: $cloud,

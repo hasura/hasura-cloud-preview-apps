@@ -70,7 +70,10 @@ export const createPreviewApp = async (
             payload: {
               githubPersonalAccessToken: $githubPAT,
               githubRepoDetails: {
-                directory: $githubDir
+                  branch:$githubBranch
+                  owner: $githubRepoOwner
+                  repo: $githubRepo,
+                  directory: $githubDir
               },
               projectOptions: {
                 cloud: $cloud,

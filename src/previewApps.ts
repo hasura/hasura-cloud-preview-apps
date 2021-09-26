@@ -28,7 +28,11 @@ export const doesProjectExist = async (
     }
   } catch (e) {
     if (e instanceof Error) {
-      if (e.message && e.message.includes('projects') && e.message.includes('query_root')) {
+      if (
+        e.message &&
+        e.message.includes('projects') &&
+        e.message.includes('query_root')
+      ) {
         throw new Error('invalid authorization to Hasura Cloud APIs')
       }
     }

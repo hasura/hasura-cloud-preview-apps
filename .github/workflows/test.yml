@@ -22,3 +22,6 @@ jobs:
       - uses: ./
         with:
           name: 'sample-name'
+          hasuraCloudAccessToken: 'sample-token'
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

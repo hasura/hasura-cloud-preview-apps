@@ -14,13 +14,13 @@ inputs:
     required: false
     default: 'cloud_free'
   hasuraCloudGraphQLEndpoint:
-    description: 'GraphQL endpoint of Hasura Cloud data service',
+    description: 'GraphQL endpoint of Hasura Cloud data service'
     required: false
     default: 'https://data.pro.hasura.io/v1/graphql'
   githubToken:
     description: 'GitHub token for Hasura Cloud to apply metadata/migrations'
     required: false
-    default: ${{secrets.GITHUB_TOKEN}}
+    default: ${{ secrets.GITHUB_TOKEN }}
   hasuraCloudAccessToken:
     description: 'Hasura Cloud personal access token for contacting the Hasura Cloud APIs'
     required: true

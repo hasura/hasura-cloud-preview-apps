@@ -4895,6 +4895,116 @@ const doesProjectExist = (appName, client) => __awaiter(void 0, void 0, void 0, 
         throw e;
     }
 });
+const createPreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const resp = yield client.query({
+            query: `
+        mutation createPreviewApp (
+          $githubPAT: String!
+          $appName: String!
+          $githubRepoOwner: String!
+          $githubRepo: String!
+          $githubBranch: String!
+          $githubDir: String!
+          $region: String!
+          $cloud: String!
+          $plan: String!
+        ) {
+          createGitHubPreviewApp (
+            payload: {
+              githubPersonalAccessToken: $githubPAT,
+              githubRepoDetails: {
+                branch:$githubBranch
+                owner: $githubRepoOwner
+                repo: $githubRepo,
+                directory: $githubDir
+              },
+              projectOptions: {
+                cloud: $cloud,
+                region: $region,
+                plan: $plan,
+                name: $appName
+              }
+            }
+          ) {
+            github_deployment_job_id
+            projectId
+          }
+        }
+      `,
+            variables: {
+                githubDir: parameters.HASURA_PROJECT_DIR,
+                githubPAT: parameters.GITHUB_TOKEN,
+                githubRepoOwner: parameters.GITHUB_OWNER,
+                githubRepo: parameters.GITHUB_REPO_NAME,
+                githubBranch: parameters.GITHUB_BRANCH_NAME,
+                appName: parameters.NAME,
+                cloud: 'aws',
+                region: parameters.REGION,
+                plan: parameters.PLAN
+            }
+        });
+        return Object.assign({}, resp.createGitHubPreviewApp);
+    }
+    catch (e) {
+        throw e;
+    }
+});
+const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const resp = yield client.query({
+            query: `
+        mutation recreatePreviewApp (
+          $githubPAT: String!
+          $appName: String!
+          $githubRepoOwner: String!
+          $githubRepo: String!
+          $githubBranch: String!
+          $githubDir: String!
+          $region: String!
+          $cloud: String!
+          $plan: String!
+        ) {
+          recreateGithubPreviewApp (
+            payload: {
+              githubPersonalAccessToken: $githubPAT,
+              githubRepoDetails: {
+                branch:$githubBranch
+                owner: $githubRepoOwner
+                repo: $githubRepo,
+                directory: $githubDir
+              },
+              projectOptions: {
+                cloud: $cloud,
+                region: $region,
+                plan: $plan,
+                name: $appName
+              }
+            }
+          ) {
+            github_deployment_job_id
+            projectId
+          }
+        }
+      `,
+            variables: {
+                githubDir: parameters.HASURA_PROJECT_DIR,
+                githubPAT: parameters.GITHUB_TOKEN,
+                githubRepoOwner: parameters.GITHUB_OWNER,
+                githubRepo: parameters.GITHUB_REPO_NAME,
+                githubBranch: parameters.GITHUB_BRANCH_NAME,
+                appName: parameters.NAME,
+                cloud: 'aws',
+                region: parameters.REGION,
+                plan: parameters.PLAN
+            }
+        });
+        return Object.assign({}, resp.recreateGithubPreviewApp);
+    }
+    catch (e) {
+        throw e;
+    }
+});
 
 ;// CONCATENATED MODULE: external "http"
 const external_http_namespaceObject = require("http");
@@ -6800,6 +6910,14 @@ const handler = (parameters) => handler_awaiter(void 0, void 0, void 0, function
     const client = createGqlClient(parameters);
     const exists = yield doesProjectExist(parameters.NAME, client);
     console.log(exists);
+    if (exists) {
+        const recreateResp = yield recreatePreviewApp(parameters, client);
+        console.log(recreateResp);
+    }
+    else {
+        const createResp = yield createPreviewApp(parameters, client);
+        console.log(createResp);
+    }
     return {
         graphQLEndpoint: 'fkld',
         consoleURL: 'af',
@@ -6819,7 +6937,6 @@ var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 };
 
 
-// import { getParameters } from './parameters'
 function run() {
     return main_awaiter(this, void 0, void 0, function* () {
         try {
@@ -6827,10 +6944,14 @@ function run() {
             const params = {
                 PLAN: 'cloud_free',
                 REGION: 'us-east-2',
-                NAME: 'tenant1',
+                NAME: 'my-app',
                 GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
                 HASURA_CLOUD_PAT: 'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI',
-                CLOUD_DATA_GRAPHQL: 'https://2a8e-106-51-72-39.ngrok.io/v1/graphql'
+                CLOUD_DATA_GRAPHQL: 'https://2a8e-106-51-72-39.ngrok.io/v1/graphql',
+                GITHUB_REPO_NAME: 'hcgitest',
+                GITHUB_OWNER: 'wawhal',
+                GITHUB_BRANCH_NAME: 'main',
+                HASURA_PROJECT_DIR: 'hasura'
             };
             const outputVars = yield handler(params);
             const outputVarKeys = Object.keys(outputVars);

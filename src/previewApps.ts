@@ -20,7 +20,6 @@ export const doesProjectExist = async (
         name: appName
       }
     })
-    console.log(resp)
     if (resp.projects.length) {
       return true
     } else {

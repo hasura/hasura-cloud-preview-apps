@@ -5,19 +5,17 @@ export const createGqlClient = (endpoint: string, token: string) => {
     query: string
     variables?: VariablesType
   }): Promise<QueryResponseType> => {
-  	const respRaw = await fetch(endpoint, {
+    const respRaw = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         authorization: `pat ${token}`
       },
       body: JSON.stringify({query: opts.query, variables: opts.variables})
-    });
-    const result: any = await respRaw.json();
+    })
+    const result: any = await respRaw.json()
     if (result.errors) {
-      throw new Error(
-        result.errors[0]?.message || 'unexpected graphql error'
-      )
+      throw new Error(result.errors[0]?.message || 'unexpected graphql error')
     }
     return result.data as QueryResponseType
   }

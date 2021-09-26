@@ -1,11 +1,24 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Hasura Cloud Preview App'
+description: 'Hasura Cloud preview app with metadata migrations from your GitHub branch'
 inputs:
-  milliseconds: # change this
+  name:
+    description: 'Name of the preview app'
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    default: 'cloud_free'
+  region:
+    description: 'Region to deploy preview app in'
+    required: false
+    default: 'us-east-2'
+  plan:
+    description: 'Plan of the preview app'
+    required: false
+    default: 'cloud_free' 
+outputs:
+  graphqlEndpoint: # id of output
+    description: 'GraphQL endpoint of the created preview app'
+  consoleUrl:
+    description: 'Console URL of the created preview app'
+
 runs:
   using: 'node12'
   main: 'dist/index.js'

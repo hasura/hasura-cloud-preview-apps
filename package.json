@@ -1,9 +1,9 @@
 {
-  "name": "typescript-action",
+  "name": "hasura-cloud-preview-apps",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
-  "main": "lib/main.js",
+  "description": "Create Hasura Cloud preview apps from metadata/migrations from your Git repo",
+  "main": "src/main.ts",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/hasura/hasura-cloud-preview-apps.git"
   },
   "keywords": [
     "actions",

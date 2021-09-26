@@ -4914,9 +4914,6 @@ const createPreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 
             payload: {
               githubPersonalAccessToken: $githubPAT,
               githubRepoDetails: {
-                branch:$githubBranch
-                owner: $githubRepoOwner
-                repo: $githubRepo,
                 directory: $githubDir
               },
               projectOptions: {
@@ -4957,10 +4954,6 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
         mutation recreatePreviewApp (
           $githubPAT: String!
           $appName: String!
-          $githubRepoOwner: String!
-          $githubRepo: String!
-          $githubBranch: String!
-          $githubDir: String!
           $region: String!
           $cloud: String!
           $plan: String!
@@ -4969,12 +4962,6 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
             payload: {
               appName: $appName
               githubPersonalAccessToken: $githubPAT,
-              githubRepoDetails: {
-                branch:$githubBranch
-                owner: $githubRepoOwner
-                repo: $githubRepo,
-                directory: $githubDir
-              },
               projectOptions: {
                 cloud: $cloud,
                 region: $region,
@@ -4988,11 +4975,7 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
         }
       `,
             variables: {
-                githubDir: parameters.HASURA_PROJECT_DIR,
                 githubPAT: parameters.GITHUB_TOKEN,
-                githubRepoOwner: parameters.GITHUB_OWNER,
-                githubRepo: parameters.GITHUB_REPO_NAME,
-                githubBranch: parameters.GITHUB_BRANCH_NAME,
                 appName: parameters.NAME,
                 cloud: 'aws',
                 region: parameters.REGION,

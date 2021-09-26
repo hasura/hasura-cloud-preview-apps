@@ -2,7 +2,6 @@ import {Client} from './client'
 import {
   Project,
   RecreatePreviewAppResponse,
-  RecreatePreviewAppVariables,
   CreatePreviewAppVariables,
   CreatePreviewAppResponse
 } from './types'
@@ -71,9 +70,6 @@ export const createPreviewApp = async (
             payload: {
               githubPersonalAccessToken: $githubPAT,
               githubRepoDetails: {
-                branch:$githubBranch
-                owner: $githubRepoOwner
-                repo: $githubRepo,
                 directory: $githubDir
               },
               projectOptions: {
@@ -114,18 +110,11 @@ export const recreatePreviewApp = async (
   client: Client
 ): Promise<{github_deployment_job_id: string; project_id: string}> => {
   try {
-    const resp = await client.query<
-      RecreatePreviewAppResponse,
-      RecreatePreviewAppVariables
-    >({
+    const resp = await client.query<RecreatePreviewAppResponse, any>({
       query: `
         mutation recreatePreviewApp (
           $githubPAT: String!
           $appName: String!
-          $githubRepoOwner: String!
-          $githubRepo: String!
-          $githubBranch: String!
-          $githubDir: String!
           $region: String!
           $cloud: String!
           $plan: String!
@@ -134,12 +123,6 @@ export const recreatePreviewApp = async (
             payload: {
               appName: $appName
               githubPersonalAccessToken: $githubPAT,
-              githubRepoDetails: {
-                branch:$githubBranch
-                owner: $githubRepoOwner
-                repo: $githubRepo,
-                directory: $githubDir
-              },
               projectOptions: {
                 cloud: $cloud,
                 region: $region,
@@ -153,11 +136,7 @@ export const recreatePreviewApp = async (
         }
       `,
       variables: {
-        githubDir: parameters.HASURA_PROJECT_DIR,
         githubPAT: parameters.GITHUB_TOKEN,
-        githubRepoOwner: parameters.GITHUB_OWNER,
-        githubRepo: parameters.GITHUB_REPO_NAME,
-        githubBranch: parameters.GITHUB_BRANCH_NAME,
         appName: parameters.NAME,
         cloud: 'aws',
         region: parameters.REGION,

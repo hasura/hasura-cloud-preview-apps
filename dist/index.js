@@ -564,11 +564,12 @@ const errors = {
 
 
 const parameters = {
-    PLAN: core.getInput('plan') || 'cloud_free',
-    REGION: core.getInput('region') || 'us-east-2',
+    PLAN: core.getInput('plan'),
+    REGION: core.getInput('region'),
     NAME: core.getInput('name') || '',
     GITHUB_TOKEN: core.getInput('githubToken'),
-    HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || ''
+    HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || '',
+    CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint')
 };
 const validateParameters = (params) => {
     if (!params.NAME) {
@@ -580,6 +581,7 @@ const validateParameters = (params) => {
 };
 const getParameters = () => {
     validateParameters(parameters);
+    console.log(parameters);
     return parameters;
 };
 

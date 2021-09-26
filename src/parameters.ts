@@ -2,11 +2,12 @@ import * as core from '@actions/core'
 import {errors} from './errors'
 
 export const parameters = {
-  PLAN: core.getInput('plan') || 'cloud_free',
-  REGION: core.getInput('region') || 'us-east-2',
+  PLAN: core.getInput('plan'),
+  REGION: core.getInput('region'),
   NAME: core.getInput('name') || '',
   GITHUB_TOKEN: core.getInput('githubToken'),
-  HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || ''
+  HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || '',
+  CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint')
 }
 
 export type Parameters = typeof parameters
@@ -22,5 +23,6 @@ export const validateParameters = (params: Parameters): void => {
 
 export const getParameters = (): Parameters => {
   validateParameters(parameters)
+  console.log(parameters)
   return parameters
 }

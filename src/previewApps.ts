@@ -132,6 +132,7 @@ export const recreatePreviewApp = async (
         ) {
           recreateGithubPreviewApp (
             payload: {
+              appName: $appName
               githubPersonalAccessToken: $githubPAT,
               githubRepoDetails: {
                 branch:$githubBranch
@@ -142,8 +143,7 @@ export const recreatePreviewApp = async (
               projectOptions: {
                 cloud: $cloud,
                 region: $region,
-                plan: $plan,
-                name: $appName
+                plan: $plan
               }
             }
           ) {

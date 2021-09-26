@@ -4967,6 +4967,7 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
         ) {
           recreateGithubPreviewApp (
             payload: {
+              appName: $appName
               githubPersonalAccessToken: $githubPAT,
               githubRepoDetails: {
                 branch:$githubBranch
@@ -4977,8 +4978,7 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
               projectOptions: {
                 cloud: $cloud,
                 region: $region,
-                plan: $plan,
-                name: $appName
+                plan: $plan
               }
             }
           ) {

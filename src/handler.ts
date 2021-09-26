@@ -4,6 +4,7 @@ import {doesProjectExist} from './previewApps'
 import {createGqlClient} from './client'
 
 export const handler = async (parameters: Parameters): Promise<OutputVars> => {
+  console.log(parameters);
   const client = createGqlClient(parameters)
   const exists = await doesProjectExist(parameters.NAME, client)
   console.log(exists)

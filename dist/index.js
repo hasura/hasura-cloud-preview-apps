@@ -555,22 +555,28 @@ var core = __nccwpck_require__(186);
 ;// CONCATENATED MODULE: ./src/errors.ts
 const errors = {
     validation: {
-        name: 'preview app name is mandatory; please provide it in the inputs'
+        name: 'preview app name is mandatory; please provide it in the action inputs',
+        hasuraCloudPAT: 'hasura cloud personal access token is required for creating preview apps; please provide it in the action inputs'
     }
 };
 
 ;// CONCATENATED MODULE: ./src/parameters.ts
 
 
-const validateParameters = (params) => {
-    if (!params.NAME) {
-        throw new Error(errors.validation.name);
-    }
-};
 const parameters = {
     PLAN: core.getInput('plan') || 'cloud_free',
     REGION: core.getInput('region') || 'us-east-2',
     NAME: core.getInput('name') || '',
+    GITHUB_TOKEN: core.getInput('githubToken'),
+    HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || ''
+};
+const validateParameters = (params) => {
+    if (!params.NAME) {
+        throw new Error(errors.validation.name);
+    }
+    if (!params.HASURA_CLOUD_PAT) {
+        throw new Error(errors.validation.hasuraCloudPAT);
+    }
 };
 const getParameters = () => {
     validateParameters(parameters);
@@ -594,6 +600,7 @@ function run() {
         try {
             const parameters = getParameters();
             core.setOutput('graphqlEndpoint', 'https://something');
+            core.setOutput('name', parameters.NAME);
         }
         catch (error) {
             console.error(error);

@@ -9,7 +9,7 @@ async function run(): Promise<void> {
     const params: Parameters = {
       PLAN: 'cloud_free',
       REGION: 'us-east-2',
-      NAME: 'my-app',
+      NAME: 'my-app-new',
       GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
       HASURA_CLOUD_PAT:
         'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI',

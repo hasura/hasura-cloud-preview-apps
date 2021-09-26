@@ -25,7 +25,6 @@ outputs:
     description: 'GraphQL endpoint of the created preview app'
   consoleUrl:
     description: 'Console URL of the created preview app'
-
 runs:
   using: 'node12'
   main: 'dist/index.js'

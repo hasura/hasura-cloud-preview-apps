@@ -6790,6 +6790,7 @@ var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _
 
 
 const handler = (parameters) => handler_awaiter(void 0, void 0, void 0, function* () {
+    console.log(parameters);
     const client = createGqlClient(parameters);
     const exists = yield doesProjectExist(parameters.NAME, client);
     console.log(exists);
@@ -6820,11 +6821,12 @@ function run() {
             const params = {
                 PLAN: 'cloud_free',
                 REGION: 'us-east-2',
-                NAME: 'mah-app',
-                GITHUB_TOKEN: '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',
+                NAME: 'tenant1',
+                GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
                 HASURA_CLOUD_PAT: 'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI',
                 CLOUD_DATA_GRAPHQL: 'https://2a8e-106-51-72-39.ngrok.io/v1/graphql'
             };
+            console.log(params);
             const outputVars = yield handler(params);
             const outputVarKeys = Object.keys(outputVars);
             for (let i = 0; i < outputVarKeys.length; i++) {

@@ -4851,42 +4851,44 @@ __nccwpck_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(186);
-;// CONCATENATED MODULE: ./src/errors.ts
-const errors = {
-    validation: {
-        name: 'preview app name is mandatory; please provide it in the action inputs',
-        hasuraCloudPAT: 'hasura cloud personal access token is required for creating preview apps; please provide it in the action inputs',
-        githubToken: 'Github access token is required for Hasura Cloud to access metadata/migrations from your branch; please pass it in the GITHUB_TOKEN env var of the github action'
-    }
+;// CONCATENATED MODULE: ./src/previewApps.ts
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
-
-;// CONCATENATED MODULE: ./src/parameters.ts
-
-
-const parameters = {
-    PLAN: core.getInput('plan'),
-    REGION: core.getInput('region'),
-    NAME: core.getInput('name') || '',
-    GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
-    HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || '',
-    CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint')
-};
-const validateParameters = (params) => {
-    if (!params.NAME) {
-        throw new Error(errors.validation.name);
+const doesProjectExist = (appName, client) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const resp = yield client.query({
+            query: `
+				query getProjects ($name:String!) {
+				  projects( where: {name: {_eq: $name}}) {
+				    id
+				  	name
+				    endpoint
+				  }
+				}
+			`,
+            variables: {
+                name: appName
+            }
+        });
+        console.log(resp);
+        if (resp.projects.length) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
-    if (!params.HASURA_CLOUD_PAT) {
-        throw new Error(errors.validation.hasuraCloudPAT);
+    catch (e) {
+        throw e;
     }
-    if (!params.GITHUB_TOKEN) {
-        throw new Error(errors.validation.githubToken);
-    }
-};
-const getParameters = () => {
-    validateParameters(parameters);
-    console.log(parameters);
-    return parameters;
-};
+});
 
 ;// CONCATENATED MODULE: external "http"
 const external_http_namespaceObject = require("http");
@@ -6743,32 +6745,40 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
 }
 
 ;// CONCATENATED MODULE: ./src/client.ts
+var client_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 
-const createGqlClient = (endpoint, token) => {
-    const query = (opts) => {
-        return fetch(endpoint, {
+const createGqlClient = (parameters) => {
+    const query = (opts) => client_awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        const respRaw = yield fetch(parameters.CLOUD_DATA_GRAPHQL, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                'authorization': `pat ${token}`
+                authorization: `pat ${parameters.HASURA_CLOUD_PAT}`
             },
             body: JSON.stringify({ query: opts.query, variables: opts.variables })
-        }).then(r => r.json())
-            .then((result) => {
-            var _a;
-            if (result.errors) {
-                throw new Error(((_a = result.errors[0]) === null || _a === void 0 ? void 0 : _a.message) || 'unexpected graphql error');
-            }
-            return result.data;
         });
-    };
+        const result = yield respRaw.json();
+        if (result.errors) {
+            throw new Error(((_a = result.errors[0]) === null || _a === void 0 ? void 0 : _a.message) || 'unexpected graphql error');
+        }
+        return result.data;
+    });
     return {
         query
     };
 };
 
-;// CONCATENATED MODULE: ./src/previewApps.ts
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+;// CONCATENATED MODULE: ./src/handler.ts
+var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -6779,34 +6789,61 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 };
 
 
-const gqlClient = createGqlClient(parameters.CLOUD_DATA_GRAPHQL, parameters.HASURA_CLOUD_PAT);
-const doesProjectExist = (appName, client = gqlClient) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const resp = yield client.query({
-            query: `
-				query getProjects ($name:String!) {
-				  projects( where: {name: {_eq: $name}}) {
-				    id
-				  	name
-				    endpoint
-				  }
-				}
-			`,
-            variables: {
-                name: appName
-            }
-        });
-        if (resp.projects.length) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    catch (e) {
-        throw e;
-    }
+const params = {
+    PLAN: 'cloud_free',
+    REGION: 'us-east-2',
+    NAME: 'mah-app',
+    GITHUB_TOKEN: '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',
+    HASURA_CLOUD_PAT: 'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI',
+    CLOUD_DATA_GRAPHQL: 'http://data.lux-dev.hasura.me/v1/graphql'
+};
+const handler = (parameters) => handler_awaiter(void 0, void 0, void 0, function* () {
+    const client = createGqlClient(parameters);
+    const exists = yield doesProjectExist(parameters.NAME, client);
+    return {
+        graphQLEndpoint: 'fkld',
+        consoleURL: 'af',
+        jobId: 'something'
+    };
 });
+handler(params);
+
+;// CONCATENATED MODULE: ./src/errors.ts
+const errors = {
+    validation: {
+        name: 'preview app name is mandatory; please provide it in the action inputs',
+        hasuraCloudPAT: 'hasura cloud personal access token is required for creating preview apps; please provide it in the action inputs',
+        githubToken: 'Github access token is required for Hasura Cloud to access metadata/migrations from your branch; please pass it in the GITHUB_TOKEN env var of the github action'
+    }
+};
+
+;// CONCATENATED MODULE: ./src/parameters.ts
+
+
+const parameters = {
+    PLAN: core.getInput('plan'),
+    REGION: core.getInput('region'),
+    NAME: core.getInput('name') || '',
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
+    HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || '',
+    CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint')
+};
+const validateParameters = (params) => {
+    if (!params.NAME) {
+        throw new Error(errors.validation.name);
+    }
+    if (!params.HASURA_CLOUD_PAT) {
+        throw new Error(errors.validation.hasuraCloudPAT);
+    }
+    if (!params.GITHUB_TOKEN) {
+        throw new Error(errors.validation.githubToken);
+    }
+};
+const getParameters = () => {
+    validateParameters(parameters);
+    console.log(parameters);
+    return parameters;
+};
 
 ;// CONCATENATED MODULE: ./src/main.ts
 var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -6825,10 +6862,10 @@ function run() {
     return main_awaiter(this, void 0, void 0, function* () {
         try {
             const parameters = getParameters();
-            const exists = yield doesProjectExist(parameters.NAME);
-            core.setOutput('exists', exists);
-            core.setOutput('graphqlEndpoint', 'https://something');
-            core.setOutput('name', parameters.NAME);
+            const outputVars = yield handler(parameters);
+            Object.keys(outputVars).forEach(outputVar => {
+                core.setOutput(outputVar, outputVars[outputVar]);
+            });
         }
         catch (error) {
             console.error(error);

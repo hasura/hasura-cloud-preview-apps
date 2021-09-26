@@ -1,15 +1,9 @@
-import {createGqlClient} from './client'
-import {parameters} from './parameters'
+import {Client} from './client'
 import {Project} from './types'
-
-const gqlClient = createGqlClient(
-  parameters.CLOUD_DATA_GRAPHQL,
-  parameters.HASURA_CLOUD_PAT
-)
 
 export const doesProjectExist = async (
   appName: string,
-  client = gqlClient
+  client: Client
 ): Promise<boolean> => {
   try {
     const resp = await client.query<{projects: Project[]}, {name: string}>({
@@ -26,6 +20,7 @@ export const doesProjectExist = async (
         name: appName
       }
     })
+    console.log(resp)
     if (resp.projects.length) {
       return true
     } else {

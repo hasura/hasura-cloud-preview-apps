@@ -5,3 +5,9 @@ export type Project = {
   id: string
   endpoint: string
 }
+
+export type OutputVars = {
+  graphQLEndpoint: string
+  consoleURL: string
+  jobId: string
+}

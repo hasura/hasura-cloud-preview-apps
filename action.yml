@@ -21,9 +21,9 @@ inputs:
     description: 'Hasura Cloud personal access token for contacting the Hasura Cloud APIs'
     required: true
 outputs:
-  graphqlEndpoint:
+  graphQLEndpoint:
     description: 'GraphQL endpoint of the created preview app'
-  consoleUrl:
+  consoleURL:
     description: 'Console URL of the created preview app'
 runs:
   using: 'node12'

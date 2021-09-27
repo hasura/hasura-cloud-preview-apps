@@ -23,5 +23,10 @@ jobs:
         with:
           name: 'sample-name'
           hasuraCloudAccessToken: 'sample-token'
+          env:
+            - key: KEY_ONE
+              value: VALUE_ONE
+            - key: KEY_TWO
+              value: VALUE_TWO
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

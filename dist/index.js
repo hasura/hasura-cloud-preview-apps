@@ -6927,6 +6927,7 @@ function run() {
     return main_awaiter(this, void 0, void 0, function* () {
         try {
             //const parameters = getParameters();
+            console.log(core.getInput('env'));
             const params = {
                 PLAN: 'cloud_free',
                 REGION: 'us-east-2',

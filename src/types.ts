@@ -13,7 +13,7 @@ export type Job = {
 
 export type CreatePreviewAppResponse = {
   createGitHubPreviewApp: {
-    project_id: string
+    projectId: string
     github_deployment_job_id: string
   }
 }
@@ -39,4 +39,22 @@ export type OutputVars = {
   graphQLEndpoint: string
   consoleURL: string
   jobId: string
+}
+
+export type JobDetails = {
+  jobs_by_pk: {
+    status: string
+    tasks: {
+      id: string
+      name: string
+      cloud: string
+      region: string
+      task_events: {
+        event_type: string
+        id: string
+        error: string
+        github_detail: string
+      }[]
+    }[]
+  }
 }

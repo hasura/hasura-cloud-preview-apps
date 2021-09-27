@@ -48,7 +48,7 @@ export const doesProjectExist = async (
 export const createPreviewApp = async (
   parameters: Parameters,
   client: Client
-): Promise<{github_deployment_job_id: string; project_id: string}> => {
+): Promise<{github_deployment_job_id: string; projectId: string}> => {
   try {
     const resp = await client.query<
       CreatePreviewAppResponse,
@@ -111,7 +111,7 @@ export const createPreviewApp = async (
 export const recreatePreviewApp = async (
   parameters: Parameters,
   client: Client
-): Promise<{github_deployment_job_id: string; project_id: string}> => {
+): Promise<{github_deployment_job_id: string; projectId: string}> => {
   try {
     const resp = await client.query<RecreatePreviewAppResponse, any>({
       query: `

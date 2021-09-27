@@ -5,7 +5,9 @@ import {
   createPreviewApp,
   recreatePreviewApp
 } from './previewApps'
+import {getRealtimeLogs} from './tasks'
 import {createGqlClient} from './client'
+import {getOutputVars} from './utils'
 
 export const handler = async (parameters: Parameters): Promise<OutputVars> => {
   console.log(parameters)
@@ -15,13 +17,28 @@ export const handler = async (parameters: Parameters): Promise<OutputVars> => {
   if (exists) {
     const recreateResp = await recreatePreviewApp(parameters, client)
     console.log(recreateResp)
+    const jobStatus = await getRealtimeLogs(
+      recreateResp.github_deployment_job_id,
+      client
+    )
+    if (jobStatus === 'failed') {
+      console.error(
+        'Preview app has been created, but applying metadata and migrations failed'
+      )
+    }
+    return getOutputVars(parameters, recreateResp)
   } else {
     const createResp = await createPreviewApp(parameters, client)
     console.log(createResp)
-  }
-  return {
-    graphQLEndpoint: 'fkld',
-    consoleURL: 'af',
-    jobId: 'something'
+    const jobStatus = await getRealtimeLogs(
+      createResp.github_deployment_job_id,
+      client
+    )
+    if (jobStatus === 'failed') {
+      console.error(
+        'Preview app has been created, but applying metadata and migrations failed'
+      )
+    }
+    return getOutputVars(parameters, createResp)
   }
 }

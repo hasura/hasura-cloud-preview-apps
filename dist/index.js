@@ -4992,6 +4992,98 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
     }
 });
 
+;// CONCATENATED MODULE: ./src/tasks.ts
+var tasks_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+const getTaskName = (taskName) => {
+    switch (taskName) {
+        case 'gh-validation':
+            return 'Fetching Metadata';
+        case 'parse-metadata-migration':
+            return 'Parsing metadata and migrations';
+        case 'apply-metadata':
+            return 'Applying metadata';
+        case 'apply-migration':
+            return 'Applying migrations';
+        case 'reload-metadata':
+            return 'Refreshing metadata';
+        case 'check-healthz':
+            return 'Checking Project Health';
+        default:
+            return null;
+    }
+};
+const getJobStatus = (jobId, client) => tasks_awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    try {
+        const resp = yield client.query({
+            query: `
+        query getJobStatus($jobId: uuid!) {
+          jobs_by_pk(id: $jobId) {
+            status
+            tasks(order_by: { updated_at: asc }) {
+              id
+              name
+              cloud
+              region
+              task_events(order_by: { updated_at: desc }, limit: 1) {
+                event_type
+                id
+                error
+                github_detail
+              }
+            }
+          }
+        }
+      `,
+            variables: {
+                jobId
+            }
+        });
+        const tasksCount = (_a = resp.jobs_by_pk) === null || _a === void 0 ? void 0 : _a.tasks.length;
+        if (tasksCount && tasksCount > 0) {
+            const latestTask = (_b = resp.jobs_by_pk) === null || _b === void 0 ? void 0 : _b.tasks[tasksCount - 1];
+            const taskEventsCount = latestTask === null || latestTask === void 0 ? void 0 : latestTask.task_events.length;
+            if (latestTask && taskEventsCount && taskEventsCount > 0) {
+                const latestTaskEvent = latestTask.task_events[taskEventsCount - 1];
+                console.log(`${getTaskName(latestTask.name)}: ${latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.event_type}`);
+                if (latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.github_detail) {
+                    console.log(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.github_detail);
+                }
+                if (latestTaskEvent &&
+                    latestTaskEvent.event_type === 'failed' &&
+                    latestTaskEvent.error) {
+                    console.log(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.error);
+                }
+            }
+        }
+        return resp.jobs_by_pk.status;
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            console.error(e.message);
+        }
+        throw e;
+    }
+});
+const getRealtimeLogs = (jobId, client) => tasks_awaiter(void 0, void 0, void 0, function* () {
+    const jobStatus = yield getJobStatus(jobId, client);
+    if (jobStatus === 'success') {
+        return 'success';
+    }
+    if (jobStatus === 'failed') {
+        return 'failed';
+    }
+    return getRealtimeLogs(jobId, client);
+});
+
 ;// CONCATENATED MODULE: external "http"
 const external_http_namespaceObject = require("http");
 ;// CONCATENATED MODULE: external "https"
@@ -6879,6 +6971,15 @@ const createGqlClient = (parameters) => {
     };
 };
 
+;// CONCATENATED MODULE: ./src/utils.ts
+const getOutputVars = (params, createResp) => {
+    return {
+        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
+        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
+        jobId: createResp.github_deployment_job_id
+    };
+};
+
 ;// CONCATENATED MODULE: ./src/handler.ts
 var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -6891,6 +6992,8 @@ var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _
 };
 
 
+
+
 const handler = (parameters) => handler_awaiter(void 0, void 0, void 0, function* () {
     console.log(parameters);
     const client = createGqlClient(parameters);
@@ -6899,16 +7002,21 @@ const handler = (parameters) => handler_awaiter(void 0, void 0, void 0, function
     if (exists) {
         const recreateResp = yield recreatePreviewApp(parameters, client);
         console.log(recreateResp);
+        const jobStatus = yield getRealtimeLogs(recreateResp.github_deployment_job_id, client);
+        if (jobStatus === 'failed') {
+            console.error('Preview app has been created, but applying metadata and migrations failed');
+        }
+        return getOutputVars(parameters, recreateResp);
     }
     else {
         const createResp = yield createPreviewApp(parameters, client);
         console.log(createResp);
+        const jobStatus = yield getRealtimeLogs(createResp.github_deployment_job_id, client);
+        if (jobStatus === 'failed') {
+            console.error('Preview app has been created, but applying metadata and migrations failed');
+        }
+        return getOutputVars(parameters, createResp);
     }
-    return {
-        graphQLEndpoint: 'fkld',
-        consoleURL: 'af',
-        jobId: 'something'
-    };
 });
 
 ;// CONCATENATED MODULE: ./src/main.ts

@@ -24,7 +24,10 @@ inputs:
     description: 'Path to the directory of the Hasura project in the repo. If empty, root is considered to be a Hasura project.'
     required: false
     default: ''
-
+  hasuraEnv:
+    description: 'Set of environment variables that you wish to provide to the created preview app. Example: HASURA_GRAPHQL_JWT_SECRET, PG_DATABASE_URL etc'
+    required: false
+    default: ''
 outputs:
   graphQLEndpoint:
     description: 'GraphQL endpoint of the created preview app'

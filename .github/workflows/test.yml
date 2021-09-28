@@ -23,9 +23,8 @@ jobs:
         with:
           name: 'sample-name'
           hasuraCloudAccessToken: 'sample-token'
-          env:
-            KEY_ONE: 'valueone'
-            KEY_TWO: 'valuetwo'
-            KEY_THREE: 'valuethree'
+          hasuraEnv: |
+            HASURA_GRAPHQL_JWT_SECRET={"type": "asdf", "key":"asdf"}
+            PG_DB_URL=randomness
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

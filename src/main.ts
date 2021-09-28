@@ -15,7 +15,7 @@ const run = async (): Promise<void> => {
     } else {
       context.logger.terminate('unexpected error occured')
     }
-    process.exit(1);
+    process.exit(1)
   }
 }
 

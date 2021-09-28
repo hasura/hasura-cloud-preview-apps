@@ -7172,6 +7172,7 @@ const run = () => main_awaiter(void 0, void 0, void 0, function* () {
         else {
             context.logger.terminate('unexpected error occured');
         }
+        process.exit(1);
     }
 });
 run();

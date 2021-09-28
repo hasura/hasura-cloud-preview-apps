@@ -7042,7 +7042,7 @@ function run() {
                 NAME: 'my-app-new',
                 GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
                 HASURA_CLOUD_PAT: 'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI',
-                CLOUD_DATA_GRAPHQL: 'https://155c-106-51-72-39.ngrok.io/v1/graphql',
+                CLOUD_DATA_GRAPHQL: 'https://ec52-106-51-72-39.ngrok.io/v1/graphql',
                 GITHUB_REPO_NAME: 'hcgitest',
                 GITHUB_OWNER: 'wawhal',
                 GITHUB_BRANCH_NAME: 'main',

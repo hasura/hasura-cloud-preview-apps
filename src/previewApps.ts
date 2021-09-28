@@ -63,7 +63,7 @@ export const createPreviewApp = async (
           $region: String!
           $cloud: String!
           $plan: String!
-          $env: [UpdateEnvObject]
+          $env: [UpdateEnvsObject]
         ) {
           createGitHubPreviewApp (
             payload: {
@@ -121,7 +121,7 @@ export const recreatePreviewApp = async (
           $region: String!
           $cloud: String!
           $plan: String!
-          $env: [UpdateEnvObject]
+          $env: [UpdateEnvsObject]
         ) {
           recreateGitHubPreviewApp (
             payload: {

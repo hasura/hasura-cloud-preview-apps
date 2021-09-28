@@ -5144,6 +5144,16 @@ const handler = (context) => handler_awaiter(void 0, void 0, void 0, function* (
 
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(186);
+;// CONCATENATED MODULE: ./src/logger.ts
+
+const createLogger = () => ({
+    log: console.log,
+    error: console.error,
+    debug: core.debug,
+    output: core.setOutput,
+    terminate: core.setFailed
+});
+
 ;// CONCATENATED MODULE: ./src/errors.ts
 const errors = {
     validation: {
@@ -5161,20 +5171,23 @@ const GITHUB_BRANCH_NAME = process.env.GITHUB_HEAD_REF || '';
 const GITHUB_OWNER = GITHUB_REPOSITORY.split('/')[0];
 const GITHUB_REPO_NAME = GITHUB_REPOSITORY.split('/')[1] || '';
 const getHasuraEnvVars = (rawEnvVars) => {
-    return rawEnvVars.split('\n').map(rawEnvVar => {
+    return rawEnvVars
+        .split('\n')
+        .map(rawEnvVar => {
         const envMetadata = rawEnvVar.split(';');
         if (envMetadata.length > 0) {
-            const [key, value = ""] = envMetadata[0].split('=');
+            const [key, value = ''] = envMetadata[0].split('=');
             return {
                 key,
                 value
             };
         }
         return {
-            key: "",
-            value: ""
+            key: '',
+            value: ''
         };
-    }).filter(env => !!env.key);
+    })
+        .filter(env => !!env.key);
 };
 const parameters = {
     PLAN: core.getInput('plan'),
@@ -5205,16 +5218,6 @@ const getParameters = () => {
     console.log(parameters);
     return parameters;
 };
-
-;// CONCATENATED MODULE: ./src/logger.ts
-
-const createLogger = () => ({
-    log: console.log,
-    error: console.error,
-    debug: core.debug,
-    output: core.setOutput,
-    terminate: core.setFailed
-});
 
 ;// CONCATENATED MODULE: external "http"
 const external_http_namespaceObject = require("http");
@@ -7135,11 +7138,9 @@ var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 };
 
 
-
 const run = () => main_awaiter(void 0, void 0, void 0, function* () {
     const context = createContext();
     try {
-        const parameters = getParameters();
         const outputVars = yield handler(context);
         const outputVarKeys = Object.keys(outputVars);
         for (let i = 0; i < outputVarKeys.length; i++) {

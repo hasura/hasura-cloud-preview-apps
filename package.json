@@ -24,7 +24,7 @@
     "setup"
   ],
   "pre-commit": [
-    "format",
+    "format-check",
     "lint"
   ],
   "author": "",

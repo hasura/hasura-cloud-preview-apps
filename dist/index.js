@@ -7156,8 +7156,8 @@ var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 };
 
 
-const run = () => main_awaiter(void 0, void 0, void 0, function* () {
-    const context = createContext();
+
+const run = (context) => main_awaiter(void 0, void 0, void 0, function* () {
     try {
         const outputVars = yield handler(context);
         const outputVarKeys = Object.keys(outputVars);
@@ -7175,7 +7175,20 @@ const run = () => main_awaiter(void 0, void 0, void 0, function* () {
         process.exit(1);
     }
 });
-run();
+const logger = createLogger();
+try {
+    const context = createContext();
+    run(context);
+}
+catch (e) {
+    if (e instanceof Error) {
+        logger.terminate(e.message);
+    }
+    else {
+        logger.terminate('unexpected error occured');
+    }
+    process.exit(1);
+}
 
 })();
 

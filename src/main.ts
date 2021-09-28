@@ -1,8 +1,8 @@
 import {handler} from './handler'
 import {createContext} from './context'
+import {createLogger} from './logger'
 
-const run = async (): Promise<void> => {
-  const context = createContext()
+const run = async (context): Promise<void> => {
   try {
     const outputVars = await handler(context)
     const outputVarKeys = Object.keys(outputVars)
@@ -19,4 +19,15 @@ const run = async (): Promise<void> => {
   }
 }
 
-run()
+const logger = createLogger()
+try {
+  const context = createContext()
+  run(context)
+} catch (e) {
+  if (e instanceof Error) {
+    logger.terminate(e.message)
+  } else {
+    logger.terminate('unexpected error occured')
+  }
+  process.exit(1)
+}

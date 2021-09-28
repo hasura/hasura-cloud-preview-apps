@@ -5065,14 +5065,14 @@ const getJobStatus = (jobId, context) => tasks_awaiter(void 0, void 0, void 0, f
             const taskEventsCount = latestTask === null || latestTask === void 0 ? void 0 : latestTask.task_events.length;
             if (latestTask && taskEventsCount && taskEventsCount > 0) {
                 const latestTaskEvent = latestTask.task_events[taskEventsCount - 1];
-                console.log(`${getTaskName(latestTask.name)}: ${getTaskStatus(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.event_type)}`);
+                context.logger.log(`${getTaskName(latestTask.name)}: ${getTaskStatus(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.event_type)}`, false);
                 if (latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.github_detail) {
-                    console.log(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.github_detail);
+                    context.logger.log(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.github_detail, false);
                 }
                 if (latestTaskEvent &&
                     latestTaskEvent.event_type === 'failed' &&
                     latestTaskEvent.error) {
-                    console.log(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.error);
+                    context.logger.log(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.error, false);
                 }
             }
         }
@@ -5080,7 +5080,7 @@ const getJobStatus = (jobId, context) => tasks_awaiter(void 0, void 0, void 0, f
     }
     catch (e) {
         if (e instanceof Error) {
-            console.error(e.message);
+            context.logger.log(e.message);
         }
         throw e;
     }
@@ -5120,26 +5120,25 @@ var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _
 
 const handler = (context) => handler_awaiter(void 0, void 0, void 0, function* () {
     const exists = yield doesProjectExist(context);
-    console.log(exists);
     if (exists) {
+        context.logger.log('A project with the given name exists. Triggering redeployment.');
         const recreateResp = yield recreatePreviewApp(context);
-        console.log('Recreate resp=================');
-        console.log(recreateResp);
-        console.log('==============================');
+        context.logger.log(`Redeployed:\n${JSON.stringify(recreateResp, null, 2)}`);
+        context.logger.log(`Applying metadata and migrations from the branch...`);
         const jobStatus = yield getRealtimeLogs(recreateResp.githubDeploymentJobID, context);
         if (jobStatus === 'failed') {
-            console.error('Preview app has been created, but applying metadata and migrations failed');
+            context.logger.log('Preview app has been created, but applying metadata and migrations failed');
         }
         return getOutputVars(recreateResp, context.parameters);
     }
     else {
+        context.logger.log('Creating Hasura Cloud preview app.');
         const createResp = yield createPreviewApp(context);
-        console.log('Create resp=================');
-        console.log(createResp);
-        console.log('============================');
+        context.logger.log(`Deployed:\n${JSON.stringify(createResp, null, 2)}`);
+        context.logger.log(`Applying metadata and migrations from the branch...`);
         const jobStatus = yield getRealtimeLogs(createResp.githubDeploymentJobID, context);
         if (jobStatus === 'failed') {
-            console.error('Preview app has been created, but applying metadata and migrations failed');
+            context.logger.log('Preview app has been created, but applying metadata and migrations failed');
         }
         return getOutputVars(createResp, context.parameters);
     }
@@ -5150,7 +5149,9 @@ var core = __nccwpck_require__(186);
 ;// CONCATENATED MODULE: ./src/logger.ts
 
 const createLogger = () => ({
-    log: console.log,
+    log: (log, linebreak = true) => {
+        console.log(`${log}${linebreak ? '\n' : ''}`);
+    },
     error: console.error,
     debug: core.debug,
     output: core.setOutput,
@@ -5216,9 +5217,9 @@ const validateParameters = (params) => {
         throw new Error(errors.validation.githubToken);
     }
 };
-const getParameters = () => {
+const getParameters = (logger) => {
     validateParameters(parameters);
-    console.log(parameters);
+    logger.debug(`Received parameters:\n${JSON.stringify(parameters, null, 4)}`);
     return parameters;
 };
 
@@ -7087,22 +7088,31 @@ var client_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _a
     });
 };
 
-const createGqlClient = (parameters) => {
+const createGqlClient = (parameters, logger) => {
     const query = (opts) => client_awaiter(void 0, void 0, void 0, function* () {
         var _a;
-        const respRaw = yield fetch(parameters.CLOUD_DATA_GRAPHQL, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-                authorization: `pat ${parameters.HASURA_CLOUD_PAT}`
-            },
-            body: JSON.stringify({ query: opts.query, variables: opts.variables })
-        });
-        const result = yield respRaw.json();
-        if (result.errors) {
-            throw new Error(((_a = result.errors[0]) === null || _a === void 0 ? void 0 : _a.message) || 'unexpected graphql error');
+        try {
+            logger.debug('Making GraphQL query to Hasura Cloud API...');
+            const respRaw = yield fetch(parameters.CLOUD_DATA_GRAPHQL, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    authorization: `pat ${parameters.HASURA_CLOUD_PAT}`
+                },
+                body: JSON.stringify({ query: opts.query, variables: opts.variables })
+            });
+            logger.debug(`Received response: ${JSON.stringify(respRaw, null, 4)}`);
+            logger.debug(`Getting response body JSON...`);
+            const result = yield respRaw.json();
+            if (result.errors) {
+                throw new Error(((_a = result.errors[0]) === null || _a === void 0 ? void 0 : _a.message) || 'unexpected graphql error');
+            }
+            logger.debug(`Response body JSON: ${JSON.stringify(result, null, 4)}`);
+            return result.data;
         }
-        return result.data;
+        catch (e) {
+            throw e;
+        }
     });
     return {
         query
@@ -7116,8 +7126,8 @@ const createGqlClient = (parameters) => {
 const createContext = () => {
     try {
         const logger = createLogger();
-        const parameters = getParameters();
-        const client = createGqlClient(parameters);
+        const parameters = getParameters(logger);
+        const client = createGqlClient(parameters, logger);
         return {
             logger,
             parameters,
@@ -7151,7 +7161,6 @@ const run = () => main_awaiter(void 0, void 0, void 0, function* () {
         }
     }
     catch (error) {
-        console.error(error);
         if (error instanceof Error) {
             context.logger.terminate(error.message);
         }

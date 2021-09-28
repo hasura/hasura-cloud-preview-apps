@@ -63,27 +63,28 @@ const getJobStatus = async (jobId: string, context: Context) => {
       const taskEventsCount = latestTask?.task_events.length
       if (latestTask && taskEventsCount && taskEventsCount > 0) {
         const latestTaskEvent = latestTask.task_events[taskEventsCount - 1]
-        console.log(
+        context.logger.log(
           `${getTaskName(latestTask.name)}: ${getTaskStatus(
             latestTaskEvent?.event_type
-          )}`
+          )}`,
+          false
         )
         if (latestTaskEvent?.github_detail) {
-          console.log(latestTaskEvent?.github_detail)
+          context.logger.log(latestTaskEvent?.github_detail, false)
         }
         if (
           latestTaskEvent &&
           latestTaskEvent.event_type === 'failed' &&
           latestTaskEvent.error
         ) {
-          console.log(latestTaskEvent?.error)
+          context.logger.log(latestTaskEvent?.error, false)
         }
       }
     }
     return resp.jobs_by_pk.status
   } catch (e) {
     if (e instanceof Error) {
-      console.error(e.message)
+      context.logger.log(e.message)
     }
     throw e
   }

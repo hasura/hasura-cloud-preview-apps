@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import {errors} from './errors'
+import { Logger } from './logger'
 
 const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || ''
 const GITHUB_BRANCH_NAME = process.env.GITHUB_HEAD_REF || ''
@@ -54,8 +55,8 @@ export const validateParameters = (params: Parameters): void => {
   }
 }
 
-export const getParameters = (): Parameters => {
+export const getParameters = (logger: Logger): Parameters => {
   validateParameters(parameters)
-  console.log(parameters)
+  logger.debug(`Received parameters:\n${JSON.stringify(parameters, null, 4)}`);
   return parameters
 }

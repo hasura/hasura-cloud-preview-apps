@@ -10,7 +10,6 @@ const run = async (): Promise<void> => {
       context.logger.output(outputVarKeys[i], outputVars[outputVarKeys[i]])
     }
   } catch (error) {
-    console.error(error)
     if (error instanceof Error) {
       context.logger.terminate(error.message)
     } else {

@@ -5,8 +5,8 @@ import {createGqlClient} from './client'
 export const createContext = () => {
   try {
     const logger = createLogger()
-    const parameters = getParameters()
-    const client = createGqlClient(parameters)
+    const parameters = getParameters(logger)
+    const client = createGqlClient(parameters, logger)
     return {
       logger,
       parameters,

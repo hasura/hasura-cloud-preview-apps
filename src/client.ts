@@ -1,15 +1,14 @@
 import fetch from 'node-fetch'
 import {Parameters} from './parameters'
-import { Logger } from './logger'
+import {Logger} from './logger'
 
 export const createGqlClient = (parameters: Parameters, logger: Logger) => {
   const query = async <QueryResponseType, VariablesType>(opts: {
     query: string
     variables?: VariablesType
   }): Promise<QueryResponseType> => {
-
     try {
-      logger.debug('Making GraphQL query to Hasura Cloud API...');
+      logger.debug('Making GraphQL query to Hasura Cloud API...')
       const respRaw = await fetch(parameters.CLOUD_DATA_GRAPHQL, {
         method: 'POST',
         headers: {
@@ -29,7 +28,6 @@ export const createGqlClient = (parameters: Parameters, logger: Logger) => {
     } catch (e) {
       throw e
     }
-
   }
   return {
     query

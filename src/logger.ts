@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
 
 export const createLogger = () => ({
-  log: (log: string, linebreak=true) => {
-    console.log(`${log}${linebreak ? '\n' : ''}`);
+  log: (log: string, linebreak = true) => {
+    console.log(`${log}${linebreak ? '\n' : ''}`)
   },
   error: console.error,
   debug: core.debug,

@@ -5,9 +5,6 @@ inputs:
     description: 'Name of the preview app'
     required: true
     default: 'cloud_free'
-  hasuraCloudAccessToken:
-    description: 'Hasura Cloud personal access token for contacting the Hasura Cloud APIs'
-    required: true
   region:
     description: 'Region to deploy preview app in'
     required: false
@@ -25,7 +22,7 @@ inputs:
     required: false
     default: ''
   hasuraEnv:
-    description: 'Set of environment variables that you wish to provide to the created preview app. Example: HASURA_GRAPHQL_JWT_SECRET, PG_DATABASE_URL etc'
+    description: 'Set of environment variables that you wish to provide to the created preview app. Example: HASURA_GRAPHQL_JWT_SECRET, PG_DATABASE_URL etc. Please note that this is different from the env vars of this action.'
     required: false
     default: ''
 outputs:

@@ -6,7 +6,7 @@ async function run(): Promise<void> {
   try {
     //const parameters = getParameters();
 
-    console.log(core.getInput('env'))
+    console.log(core.getInput('hasuraEnv'))
 
     const params: Parameters = {
       PLAN: 'cloud_free',

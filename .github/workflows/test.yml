@@ -24,8 +24,5 @@ jobs:
           hasuraCloudAccessToken: 'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI'
           hasuraCloudGraphQLEndpoint: 'https://f699-106-51-72-39.ngrok.io/v1/graphql'
           hasuraProjectDirectoryPath: hasura
-          hasuraEnv: |
-            HASURA_GRAPHQL_CORS_DOMAIN=https://cloud.hasura.io
-            PG_DB_URL=randomness
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

@@ -20,11 +20,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          name: 'sample-name'
+          name: 'my-another-preview-app'
           hasuraCloudAccessToken: 'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI'
           hasuraCloudGraphQLEndpoint: 'https://f699-106-51-72-39.ngrok.io/v1/graphql'
           hasuraProjectDirectoryPath: hasura
-          name: 'my-another-preview-app'
           hasuraEnv: |
             HASURA_GRAPHQL_JWT_SECRET={"type": "asdf", "key":"asdf"}
             PG_DB_URL=randomness

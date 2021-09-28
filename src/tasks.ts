@@ -53,7 +53,9 @@ const getJobStatus = async (jobId: string, context: Context) => {
       }
     })
     if (!resp.jobs_by_pk) {
-      throw new Error('could not find the GitHub job; the associated deployment was terminated');
+      throw new Error(
+        'could not find the GitHub job; the associated deployment was terminated'
+      )
     }
     const tasksCount = resp.jobs_by_pk?.tasks.length
     if (tasksCount && tasksCount > 0) {

@@ -21,7 +21,6 @@ jobs:
       - uses: ./
         with:
           name: 'tenant1'
-          hasuraCloudAccessToken: ''
           hasuraCloudGraphQLEndpoint: 'https://f699-106-51-72-39.ngrok.io/v1/graphql'
           hasuraProjectDirectoryPath: hasura
           hasuraEnv: |

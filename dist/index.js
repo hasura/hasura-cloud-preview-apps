@@ -5218,7 +5218,12 @@ const validateParameters = (params) => {
     }
 };
 const getParameters = (logger) => {
-    validateParameters(parameters);
+    try {
+        validateParameters(parameters);
+    }
+    catch (e) {
+        throw e;
+    }
     logger.debug(`Received parameters:\n${JSON.stringify(parameters, null, 4)}`);
     return parameters;
 };

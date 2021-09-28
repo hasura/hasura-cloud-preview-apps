@@ -1,6 +1,7 @@
 import {handler} from './handler'
 import {createContext} from './context'
 import {createLogger} from './logger'
+import {errors} from './errors'
 
 const run = async (context): Promise<void> => {
   try {
@@ -13,7 +14,7 @@ const run = async (context): Promise<void> => {
     if (error instanceof Error) {
       context.logger.terminate(error.message)
     } else {
-      context.logger.terminate('unexpected error occured')
+      context.logger.terminate(errors.unexpected)
     }
     process.exit(1)
   }
@@ -27,7 +28,7 @@ try {
   if (e instanceof Error) {
     logger.terminate(e.message)
   } else {
-    logger.terminate('unexpected error occured')
+    logger.terminate(errors.unexpected)
   }
   process.exit(1)
 }

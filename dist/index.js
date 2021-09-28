@@ -4907,7 +4907,7 @@ const createPreviewApp = (context) => __awaiter(void 0, void 0, void 0, function
           $region: String!
           $cloud: String!
           $plan: String!
-          $env: [UpdateEnvObject!]
+          $env: [UpdateEnvsObject]
         ) {
           createGitHubPreviewApp (
             payload: {
@@ -4961,7 +4961,7 @@ const recreatePreviewApp = (context) => __awaiter(void 0, void 0, void 0, functi
           $region: String!
           $cloud: String!
           $plan: String!
-          $env: [UpdateEnvObject!]
+          $env: [UpdateEnvsObject]
         ) {
           recreateGitHubPreviewApp (
             payload: {

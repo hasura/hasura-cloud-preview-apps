@@ -1,4 +1,4 @@
-import {Parameters} from './parameters'
+import {Context} from './context'
 import {OutputVars} from './types'
 import {
   doesProjectExist,
@@ -6,43 +6,40 @@ import {
   recreatePreviewApp
 } from './previewApps'
 import {getRealtimeLogs} from './tasks'
-import {createGqlClient} from './client'
 import {getOutputVars} from './utils'
 
-export const handler = async (parameters: Parameters): Promise<OutputVars> => {
-  console.log(parameters)
-  const client = createGqlClient(parameters)
-  const exists = await doesProjectExist(parameters.NAME, client)
+export const handler = async (context: Context): Promise<OutputVars> => {
+  const exists = await doesProjectExist(context)
   console.log(exists)
   if (exists) {
-    const recreateResp = await recreatePreviewApp(parameters, client)
+    const recreateResp = await recreatePreviewApp(context)
     console.log('Recreate resp=================')
     console.log(recreateResp)
     console.log('==============================')
     const jobStatus = await getRealtimeLogs(
       recreateResp.githubDeploymentJobID,
-      client
+      context
     )
     if (jobStatus === 'failed') {
       console.error(
         'Preview app has been created, but applying metadata and migrations failed'
       )
     }
-    return getOutputVars(parameters, recreateResp)
+    return getOutputVars(recreateResp, context.parameters)
   } else {
-    const createResp = await createPreviewApp(parameters, client)
+    const createResp = await createPreviewApp(context)
     console.log('Create resp=================')
     console.log(createResp)
     console.log('============================')
     const jobStatus = await getRealtimeLogs(
       createResp.githubDeploymentJobID,
-      client
+      context
     )
     if (jobStatus === 'failed') {
       console.error(
         'Preview app has been created, but applying metadata and migrations failed'
       )
     }
-    return getOutputVars(parameters, createResp)
+    return getOutputVars(createResp, context.parameters)
   }
 }

@@ -28,6 +28,7 @@ export type CreatePreviewAppVariables = {
   region: string
   cloud: string
   plan: string
+  env: {key: string; value: string}[]
 }
 
 export type RecreatePreviewAppResponse = {

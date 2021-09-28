@@ -2,8 +2,8 @@ import {Parameters} from './parameters'
 import {OutputVars} from './types'
 
 export const getOutputVars = (
-  params: Parameters,
-  createResp: {githubDeploymentJobID: string; projectId: string}
+  createResp: {githubDeploymentJobID: string; projectId: string},
+  params: Parameters
 ): OutputVars => {
   return {
     consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,

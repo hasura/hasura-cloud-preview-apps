@@ -1,0 +1,24 @@
+actions:
+- name: getCurrentWeather
+  definition:
+    kind: ""
+    handler: http://localhost:3000
+- name: getUserInfo
+  definition:
+    kind: ""
+    handler: http://localhost:3000
+- name: login
+  definition:
+    kind: synchronous
+    handler: http://localhost:3000
+- name: signup
+  definition:
+    kind: synchronous
+    handler: http://localhost:3000
+custom_types:
+  enums: []
+  input_objects:
+  - name: SampleInput
+  objects:
+  - name: SampleOutput
+  scalars: []

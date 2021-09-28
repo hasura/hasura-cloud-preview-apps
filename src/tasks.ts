@@ -1,4 +1,4 @@
-import {Client} from './client'
+import {Context} from './context'
 import {JobDetails} from './types'
 
 const getTaskName = (taskName?: string) => {
@@ -22,14 +22,14 @@ const getTaskName = (taskName?: string) => {
 
 const getTaskStatus = (status: string) => {
   if (status === 'created') {
-    return 'In Progress';
+    return 'started'
   }
-  return status;
+  return status
 }
 
-const getJobStatus = async (jobId: string, client: Client) => {
+const getJobStatus = async (jobId: string, context: Context) => {
   try {
-    const resp = await client.query<JobDetails, {jobId: string}>({
+    const resp = await context.client.query<JobDetails, {jobId: string}>({
       query: `
         query getJobStatus($jobId: uuid!) {
           jobs_by_pk(id: $jobId) {
@@ -59,7 +59,9 @@ const getJobStatus = async (jobId: string, client: Client) => {
       if (latestTask && taskEventsCount && taskEventsCount > 0) {
         const latestTaskEvent = latestTask.task_events[taskEventsCount - 1]
         console.log(
-          `${getTaskName(latestTask.name)}: ${getTaskStatus(latestTaskEvent?.event_type)}`
+          `${getTaskName(latestTask.name)}: ${getTaskStatus(
+            latestTaskEvent?.event_type
+          )}`
         )
         if (latestTaskEvent?.github_detail) {
           console.log(latestTaskEvent?.github_detail)
@@ -82,13 +84,13 @@ const getJobStatus = async (jobId: string, client: Client) => {
   }
 }
 
-export const getRealtimeLogs = async (jobId: string, client: Client) => {
-  const jobStatus = await getJobStatus(jobId, client)
+export const getRealtimeLogs = async (jobId: string, context: Context) => {
+  const jobStatus = await getJobStatus(jobId, context)
   if (jobStatus === 'success') {
     return 'success'
   }
   if (jobStatus === 'failed') {
     return 'failed'
   }
-  return getRealtimeLogs(jobId, client)
+  return getRealtimeLogs(jobId, context)
 }

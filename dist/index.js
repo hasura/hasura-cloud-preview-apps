@@ -4849,8 +4849,6 @@ var __webpack_exports__ = {};
 // ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(186);
 ;// CONCATENATED MODULE: ./src/previewApps.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -4861,9 +4859,9 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const doesProjectExist = (appName, client) => __awaiter(void 0, void 0, void 0, function* () {
+const doesProjectExist = (context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const resp = yield client.query({
+        const resp = yield context.client.query({
             query: `
 				query getProjects ($name:String!) {
 				  projects( where: {name: {_eq: $name}}) {
@@ -4874,7 +4872,7 @@ const doesProjectExist = (appName, client) => __awaiter(void 0, void 0, void 0, 
 				}
 			`,
             variables: {
-                name: appName
+                name: context.parameters.NAME
             }
         });
         if (resp.projects.length) {
@@ -4895,9 +4893,9 @@ const doesProjectExist = (appName, client) => __awaiter(void 0, void 0, void 0, 
         throw e;
     }
 });
-const createPreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 0, function* () {
+const createPreviewApp = (context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const resp = yield client.query({
+        const resp = yield context.client.query({
             query: `
         mutation createPreviewApp (
           $githubPAT: String!
@@ -4909,6 +4907,7 @@ const createPreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 
           $region: String!
           $cloud: String!
           $plan: String!
+          $env: [UpdateEnvObject!]
         ) {
           createGitHubPreviewApp (
             payload: {
@@ -4924,6 +4923,7 @@ const createPreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 
                 region: $region,
                 plan: $plan,
                 name: $appName
+                envVars: $env 
               }
             }
           ) {
@@ -4933,15 +4933,16 @@ const createPreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 
         }
       `,
             variables: {
-                githubDir: parameters.HASURA_PROJECT_DIR,
-                githubPAT: parameters.GITHUB_TOKEN,
-                githubRepoOwner: parameters.GITHUB_OWNER,
-                githubRepo: parameters.GITHUB_REPO_NAME,
-                githubBranch: parameters.GITHUB_BRANCH_NAME,
-                appName: parameters.NAME,
+                githubDir: context.parameters.HASURA_PROJECT_DIR,
+                githubPAT: context.parameters.GITHUB_TOKEN,
+                githubRepoOwner: context.parameters.GITHUB_OWNER,
+                githubRepo: context.parameters.GITHUB_REPO_NAME,
+                githubBranch: context.parameters.GITHUB_BRANCH_NAME,
+                appName: context.parameters.NAME,
                 cloud: 'aws',
-                region: parameters.REGION,
-                plan: parameters.PLAN
+                region: context.parameters.REGION,
+                plan: context.parameters.PLAN,
+                env: context.parameters.HASURA_ENV_VARS
             }
         });
         return Object.assign({}, resp.createGitHubPreviewApp);
@@ -4950,9 +4951,9 @@ const createPreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 
         throw e;
     }
 });
-const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 0, function* () {
+const recreatePreviewApp = (context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const resp = yield client.query({
+        const resp = yield context.client.query({
             query: `
         mutation recreatePreviewApp (
           $githubPAT: String!
@@ -4960,6 +4961,7 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
           $region: String!
           $cloud: String!
           $plan: String!
+          $env: [UpdateEnvObject!]
         ) {
           recreateGitHubPreviewApp (
             payload: {
@@ -4968,7 +4970,8 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
                 cloud: $cloud,
                 region: $region,
                 plan: $plan
-                appName: $appName 
+                appName: $appName
+                envVars: $env 
               }
             }
           ) {
@@ -4978,11 +4981,12 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
         }
       `,
             variables: {
-                githubPAT: parameters.GITHUB_TOKEN,
-                appName: parameters.NAME,
+                githubPAT: context.parameters.GITHUB_TOKEN,
+                appName: context.parameters.NAME,
                 cloud: 'aws',
-                region: parameters.REGION,
-                plan: parameters.PLAN
+                region: context.parameters.REGION,
+                plan: context.parameters.PLAN,
+                env: context.parameters.HASURA_ENV_VARS
             }
         });
         return Object.assign({}, resp.recreateGitHubPreviewApp);
@@ -5022,14 +5026,14 @@ const getTaskName = (taskName) => {
 };
 const getTaskStatus = (status) => {
     if (status === 'created') {
-        return 'In Progress';
+        return 'started';
     }
     return status;
 };
-const getJobStatus = (jobId, client) => tasks_awaiter(void 0, void 0, void 0, function* () {
+const getJobStatus = (jobId, context) => tasks_awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
-        const resp = yield client.query({
+        const resp = yield context.client.query({
             query: `
         query getJobStatus($jobId: uuid!) {
           jobs_by_pk(id: $jobId) {
@@ -5078,15 +5082,138 @@ const getJobStatus = (jobId, client) => tasks_awaiter(void 0, void 0, void 0, fu
         throw e;
     }
 });
-const getRealtimeLogs = (jobId, client) => tasks_awaiter(void 0, void 0, void 0, function* () {
-    const jobStatus = yield getJobStatus(jobId, client);
+const getRealtimeLogs = (jobId, context) => tasks_awaiter(void 0, void 0, void 0, function* () {
+    const jobStatus = yield getJobStatus(jobId, context);
     if (jobStatus === 'success') {
         return 'success';
     }
     if (jobStatus === 'failed') {
         return 'failed';
     }
-    return getRealtimeLogs(jobId, client);
+    return getRealtimeLogs(jobId, context);
+});
+
+;// CONCATENATED MODULE: ./src/utils.ts
+const getOutputVars = (createResp, params) => {
+    return {
+        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
+        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
+        jobId: createResp.githubDeploymentJobID
+    };
+};
+
+;// CONCATENATED MODULE: ./src/handler.ts
+var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+const handler = (context) => handler_awaiter(void 0, void 0, void 0, function* () {
+    const exists = yield doesProjectExist(context);
+    console.log(exists);
+    if (exists) {
+        const recreateResp = yield recreatePreviewApp(context);
+        console.log('Recreate resp=================');
+        console.log(recreateResp);
+        console.log('==============================');
+        const jobStatus = yield getRealtimeLogs(recreateResp.githubDeploymentJobID, context);
+        if (jobStatus === 'failed') {
+            console.error('Preview app has been created, but applying metadata and migrations failed');
+        }
+        return getOutputVars(recreateResp, context.parameters);
+    }
+    else {
+        const createResp = yield createPreviewApp(context);
+        console.log('Create resp=================');
+        console.log(createResp);
+        console.log('============================');
+        const jobStatus = yield getRealtimeLogs(createResp.githubDeploymentJobID, context);
+        if (jobStatus === 'failed') {
+            console.error('Preview app has been created, but applying metadata and migrations failed');
+        }
+        return getOutputVars(createResp, context.parameters);
+    }
+});
+
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(186);
+;// CONCATENATED MODULE: ./src/errors.ts
+const errors = {
+    validation: {
+        name: 'preview app name is mandatory; please provide it in the action inputs',
+        hasuraCloudPAT: 'hasura cloud personal access token is required for creating preview apps; please provide it in the action inputs',
+        githubToken: 'GitHub access token is required for Hasura Cloud to access metadata/migrations from your branch; please pass it in the GITHUB_TOKEN env var of the github action'
+    }
+};
+
+;// CONCATENATED MODULE: ./src/parameters.ts
+
+
+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || '';
+const GITHUB_BRANCH_NAME = process.env.GITHUB_HEAD_REF || '';
+const GITHUB_OWNER = GITHUB_REPOSITORY.split('/')[0];
+const GITHUB_REPO_NAME = GITHUB_REPOSITORY.split('/')[1] || '';
+const getHasuraEnvVars = (rawEnvVars) => {
+    return rawEnvVars.split('\n').map(rawEnvVar => {
+        const envMetadata = rawEnvVar.split(';');
+        if (envMetadata.length > 0) {
+            const [key, value = ""] = envMetadata[0].split('=');
+            return {
+                key,
+                value
+            };
+        }
+        return {
+            key: "",
+            value: ""
+        };
+    }).filter(env => !!env.key);
+};
+const parameters = {
+    PLAN: core.getInput('plan'),
+    REGION: core.getInput('region'),
+    NAME: core.getInput('name') || '',
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
+    HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || '',
+    CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint'),
+    HASURA_PROJECT_DIR: core.getInput('hasuraProjectDirectoryPath') || '',
+    GITHUB_REPO_NAME,
+    GITHUB_OWNER,
+    GITHUB_BRANCH_NAME,
+    HASURA_ENV_VARS: getHasuraEnvVars(core.getInput('hasuraEnv'))
+};
+const validateParameters = (params) => {
+    if (!params.NAME) {
+        throw new Error(errors.validation.name);
+    }
+    if (!params.HASURA_CLOUD_PAT) {
+        throw new Error(errors.validation.hasuraCloudPAT);
+    }
+    if (!params.GITHUB_TOKEN) {
+        throw new Error(errors.validation.githubToken);
+    }
+};
+const getParameters = () => {
+    validateParameters(parameters);
+    console.log(parameters);
+    return parameters;
+};
+
+;// CONCATENATED MODULE: ./src/logger.ts
+
+const createLogger = () => ({
+    log: console.log,
+    error: console.error,
+    debug: core.debug,
+    output: core.setOutput,
+    terminate: core.setFailed
 });
 
 ;// CONCATENATED MODULE: external "http"
@@ -6976,57 +7103,25 @@ const createGqlClient = (parameters) => {
     };
 };
 
-;// CONCATENATED MODULE: ./src/utils.ts
-const getOutputVars = (params, createResp) => {
-    return {
-        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
-        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
-        jobId: createResp.githubDeploymentJobID
-    };
-};
-
-;// CONCATENATED MODULE: ./src/handler.ts
-var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+;// CONCATENATED MODULE: ./src/context.ts
 
 
 
-
-const handler = (parameters) => handler_awaiter(void 0, void 0, void 0, function* () {
-    console.log(parameters);
-    const client = createGqlClient(parameters);
-    const exists = yield doesProjectExist(parameters.NAME, client);
-    console.log(exists);
-    if (exists) {
-        const recreateResp = yield recreatePreviewApp(parameters, client);
-        console.log('Recreate resp=================');
-        console.log(recreateResp);
-        console.log('==============================');
-        const jobStatus = yield getRealtimeLogs(recreateResp.githubDeploymentJobID, client);
-        if (jobStatus === 'failed') {
-            console.error('Preview app has been created, but applying metadata and migrations failed');
-        }
-        return getOutputVars(parameters, recreateResp);
+const createContext = () => {
+    try {
+        const logger = createLogger();
+        const parameters = getParameters();
+        const client = createGqlClient(parameters);
+        return {
+            logger,
+            parameters,
+            client
+        };
     }
-    else {
-        const createResp = yield createPreviewApp(parameters, client);
-        console.log('Create resp=================');
-        console.log(createResp);
-        console.log('============================');
-        const jobStatus = yield getRealtimeLogs(createResp.githubDeploymentJobID, client);
-        if (jobStatus === 'failed') {
-            console.error('Preview app has been created, but applying metadata and migrations failed');
-        }
-        return getOutputVars(parameters, createResp);
+    catch (e) {
+        throw e;
     }
-});
+};
 
 ;// CONCATENATED MODULE: ./src/main.ts
 var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -7040,40 +7135,27 @@ var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 };
 
 
-function run() {
-    return main_awaiter(this, void 0, void 0, function* () {
-        try {
-            //const parameters = getParameters();
-            console.log(core.getInput('hasuraEnv'));
-            const params = {
-                PLAN: 'cloud_free',
-                REGION: 'us-east-2',
-                NAME: 'my-app-new',
-                GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
-                HASURA_CLOUD_PAT: 'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI',
-                CLOUD_DATA_GRAPHQL: 'https://f699-106-51-72-39.ngrok.io/v1/graphql',
-                GITHUB_REPO_NAME: 'hcgitest',
-                GITHUB_OWNER: 'wawhal',
-                GITHUB_BRANCH_NAME: 'main',
-                HASURA_PROJECT_DIR: 'hasura'
-            };
-            const outputVars = yield handler(params);
-            const outputVarKeys = Object.keys(outputVars);
-            for (let i = 0; i < outputVarKeys.length; i++) {
-                core.setOutput(outputVarKeys[i], outputVars[outputVarKeys[i]]);
-            }
+
+const run = () => main_awaiter(void 0, void 0, void 0, function* () {
+    const context = createContext();
+    try {
+        const parameters = getParameters();
+        const outputVars = yield handler(context);
+        const outputVarKeys = Object.keys(outputVars);
+        for (let i = 0; i < outputVarKeys.length; i++) {
+            context.logger.output(outputVarKeys[i], outputVars[outputVarKeys[i]]);
         }
-        catch (error) {
-            console.error(error);
-            if (error instanceof Error) {
-                core.setFailed(error.message);
-            }
-            else {
-                core.setFailed('unexpected error occured');
-            }
+    }
+    catch (error) {
+        console.error(error);
+        if (error instanceof Error) {
+            context.logger.terminate(error.message);
         }
-    });
-}
+        else {
+            context.logger.terminate('unexpected error occured');
+        }
+    }
+});
 run();
 
 })();

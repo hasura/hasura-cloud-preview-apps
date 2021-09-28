@@ -1,18 +1,17 @@
-import {Client} from './client'
+import {Context} from './context'
 import {
   Project,
   RecreatePreviewAppResponse,
   CreatePreviewAppVariables,
   CreatePreviewAppResponse
 } from './types'
-import {Parameters} from './parameters'
 
-export const doesProjectExist = async (
-  appName: string,
-  client: Client
-): Promise<boolean> => {
+export const doesProjectExist = async (context: Context): Promise<boolean> => {
   try {
-    const resp = await client.query<{projects: Project[]}, {name: string}>({
+    const resp = await context.client.query<
+      {projects: Project[]},
+      {name: string}
+    >({
       query: `
 				query getProjects ($name:String!) {
 				  projects( where: {name: {_eq: $name}}) {
@@ -23,7 +22,7 @@ export const doesProjectExist = async (
 				}
 			`,
       variables: {
-        name: appName
+        name: context.parameters.NAME
       }
     })
     if (resp.projects.length) {
@@ -46,11 +45,10 @@ export const doesProjectExist = async (
 }
 
 export const createPreviewApp = async (
-  parameters: Parameters,
-  client: Client
+  context: Context
 ): Promise<{githubDeploymentJobID: string; projectId: string}> => {
   try {
-    const resp = await client.query<
+    const resp = await context.client.query<
       CreatePreviewAppResponse,
       CreatePreviewAppVariables
     >({
@@ -65,6 +63,7 @@ export const createPreviewApp = async (
           $region: String!
           $cloud: String!
           $plan: String!
+          $env: [UpdateEnvObject!]
         ) {
           createGitHubPreviewApp (
             payload: {
@@ -80,6 +79,7 @@ export const createPreviewApp = async (
                 region: $region,
                 plan: $plan,
                 name: $appName
+                envVars: $env 
               }
             }
           ) {
@@ -89,15 +89,16 @@ export const createPreviewApp = async (
         }
       `,
       variables: {
-        githubDir: parameters.HASURA_PROJECT_DIR,
-        githubPAT: parameters.GITHUB_TOKEN,
-        githubRepoOwner: parameters.GITHUB_OWNER,
-        githubRepo: parameters.GITHUB_REPO_NAME,
-        githubBranch: parameters.GITHUB_BRANCH_NAME,
-        appName: parameters.NAME,
+        githubDir: context.parameters.HASURA_PROJECT_DIR,
+        githubPAT: context.parameters.GITHUB_TOKEN,
+        githubRepoOwner: context.parameters.GITHUB_OWNER,
+        githubRepo: context.parameters.GITHUB_REPO_NAME,
+        githubBranch: context.parameters.GITHUB_BRANCH_NAME,
+        appName: context.parameters.NAME,
         cloud: 'aws',
-        region: parameters.REGION,
-        plan: parameters.PLAN
+        region: context.parameters.REGION,
+        plan: context.parameters.PLAN,
+        env: context.parameters.HASURA_ENV_VARS
       }
     })
     return {
@@ -109,11 +110,10 @@ export const createPreviewApp = async (
 }
 
 export const recreatePreviewApp = async (
-  parameters: Parameters,
-  client: Client
+  context: Context
 ): Promise<{githubDeploymentJobID: string; projectId: string}> => {
   try {
-    const resp = await client.query<RecreatePreviewAppResponse, any>({
+    const resp = await context.client.query<RecreatePreviewAppResponse, any>({
       query: `
         mutation recreatePreviewApp (
           $githubPAT: String!
@@ -121,6 +121,7 @@ export const recreatePreviewApp = async (
           $region: String!
           $cloud: String!
           $plan: String!
+          $env: [UpdateEnvObject!]
         ) {
           recreateGitHubPreviewApp (
             payload: {
@@ -129,7 +130,8 @@ export const recreatePreviewApp = async (
                 cloud: $cloud,
                 region: $region,
                 plan: $plan
-                appName: $appName 
+                appName: $appName
+                envVars: $env 
               }
             }
           ) {
@@ -139,11 +141,12 @@ export const recreatePreviewApp = async (
         }
       `,
       variables: {
-        githubPAT: parameters.GITHUB_TOKEN,
-        appName: parameters.NAME,
+        githubPAT: context.parameters.GITHUB_TOKEN,
+        appName: context.parameters.NAME,
         cloud: 'aws',
-        region: parameters.REGION,
-        plan: parameters.PLAN
+        region: context.parameters.REGION,
+        plan: context.parameters.PLAN,
+        env: context.parameters.HASURA_ENV_VARS
       }
     })
     return {

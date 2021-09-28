@@ -4927,7 +4927,7 @@ const createPreviewApp = (parameters, client) => __awaiter(void 0, void 0, void 
               }
             }
           ) {
-            github_deployment_job_id
+            githubDeploymentJobID
             projectId
           }
         }
@@ -4963,16 +4963,16 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
         ) {
           recreateGitHubPreviewApp (
             payload: {
-              appName: $appName
               githubPersonalAccessToken: $githubPAT,
               projectOptions: {
                 cloud: $cloud,
                 region: $region,
                 plan: $plan
+                appName: $appName 
               }
             }
           ) {
-            github_deployment_job_id
+            githubDeploymentJobID
             projectId
           }
         }
@@ -4985,7 +4985,7 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
                 plan: parameters.PLAN
             }
         });
-        return Object.assign({}, resp.recreateGithubPreviewApp);
+        return Object.assign({}, resp.recreateGitHubPreviewApp);
     }
     catch (e) {
         throw e;
@@ -5020,6 +5020,12 @@ const getTaskName = (taskName) => {
             return null;
     }
 };
+const getTaskStatus = (status) => {
+    if (status === 'created') {
+        return 'In Progress';
+    }
+    return status;
+};
 const getJobStatus = (jobId, client) => tasks_awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
@@ -5032,8 +5038,7 @@ const getJobStatus = (jobId, client) => tasks_awaiter(void 0, void 0, void 0, fu
               id
               name
               cloud
-              region
-              task_events(order_by: { updated_at: desc }, limit: 1) {
+              region task_events(order_by: { updated_at: desc }, limit: 1) {
                 event_type
                 id
                 error
@@ -5053,7 +5058,7 @@ const getJobStatus = (jobId, client) => tasks_awaiter(void 0, void 0, void 0, fu
             const taskEventsCount = latestTask === null || latestTask === void 0 ? void 0 : latestTask.task_events.length;
             if (latestTask && taskEventsCount && taskEventsCount > 0) {
                 const latestTaskEvent = latestTask.task_events[taskEventsCount - 1];
-                console.log(`${getTaskName(latestTask.name)}: ${latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.event_type}`);
+                console.log(`${getTaskName(latestTask.name)}: ${getTaskStatus(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.event_type)}`);
                 if (latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.github_detail) {
                     console.log(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.github_detail);
                 }
@@ -6976,7 +6981,7 @@ const getOutputVars = (params, createResp) => {
     return {
         consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
         graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
-        jobId: createResp.github_deployment_job_id
+        jobId: createResp.githubDeploymentJobID
     };
 };
 
@@ -7001,8 +7006,10 @@ const handler = (parameters) => handler_awaiter(void 0, void 0, void 0, function
     console.log(exists);
     if (exists) {
         const recreateResp = yield recreatePreviewApp(parameters, client);
+        console.log('Recreate resp=================');
         console.log(recreateResp);
-        const jobStatus = yield getRealtimeLogs(recreateResp.github_deployment_job_id, client);
+        console.log('==============================');
+        const jobStatus = yield getRealtimeLogs(recreateResp.githubDeploymentJobID, client);
         if (jobStatus === 'failed') {
             console.error('Preview app has been created, but applying metadata and migrations failed');
         }
@@ -7010,8 +7017,10 @@ const handler = (parameters) => handler_awaiter(void 0, void 0, void 0, function
     }
     else {
         const createResp = yield createPreviewApp(parameters, client);
+        console.log('Create resp=================');
         console.log(createResp);
-        const jobStatus = yield getRealtimeLogs(createResp.github_deployment_job_id, client);
+        console.log('============================');
+        const jobStatus = yield getRealtimeLogs(createResp.githubDeploymentJobID, client);
         if (jobStatus === 'failed') {
             console.error('Preview app has been created, but applying metadata and migrations failed');
         }
@@ -7042,7 +7051,7 @@ function run() {
                 NAME: 'my-app-new',
                 GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
                 HASURA_CLOUD_PAT: 'XGytdW2Ew7vDhH6YzO6c1LUGpLTUziNR50c01sGnZCi7K3Vx31fpP61dAw4gbUNI',
-                CLOUD_DATA_GRAPHQL: 'https://ec52-106-51-72-39.ngrok.io/v1/graphql',
+                CLOUD_DATA_GRAPHQL: 'https://f699-106-51-72-39.ngrok.io/v1/graphql',
                 GITHUB_REPO_NAME: 'hcgitest',
                 GITHUB_OWNER: 'wawhal',
                 GITHUB_BRANCH_NAME: 'main',

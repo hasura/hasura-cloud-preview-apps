@@ -48,7 +48,7 @@ export const doesProjectExist = async (
 export const createPreviewApp = async (
   parameters: Parameters,
   client: Client
-): Promise<{github_deployment_job_id: string; projectId: string}> => {
+): Promise<{githubDeploymentJobID: string; projectId: string}> => {
   try {
     const resp = await client.query<
       CreatePreviewAppResponse,
@@ -83,7 +83,7 @@ export const createPreviewApp = async (
               }
             }
           ) {
-            github_deployment_job_id
+            githubDeploymentJobID
             projectId
           }
         }
@@ -111,7 +111,7 @@ export const createPreviewApp = async (
 export const recreatePreviewApp = async (
   parameters: Parameters,
   client: Client
-): Promise<{github_deployment_job_id: string; projectId: string}> => {
+): Promise<{githubDeploymentJobID: string; projectId: string}> => {
   try {
     const resp = await client.query<RecreatePreviewAppResponse, any>({
       query: `
@@ -124,16 +124,16 @@ export const recreatePreviewApp = async (
         ) {
           recreateGitHubPreviewApp (
             payload: {
-              appName: $appName
               githubPersonalAccessToken: $githubPAT,
               projectOptions: {
                 cloud: $cloud,
                 region: $region,
                 plan: $plan
+                appName: $appName 
               }
             }
           ) {
-            github_deployment_job_id
+            githubDeploymentJobID
             projectId
           }
         }
@@ -147,7 +147,7 @@ export const recreatePreviewApp = async (
       }
     })
     return {
-      ...resp.recreateGithubPreviewApp
+      ...resp.recreateGitHubPreviewApp
     }
   } catch (e) {
     throw e

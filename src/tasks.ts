@@ -20,6 +20,13 @@ const getTaskName = (taskName?: string) => {
   }
 }
 
+const getTaskStatus = (status: string) => {
+  if (status === 'created') {
+    return 'In Progress';
+  }
+  return status;
+}
+
 const getJobStatus = async (jobId: string, client: Client) => {
   try {
     const resp = await client.query<JobDetails, {jobId: string}>({
@@ -31,8 +38,7 @@ const getJobStatus = async (jobId: string, client: Client) => {
               id
               name
               cloud
-              region
-              task_events(order_by: { updated_at: desc }, limit: 1) {
+              region task_events(order_by: { updated_at: desc }, limit: 1) {
                 event_type
                 id
                 error
@@ -53,7 +59,7 @@ const getJobStatus = async (jobId: string, client: Client) => {
       if (latestTask && taskEventsCount && taskEventsCount > 0) {
         const latestTaskEvent = latestTask.task_events[taskEventsCount - 1]
         console.log(
-          `${getTaskName(latestTask.name)}: ${latestTaskEvent?.event_type}`
+          `${getTaskName(latestTask.name)}: ${getTaskStatus(latestTaskEvent?.event_type)}`
         )
         if (latestTaskEvent?.github_detail) {
           console.log(latestTaskEvent?.github_detail)

@@ -16,9 +16,11 @@ export const handler = async (parameters: Parameters): Promise<OutputVars> => {
   console.log(exists)
   if (exists) {
     const recreateResp = await recreatePreviewApp(parameters, client)
+    console.log('Recreate resp=================')
     console.log(recreateResp)
+    console.log('==============================')
     const jobStatus = await getRealtimeLogs(
-      recreateResp.github_deployment_job_id,
+      recreateResp.githubDeploymentJobID,
       client
     )
     if (jobStatus === 'failed') {
@@ -29,9 +31,11 @@ export const handler = async (parameters: Parameters): Promise<OutputVars> => {
     return getOutputVars(parameters, recreateResp)
   } else {
     const createResp = await createPreviewApp(parameters, client)
+    console.log('Create resp=================')
     console.log(createResp)
+    console.log('============================')
     const jobStatus = await getRealtimeLogs(
-      createResp.github_deployment_job_id,
+      createResp.githubDeploymentJobID,
       client
     )
     if (jobStatus === 'failed') {

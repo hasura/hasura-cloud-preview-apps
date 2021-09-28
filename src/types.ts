@@ -14,7 +14,7 @@ export type Job = {
 export type CreatePreviewAppResponse = {
   createGitHubPreviewApp: {
     projectId: string
-    github_deployment_job_id: string
+    githubDeploymentJobID: string
   }
 }
 
@@ -31,7 +31,7 @@ export type CreatePreviewAppVariables = {
 }
 
 export type RecreatePreviewAppResponse = {
-  recreateGithubPreviewApp: CreatePreviewAppResponse['createGitHubPreviewApp']
+  recreateGitHubPreviewApp: CreatePreviewAppResponse['createGitHubPreviewApp']
 }
 export type RecreatePreviewAppVariables = CreatePreviewAppVariables
 

@@ -5056,6 +5056,9 @@ const getJobStatus = (jobId, context) => tasks_awaiter(void 0, void 0, void 0, f
                 jobId
             }
         });
+        if (!resp.jobs_by_pk) {
+            throw new Error('could not find the GitHub job; the associated deployment was terminated');
+        }
         const tasksCount = (_a = resp.jobs_by_pk) === null || _a === void 0 ? void 0 : _a.tasks.length;
         if (tasksCount && tasksCount > 0) {
             const latestTask = (_b = resp.jobs_by_pk) === null || _b === void 0 ? void 0 : _b.tasks[tasksCount - 1];

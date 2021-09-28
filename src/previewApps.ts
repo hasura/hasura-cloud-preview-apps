@@ -122,7 +122,7 @@ export const recreatePreviewApp = async (
           $cloud: String!
           $plan: String!
         ) {
-          recreateGithubPreviewApp (
+          recreateGitHubPreviewApp (
             payload: {
               appName: $appName
               githubPersonalAccessToken: $githubPAT,

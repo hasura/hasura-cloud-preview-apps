@@ -4961,7 +4961,7 @@ const recreatePreviewApp = (parameters, client) => __awaiter(void 0, void 0, voi
           $cloud: String!
           $plan: String!
         ) {
-          recreateGithubPreviewApp (
+          recreateGitHubPreviewApp (
             payload: {
               appName: $appName
               githubPersonalAccessToken: $githubPAT,
@@ -7035,7 +7035,7 @@ function run() {
     return main_awaiter(this, void 0, void 0, function* () {
         try {
             //const parameters = getParameters();
-            console.log(core.getInput('env'));
+            console.log(core.getInput('hasuraEnv'));
             const params = {
                 PLAN: 'cloud_free',
                 REGION: 'us-east-2',

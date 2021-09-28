@@ -5198,7 +5198,7 @@ const parameters = {
     REGION: core.getInput('region'),
     NAME: core.getInput('name') || '',
     GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
-    HASURA_CLOUD_PAT: core.getInput('hasuraCloudAccessToken') || '',
+    HASURA_CLOUD_PAT: process.env.HASURA_CLOUD_ACCESS_TOKEN || '',
     CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint'),
     HASURA_PROJECT_DIR: core.getInput('hasuraProjectDirectoryPath') || '',
     GITHUB_REPO_NAME,

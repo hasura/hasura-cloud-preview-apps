@@ -8,9 +8,19 @@ import {
 } from './postgres'
 
 const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || ''
-const GITHUB_BRANCH_NAME = process.env.GITHUB_HEAD_REF || ''
 const GITHUB_OWNER = GITHUB_REPOSITORY.split('/')[0]
 const GITHUB_REPO_NAME = GITHUB_REPOSITORY.split('/')[1] || ''
+
+const getBranchName = () => {
+  let branchName = process.env.GITHUB_HEAD_REF || ''
+  if (!branchName) {
+    const refName = process.env.GITHUB_REF || ''
+    branchName = refName.split('refs/heads/')[1]
+  }
+  return branchName || ''
+}
+
+const GITHUB_BRANCH_NAME = getBranchName()
 
 export const getHasuraEnvVars = (rawEnvVars: string) => {
   return rawEnvVars

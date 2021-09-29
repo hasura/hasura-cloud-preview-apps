@@ -34,7 +34,7 @@ jobs:
             POSTGRES_SERVER_CONNECTION_URI=${{secrets.DO_PG_STRING}}
             PG_ENV_VARS_FOR_HASURA=CUSTOM_DB_1,CUSTOM_DB_2
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # ${{ secrets.GITHUB_TOKEN }} is provided by default by GitHub actions
           HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}} # Hasura Cloud access token to contact Hasura Cloud APIs
 
 ```
@@ -59,7 +59,7 @@ jobs:
           name: "project-name-pr-${{github.event.number}}" # name of the preview app to deleted
           delete: true
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # ${{ secrets.GITHUB_TOKEN }} is provided by default by GitHub actions
           HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}} # Hasura Cloud access token to contact Hasura Cloud APIs
 ```
 
@@ -104,6 +104,8 @@ This action outputs the following output variables that you can use in the subse
 
 - **graphQLEndpoint**: The GraphQL endpoint of the created Hasura preview app.
 - **consoleURL**: The URL to the console UI of the created Hasura preview app.
+
+You can access these output variables and use [this GitHub Action](https://github.com/hasura/comment-progress) for commenting on the pull requests.
 
 ## Reference:
 

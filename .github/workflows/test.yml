@@ -1,6 +1,7 @@
 name: 'build-test'
 on:
   pull_request:
+    types: [open, reopen, synchronize]
   push:
     branches:
       - main
@@ -14,7 +15,7 @@ jobs:
           npm install
       - run: |
           npm run all
-  test: # make sure the action works on a clean machine without building
+  preview: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

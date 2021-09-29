@@ -4,7 +4,7 @@ on:
     types: [closed]
 
 jobs:
-  test: # make sure the action works on a clean machine without building
+  delete:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

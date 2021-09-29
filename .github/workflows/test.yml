@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Debug
+        uses: hmarr/debug-action@v2
       - uses: ./
         with:
           name: 'tenant1'

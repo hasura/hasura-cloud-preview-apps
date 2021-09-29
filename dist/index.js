@@ -14623,15 +14623,13 @@ const getPostgresServerMetadata = (rawMetadata) => {
     }
     const metadataLines = rawMetadata.trim().split('\n');
     if (metadataLines.length < 2) {
-        throw new Error('Invalid postgres server metadata.');
+        throw new Error('Invalid ephemeral DB config. ');
     }
     const [pgStringLabel, pgString] = metadataLines[0].trim().split('=');
     if (pgStringLabel !== 'POSTGRES_SERVER_CONNECTION_URI' || !pgString.trim()) {
         throw new Error('Could not find PG_SERVER_CONNECTION_URI in the Postgres server metadata');
     }
     const [envVarsForHasuraLabel, commaSeparatedEnvVars] = metadataLines[1].trim().split('=');
-    console.log(envVarsForHasuraLabel);
-    console.log(commaSeparatedEnvVars);
     if (envVarsForHasuraLabel !== 'PG_ENV_VARS_FOR_HASURA' ||
         !commaSeparatedEnvVars.trim()) {
         throw new Error('Could not find valid PG_ENV_VARS_FOR_HASURA in Postgres server metadata');
@@ -14647,10 +14645,10 @@ const getPostgresServerMetadata = (rawMetadata) => {
 };
 const getParameters = (logger) => parameters_awaiter(void 0, void 0, void 0, function* () {
     const parameters = getBaseParameters();
-    const postgresMetadata = getPostgresServerMetadata(core.getInput('ephemeralDBConfig'));
+    const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresDBConfig'));
     if (postgresMetadata) {
         for (const env of postgresMetadata.envVars) {
-            const dbName = env.toLowerCase();
+            const dbName = parameters.NAME.replace(/[^A-Z0-9]/ig, "_");
             if (!parameters.SHOULD_DELETE) {
                 try {
                     yield createEphemeralDb(postgresMetadata.pgString, dbName);

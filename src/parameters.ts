@@ -67,7 +67,7 @@ const getPostgresServerMetadata = (rawMetadata: string) => {
 
   const metadataLines = rawMetadata.trim().split('\n')
   if (metadataLines.length < 2) {
-    throw new Error('Invalid postgres server metadata.')
+    throw new Error('Invalid ephemeral DB config. ')
   }
 
   const [pgStringLabel, pgString] = metadataLines[0].trim().split('=')
@@ -81,8 +81,6 @@ const getPostgresServerMetadata = (rawMetadata: string) => {
     envVarsForHasuraLabel,
     commaSeparatedEnvVars
   ] = metadataLines[1].trim().split('=')
-  console.log(envVarsForHasuraLabel)
-  console.log(commaSeparatedEnvVars)
   if (
     envVarsForHasuraLabel !== 'PG_ENV_VARS_FOR_HASURA' ||
     !commaSeparatedEnvVars.trim()
@@ -106,11 +104,11 @@ export const getParameters = async (logger: Logger) => {
   const parameters = getBaseParameters()
 
   const postgresMetadata = getPostgresServerMetadata(
-    core.getInput('ephemeralDBConfig')
+    core.getInput('postgresDBConfig')
   )
   if (postgresMetadata) {
     for (const env of postgresMetadata.envVars) {
-      const dbName = env.toLowerCase()
+      const dbName = parameters.NAME.replace(/[^A-Z0-9]/gi, '_')
       if (!parameters.SHOULD_DELETE) {
         try {
           await createEphemeralDb(postgresMetadata.pgString, dbName)

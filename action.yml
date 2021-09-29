@@ -23,7 +23,7 @@ inputs:
   hasuraEnv:
     description: 'Set of environment variables that you wish to provide to the created preview app. Example: HASURA_GRAPHQL_JWT_SECRET, PG_DATABASE_URL etc. Please note that this is different from the env vars of this action.'
     required: false
-  ephemeralDBConfig:
+  postgresDBConfig:
     description: 'Connection to a Postgres server for creating/deleting ephemeral datasources'
     required: false
   delete:

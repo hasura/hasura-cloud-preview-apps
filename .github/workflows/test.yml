@@ -22,7 +22,7 @@ jobs:
       - uses: ./
         with:
           name: 'tenant1'
-          hasuraCloudGraphQLEndpoint: 'https://0eb0-106-51-72-39.ngrok.io/v1/graphql'
+          hasuraCloudGraphQLEndpoint: 'https://8109-106-51-72-39.ngrok.io/v1/graphql'
           hasuraProjectDirectoryPath: hasura
           hasuraEnv: |
             HASURA_GRAPHQL_CORS_DOMAIN=*

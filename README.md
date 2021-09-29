@@ -31,8 +31,8 @@ jobs:
            	HASURA_GRAPHQL_CORS_DOMAINS=http://my-site.com
            	PG_DATABASE_URL=${{secrets.PG_STRING}}
           postgresDBConfig: |
-            POSTGRES_SERVER_CONNECTION_URI=${{secrets.DO_PG_STRING}}
-            PG_ENV_VARS_FOR_HASURA=CUSTOM_DB_1,CUSTOM_DB_2
+            POSTGRES_SERVER_CONNECTION_URI=${{secrets.PG_STRING}}
+            PG_ENV_VARS_FOR_HASURA=PG_DB_URL_1,PG_DB_URL_2
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} # ${{ secrets.GITHUB_TOKEN }} is provided by default by GitHub actions
           HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}} # Hasura Cloud access token to contact Hasura Cloud APIs
@@ -87,7 +87,7 @@ jobs:
 - **postgresDBConfig**: This input accepts the connection URI of the postgres server and a comma separated list of environment variables that expect Postgres connection URIs. Given a Postgres server and a set of env vars, this action can create temporary databases in the postgres server and pass their connection strings to the given environment variables so that migrations can be applied on these freshly created databases. The format is as follows:
   ```yaml
   postgresDBConfig: | # postgres DB config for creating temporary databases
-    POSTGRES_SERVER_CONNECTION_URI=${{secrets.DO_PG_STRING}}
+    POSTGRES_SERVER_CONNECTION_URI=${{secrets.PG_STRING}}
     PG_ENV_VARS_FOR_HASURA=PG_DB_URL_1,PG_DB_URL_2
   ```
   Please make sure that this db config is also present in the deletion workflow so that this action also deletes the temporarily created databases when the PR is closed.

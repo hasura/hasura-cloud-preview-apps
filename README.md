@@ -39,7 +39,7 @@ jobs:
 
 ```
 
-#### Deleting preview apps on pull request close
+#### Deleting preview apps on pull request closure/merger
 
 The following workflow can be used for deleting Hasura Cloud preview apps on closing/merging pull requests.
 

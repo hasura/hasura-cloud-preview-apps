@@ -20,15 +20,16 @@ const run = async (context): Promise<void> => {
   }
 }
 
-const logger = createLogger()
-try {
-  const context = createContext()
-  run(context)
-} catch (e) {
-  if (e instanceof Error) {
-    logger.terminate(e.message)
-  } else {
-    logger.terminate(errors.unexpected)
-  }
-  process.exit(1)
-}
+createContext()
+  .then(context => {
+    run(context)
+  })
+  .catch(e => {
+    const logger = createLogger()
+    if (e instanceof Error) {
+      logger.terminate(e.message)
+    } else {
+      logger.terminate(errors.unexpected)
+    }
+    process.exit(1)
+  })

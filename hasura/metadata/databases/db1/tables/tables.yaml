@@ -1,0 +1,3 @@
+- "!include public_db1_table_1.yaml"
+- "!include public_db_1_table2.yaml"
+- "!include public_db_1_table2z.yaml"

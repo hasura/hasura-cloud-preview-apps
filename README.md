@@ -1,6 +1,6 @@
 # Hasura Cloud Preview Apps
 
-This action can be used to manage Hasura Cloud preview apps on pull requests. If you have a Hasura project with metadata and migrations in a Git repo, you can get preview Hasura Cloud instances with the metadata and migrations applied.
+This action helps you manage Hasura Cloud preview apps on pull requests through. If you have a Hasura project with metadata and migrations in a Git repo, this enables you to get preview Hasura Cloud instances with the metadata and migrations automatically applied.
 
 ### Sample usage
 

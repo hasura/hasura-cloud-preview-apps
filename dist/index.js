@@ -5171,6 +5171,7 @@ const handler = (context) => handler_awaiter(void 0, void 0, void 0, function* (
     const exists = yield doesProjectExist(context);
     if (context.parameters.SHOULD_DELETE) {
         const deleteResp = yield deletePreviewApp(context);
+        context.logger.log(`Preview app "${context.parameters.NAME}" deleted successfully.`);
         return deleteResp;
     }
     if (exists) {

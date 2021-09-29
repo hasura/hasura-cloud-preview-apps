@@ -13,6 +13,9 @@ export const handler = async (context: Context): Promise<OutputVars | {}> => {
   const exists = await doesProjectExist(context)
   if (context.parameters.SHOULD_DELETE) {
     const deleteResp = await deletePreviewApp(context)
+    context.logger.log(
+      `Preview app "${context.parameters.NAME}" deleted successfully.`
+    )
     return deleteResp
   }
   if (exists) {

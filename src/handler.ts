@@ -3,13 +3,18 @@ import {OutputVars} from './types'
 import {
   doesProjectExist,
   createPreviewApp,
-  recreatePreviewApp
+  recreatePreviewApp,
+  deletePreviewApp
 } from './previewApps'
 import {getRealtimeLogs} from './tasks'
 import {getOutputVars} from './utils'
 
-export const handler = async (context: Context): Promise<OutputVars> => {
+export const handler = async (context: Context): Promise<OutputVars | {}> => {
   const exists = await doesProjectExist(context)
+  if (context.parameters.SHOULD_DELETE) {
+    const deleteResp = await deletePreviewApp(context)
+    return deleteResp
+  }
   if (exists) {
     context.logger.log(
       'A project with the given name exists. Triggering redeployment.'

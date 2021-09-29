@@ -5,7 +5,7 @@ import {errors} from './errors'
 
 const run = async (context): Promise<void> => {
   try {
-    const outputVars = await handler(context)
+    const outputVars: Record<string, string> = await handler(context)
     const outputVarKeys = Object.keys(outputVars)
     for (let i = 0; i < outputVarKeys.length; i++) {
       context.logger.output(outputVarKeys[i], outputVars[outputVarKeys[i]])

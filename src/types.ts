@@ -42,6 +42,10 @@ export type OutputVars = {
   jobId: string
 }
 
+export type DeleteOutputVars = {
+  deletedProjectName: string
+}
+
 export type JobDetails = {
   jobs_by_pk: {
     status: string
@@ -58,4 +62,26 @@ export type JobDetails = {
       }[]
     }[]
   }
+}
+
+export type GetTenantIdResponse = {
+  projects: {
+    id: string
+    tenant: {
+      id: string
+    }
+  }[]
+}
+
+export type GetTenantIdVariables = {
+  projectName: string
+}
+
+export type DeleteTenantResponse = {
+  deleteTenant: {
+    status: string
+  }
+}
+export type DeleteTenantVariables = {
+  tenantId: string
 }

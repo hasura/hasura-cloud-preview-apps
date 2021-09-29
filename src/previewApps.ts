@@ -3,7 +3,11 @@ import {
   Project,
   RecreatePreviewAppResponse,
   CreatePreviewAppVariables,
-  CreatePreviewAppResponse
+  CreatePreviewAppResponse,
+  GetTenantIdResponse,
+  GetTenantIdVariables,
+  DeleteTenantResponse,
+  DeleteTenantVariables
 } from './types'
 
 export const doesProjectExist = async (context: Context): Promise<boolean> => {
@@ -153,6 +157,59 @@ export const recreatePreviewApp = async (
       ...resp.recreateGitHubPreviewApp
     }
   } catch (e) {
+    throw e
+  }
+}
+
+export const deletePreviewApp = async (context: Context) => {
+  try {
+    const getTenantIdResp = await context.client.query<
+      GetTenantIdResponse,
+      GetTenantIdVariables
+    >({
+      query: `
+        query getTenantId ($projectName: String!) {
+          projects (
+            where: {
+              name: {
+                _eq: $projectName
+              }
+            }
+          ) {
+            id
+            tenant {
+              id
+            }
+          }
+        }
+      `,
+      variables: {
+        projectName: context.parameters.NAME
+      }
+    })
+    if (getTenantIdResp.projects.length) {
+      await context.client.query<DeleteTenantResponse, DeleteTenantVariables>({
+        query: `
+          mutation deleteTenant ($tenantId: uuid!) {
+            deleteTenant(tenantId: $tenantId) {
+              status
+            }
+          }
+        `,
+        variables: {
+          tenantId: getTenantIdResp.projects[0].tenant.id
+        }
+      })
+      return {}
+    } else {
+      throw new Error(
+        'Could not delete the preview app because the given app does not exist.'
+      )
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      throw new Error(`Could not delete the preview app. ${e.message}`)
+    }
     throw e
   }
 }

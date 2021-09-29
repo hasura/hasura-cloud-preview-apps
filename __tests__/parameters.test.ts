@@ -12,7 +12,12 @@ const paramsBase: Parameters = {
   CLOUD_DATA_GRAPHQL: 'https://data.pro.hasura.io/v1/graphql',
   NAME: 'sample-name',
   HASURA_PROJECT_DIR: '',
-  HASURA_CLOUD_PAT: 'test_pat'
+  HASURA_CLOUD_PAT: 'test_pat',
+  GITHUB_REPO_NAME: 'hcgitest',
+  GITHUB_OWNER: 'wawhal',
+  GITHUB_BRANCH_NAME: 'main',
+  HASURA_ENV_VARS: [],
+  SHOULD_DELETE: false
 }
 
 test('parameters validation', () => {

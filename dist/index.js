@@ -14306,6 +14306,29 @@ const deletePreviewApp = (context) => __awaiter(void 0, void 0, void 0, function
     }
 });
 
+;// CONCATENATED MODULE: ./src/utils.ts
+var utils_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+const getOutputVars = (createResp, params) => {
+    return {
+        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
+        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
+        jobId: createResp.githubDeploymentJobID
+    };
+};
+const waitFor = (time) => utils_awaiter(void 0, void 0, void 0, function* () {
+    return new Promise(resolve => {
+        setTimeout(resolve, time);
+    });
+});
+
 ;// CONCATENATED MODULE: ./src/tasks.ts
 var tasks_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -14316,6 +14339,7 @@ var tasks_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _ar
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 const getTaskName = (taskName) => {
     switch (taskName) {
         case 'gh-validation':
@@ -14395,7 +14419,10 @@ const getJobStatus = (jobId, context) => tasks_awaiter(void 0, void 0, void 0, f
         throw e;
     }
 });
-const getRealtimeLogs = (jobId, context) => tasks_awaiter(void 0, void 0, void 0, function* () {
+const getRealtimeLogs = (jobId, context, retryCount = 0) => tasks_awaiter(void 0, void 0, void 0, function* () {
+    if (retryCount > 0) {
+        yield waitFor(2000);
+    }
     const jobStatus = yield getJobStatus(jobId, context);
     if (jobStatus === 'success') {
         return 'success';
@@ -14403,17 +14430,8 @@ const getRealtimeLogs = (jobId, context) => tasks_awaiter(void 0, void 0, void 0
     if (jobStatus === 'failed') {
         return 'failed';
     }
-    return getRealtimeLogs(jobId, context);
+    return getRealtimeLogs(jobId, context, retryCount + 1);
 });
-
-;// CONCATENATED MODULE: ./src/utils.ts
-const getOutputVars = (createResp, params) => {
-    return {
-        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
-        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
-        jobId: createResp.githubDeploymentJobID
-    };
-};
 
 ;// CONCATENATED MODULE: ./src/handler.ts
 var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -14648,7 +14666,7 @@ const getParameters = (logger) => parameters_awaiter(void 0, void 0, void 0, fun
     const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresDBConfig'));
     if (postgresMetadata) {
         for (const env of postgresMetadata.envVars) {
-            const dbName = parameters.NAME.replace(/[^A-Z0-9]/ig, "_");
+            const dbName = parameters.NAME.replace(/[^A-Z0-9]/gi, '_');
             if (!parameters.SHOULD_DELETE) {
                 try {
                     yield createEphemeralDb(postgresMetadata.pgString, dbName);

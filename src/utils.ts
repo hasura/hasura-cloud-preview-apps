@@ -11,3 +11,9 @@ export const getOutputVars = (
     jobId: createResp.githubDeploymentJobID
   }
 }
+
+export const waitFor = async (time: number) => {
+  return new Promise(resolve => {
+    setTimeout(resolve, time)
+  })
+}

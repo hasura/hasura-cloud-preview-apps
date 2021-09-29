@@ -1,5 +1,6 @@
 import {Context} from './context'
 import {JobDetails} from './types'
+import {waitFor} from './utils'
 
 const getTaskName = (taskName?: string) => {
   switch (taskName) {
@@ -90,7 +91,14 @@ const getJobStatus = async (jobId: string, context: Context) => {
   }
 }
 
-export const getRealtimeLogs = async (jobId: string, context: Context) => {
+export const getRealtimeLogs = async (
+  jobId: string,
+  context: Context,
+  retryCount = 0
+) => {
+  if (retryCount > 0) {
+    await waitFor(2000)
+  }
   const jobStatus = await getJobStatus(jobId, context)
   if (jobStatus === 'success') {
     return 'success'
@@ -98,5 +106,5 @@ export const getRealtimeLogs = async (jobId: string, context: Context) => {
   if (jobStatus === 'failed') {
     return 'failed'
   }
-  return getRealtimeLogs(jobId, context)
+  return getRealtimeLogs(jobId, context, retryCount + 1)
 }

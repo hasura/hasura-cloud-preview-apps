@@ -72,19 +72,19 @@ jobs:
 
 - **region**: (optional, default: "us-east-2") AWS region to deploy the Hasura Cloud preview app on. You can check the supported regions in the new project form at https://cloud.hasura.io/projects.
 
-- **tier**: (optional, default: "cloud_free") The tier of the the preview app. Use `cloud_free` for free tier and `cloud_payg` for Standard tier. You need a payment method added at https://cloud.hasura.io/billing for creating Standard tier projects.
+- **tier**: (optional, default: "cloud_free") The tier of the the preview app. Use `cloud_free` for free tier and `cloud_payg` for Standard tier. A valid payment method is required at https://cloud.hasura.io/billing for creating Standard tier projects.
 
 - **hasuraEnv**: (optional, default: "") The environment variables that you want to set for the Hasura Cloud preview app. These must be `KEY=value` pairs with each env var on a new line. For example:
 	```yaml
 	hasuraEnv: | # env vars exposed to the Hasura instance
-  	HASURA_GRAPHQL_CORS_DOMAINS=http://my-site.com
-  	ENV_VAR_1=value1
-    ENV_VAR_2=value2
+  	 HASURA_GRAPHQL_CORS_DOMAINS=http://my-site.com
+  	 ENV_VAR_1=value1
+     ENV_VAR_2=value2
 	```
 
-- **delete**: (optional, default: false) This must only be used in jobs where you want to delete the preview apps with the name given in the `name` field. Refer to the abo
+- **delete**: (optional, default: false) This must only be used in jobs where you want to delete the preview apps with the name given in the `name` field. Refer to the above sample usage for deleting preview apps on preview app closure/merger.
 
-- **postgresDBConfig**: This input accepts the connection URI of the postgres server and a comma separated list of environment variables that expect Postgres connection URIs. Given a Postgres server and a set of env vars, this action can create temporary databases in the postgres server and pass their connection strings to the given environment variables so that migrations can be applied on these freshly created databases. The format is as follows:
+- **postgresDBConfig**: This input accepts the connection URI of a postgres server and a comma-separated list of environment variables for the preview app that expect Postgres connection URIs. Given a Postgres server and a set of env vars, this action can create temporary databases in the postgres server and pass their connection strings to the given environment variables so that migrations can be applied on these freshly created databases. The format is as follows:
   ```yaml
   postgresDBConfig: | # postgres DB config for creating temporary databases
     POSTGRES_SERVER_CONNECTION_URI=${{secrets.PG_STRING}}
@@ -95,12 +95,12 @@ jobs:
 
 ## Env Vars
 
-- **GITHUB_TOKEN**: This is env var is mandatory for Hasura Cloud to access the metadata and migrations from the branch of your Git repo.
+- **GITHUB_TOKEN**: This env var is mandatory for Hasura Cloud to access the metadata and migrations from the branch of your Git repo. It is available in GitHub action by default in the `${{secrets.GITHUB_TOKEN}}` secret.
 - **HASURA_CLOUD_ACCESS_TOKEN**: Hasura Cloud access token is mandatory for this GitHub action to contact the Hasura Cloud APIs.
 
 ## Output Variables
 
-This action outputs the following output variables that you can use in the subsequent steps of the workflow or for commenting on the pull request:
+This action outputs the following output variables that you can use in the subsequent steps of your workflow or for commenting on the pull request:
 
 - **graphQLEndpoint**: The GraphQL endpoint of the created Hasura preview app.
 - **consoleURL**: The URL to the console UI of the created Hasura preview app.

@@ -1,1 +1,22 @@
-[]
+- name: db1
+  kind: postgres
+  configuration:
+    connection_info:
+      database_url:
+        from_env: CUSTOM_DB_1
+      isolation_level: read-committed
+      pool_settings:
+        connection_lifetime: 600
+      use_prepared_statements: false
+  tables: "!include db1/tables/tables.yaml"
+- name: db2
+  kind: postgres
+  configuration:
+    connection_info:
+      database_url:
+        from_env: CUSTOM_DB_2
+      isolation_level: read-committed
+      pool_settings:
+        connection_lifetime: 600
+      use_prepared_statements: false
+  tables: "!include db2/tables/tables.yaml"

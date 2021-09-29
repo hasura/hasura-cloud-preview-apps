@@ -14626,7 +14626,7 @@ const getPostgresServerMetadata = (rawMetadata) => {
         throw new Error('Invalid postgres server metadata.');
     }
     const [pgStringLabel, pgString] = metadataLines[0].trim().split('=');
-    if (pgStringLabel !== 'PG_SERVER_CONNECTION_URI' || !pgString.trim()) {
+    if (pgStringLabel !== 'POSTGRES_SERVER_CONNECTION_URI' || !pgString.trim()) {
         throw new Error('Could not find PG_SERVER_CONNECTION_URI in the Postgres server metadata');
     }
     const [envVarsForHasuraLabel, commaSeparatedEnvVars] = metadataLines[1].trim().split(',');

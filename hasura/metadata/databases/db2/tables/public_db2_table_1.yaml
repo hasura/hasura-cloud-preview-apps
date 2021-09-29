@@ -1,0 +1,11 @@
+table:
+  name: db2_table_1
+  schema: public
+array_relationships:
+- name: db2_table_2s
+  using:
+    foreign_key_constraint_on:
+      column: table1_id
+      table:
+        name: db2_table_2
+        schema: public

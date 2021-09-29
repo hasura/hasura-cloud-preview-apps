@@ -9,7 +9,7 @@ inputs:
     description: 'Region to deploy preview app in'
     required: false
     default: 'us-east-2'
-  plan:
+  tier:
     description: 'Plan of the preview app'
     required: false
     default: 'cloud_free'

@@ -28,7 +28,7 @@ export const getHasuraEnvVars = (rawEnvVars: string) => {
 }
 
 export const parameters = {
-  PLAN: core.getInput('plan'),
+  PLAN: core.getInput('tier'),
   REGION: core.getInput('region'),
   NAME: core.getInput('name') || '',
   GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',

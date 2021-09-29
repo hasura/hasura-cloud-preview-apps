@@ -67,13 +67,13 @@ const getPostgresServerMetadata = (rawMetadata: string) => {
 
   const metadataLines = rawMetadata.trim().split('\n')
   if (metadataLines.length < 2) {
-    throw new Error('Invalid ephemeral DB config. ')
+    throw new Error('Invalid Postgres DB config. ')
   }
 
   const [pgStringLabel, pgString] = metadataLines[0].trim().split('=')
   if (pgStringLabel !== 'POSTGRES_SERVER_CONNECTION_URI' || !pgString.trim()) {
     throw new Error(
-      'Could not find PG_SERVER_CONNECTION_URI in the Postgres server metadata'
+      'Could not find PG_SERVER_CONNECTION_URI in the Postgres DB config'
     )
   }
 
@@ -86,7 +86,7 @@ const getPostgresServerMetadata = (rawMetadata: string) => {
     !commaSeparatedEnvVars.trim()
   ) {
     throw new Error(
-      'Could not find valid PG_ENV_VARS_FOR_HASURA in Postgres server metadata'
+      'Could not find valid PG_ENV_VARS_FOR_HASURA in Postgres DB config'
     )
   }
 

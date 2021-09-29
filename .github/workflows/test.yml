@@ -22,7 +22,10 @@ jobs:
         with:
           name: 'tenant1'
           hasuraCloudGraphQLEndpoint: 'https://0eb0-106-51-72-39.ngrok.io/v1/graphql'
-          delete: true
+          hasuraProjectDirectoryPath: hasura
+          hasuraEnv: |
+            HASURA_GRAPHQL_CORS_DOMAIN=*
+            PG_DB_URL=posg.....
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}

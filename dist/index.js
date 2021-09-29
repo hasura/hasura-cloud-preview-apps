@@ -14645,7 +14645,7 @@ const getPostgresServerMetadata = (rawMetadata) => {
 };
 const getParameters = (logger) => parameters_awaiter(void 0, void 0, void 0, function* () {
     const parameters = getBaseParameters();
-    const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresServer'));
+    const postgresMetadata = getPostgresServerMetadata(core.getInput('ephemeralDBConfig'));
     if (postgresMetadata) {
         for (const env of postgresMetadata.envVars) {
             const dbName = env.toLowerCase();

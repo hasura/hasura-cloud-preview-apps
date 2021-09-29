@@ -104,7 +104,7 @@ export const getParameters = async (logger: Logger) => {
   const parameters = getBaseParameters()
 
   const postgresMetadata = getPostgresServerMetadata(
-    core.getInput('postgresServer')
+    core.getInput('ephemeralDBConfig')
   )
   if (postgresMetadata) {
     for (const env of postgresMetadata.envVars) {

@@ -1,13 +1,13 @@
 name: 'build-test'
-on: # rebuild any PRs and main branch changes
+on:
   pull_request:
+    types: [open, reopen, synchronize]
   push:
     branches:
       - main
-      - 'releases/*'
 
 jobs:
-  build: # make sure build/ci work properly
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,10 +15,18 @@ jobs:
           npm install
       - run: |
           npm run all
-  test: # make sure the action works on a clean machine without building
+  preview: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          name: 'sample-name'
+          name: 'tenant1'
+          hasuraCloudGraphQLEndpoint: 'https://0eb0-106-51-72-39.ngrok.io/v1/graphql'
+          hasuraProjectDirectoryPath: hasura
+          hasuraEnv: |
+            HASURA_GRAPHQL_CORS_DOMAIN=*
+            PG_DB_URL=posg.....
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}

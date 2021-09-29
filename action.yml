@@ -9,16 +9,33 @@ inputs:
     description: 'Region to deploy preview app in'
     required: false
     default: 'us-east-2'
-  plan:
+  tier:
     description: 'Plan of the preview app'
     required: false
-    default: 'cloud_free' 
-outputs:
-  graphqlEndpoint: # id of output
-    description: 'GraphQL endpoint of the created preview app'
-  consoleUrl:
-    description: 'Console URL of the created preview app'
+    default: 'cloud_free'
+  hasuraCloudGraphQLEndpoint:
+    description: 'GraphQL endpoint of Hasura Cloud data service'
+    required: false
+    default: 'https://data.pro.hasura.io/v1/graphql'
+  hasuraProjectDirectoryPath:
+    description: 'Path to the directory of the Hasura project in the repo. If empty, root is considered to be a Hasura project.'
+    required: false
+  hasuraEnv:
+    description: 'Set of environment variables that you wish to provide to the created preview app. Example: HASURA_GRAPHQL_JWT_SECRET, PG_DATABASE_URL etc. Please note that this is different from the env vars of this action.'
+    required: false
+  postgresServer:
+    description: 'Connection to a Postgres server for creating/deleting ephemeral datasources'
+    required: false
+  delete:
+    description: 'Set true when you are using this action on pull request close event. This will delete the preview app with the given name.'
+    required: false
+    default: false
 
+outputs:
+  graphQLEndpoint:
+    description: 'GraphQL endpoint of the created preview app'
+  consoleURL:
+    description: 'Console URL of the created preview app'
 runs:
   using: 'node12'
   main: 'dist/index.js'

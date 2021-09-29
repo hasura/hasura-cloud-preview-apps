@@ -1,19 +1,34 @@
-import * as core from '@actions/core'
-import {getParameters} from './parameters'
+import {handler} from './handler'
+import {createContext} from './context'
+import {createLogger} from './logger'
+import {errors} from './errors'
 
-async function run(): Promise<void> {
+const run = async (context): Promise<void> => {
   try {
-    const parameters = getParameters()
-    core.setOutput('graphqlEndpoint', 'https://something')
-    core.setOutput('name', parameters.NAME)
-  } catch (error: unknown) {
-    console.error(error)
-    if (error instanceof Error) {
-      core.setFailed(error.message)
-    } else {
-      core.setFailed('unexpected error occured')
+    const outputVars: Record<string, string> = await handler(context)
+    const outputVarKeys = Object.keys(outputVars)
+    for (let i = 0; i < outputVarKeys.length; i++) {
+      context.logger.output(outputVarKeys[i], outputVars[outputVarKeys[i]])
     }
+  } catch (error) {
+    if (error instanceof Error) {
+      context.logger.terminate(error.message)
+    } else {
+      context.logger.terminate(errors.unexpected)
+    }
+    process.exit(1)
   }
 }
 
-run()
+const logger = createLogger()
+try {
+  const context = createContext()
+  run(context)
+} catch (e) {
+  if (e instanceof Error) {
+    logger.terminate(e.message)
+  } else {
+    logger.terminate(errors.unexpected)
+  }
+  process.exit(1)
+}

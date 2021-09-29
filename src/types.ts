@@ -85,3 +85,5 @@ export type DeleteTenantResponse = {
 export type DeleteTenantVariables = {
   tenantId: string
 }
+
+export type PGClient = any

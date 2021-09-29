@@ -80,7 +80,9 @@ const getPostgresServerMetadata = (rawMetadata: string) => {
   const [
     envVarsForHasuraLabel,
     commaSeparatedEnvVars
-  ] = metadataLines[1].trim().split(',')
+  ] = metadataLines[1].trim().split('=')
+  console.log(envVarsForHasuraLabel)
+  console.log(commaSeparatedEnvVars)
   if (
     envVarsForHasuraLabel !== 'PG_ENV_VARS_FOR_HASURA' ||
     !commaSeparatedEnvVars.trim()

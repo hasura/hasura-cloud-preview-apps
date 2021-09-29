@@ -14629,7 +14629,9 @@ const getPostgresServerMetadata = (rawMetadata) => {
     if (pgStringLabel !== 'POSTGRES_SERVER_CONNECTION_URI' || !pgString.trim()) {
         throw new Error('Could not find PG_SERVER_CONNECTION_URI in the Postgres server metadata');
     }
-    const [envVarsForHasuraLabel, commaSeparatedEnvVars] = metadataLines[1].trim().split(',');
+    const [envVarsForHasuraLabel, commaSeparatedEnvVars] = metadataLines[1].trim().split('=');
+    console.log(envVarsForHasuraLabel);
+    console.log(commaSeparatedEnvVars);
     if (envVarsForHasuraLabel !== 'PG_ENV_VARS_FOR_HASURA' ||
         !commaSeparatedEnvVars.trim()) {
         throw new Error('Could not find valid PG_ENV_VARS_FOR_HASURA in Postgres server metadata');

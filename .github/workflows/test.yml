@@ -27,7 +27,7 @@ jobs:
           hasuraEnv: |
             HASURA_GRAPHQL_CORS_DOMAIN=*
             PG_DB_URL=posg.....
-          postgresServerMetadata: |
+          ephemeralDBConfig: |
             POSTGRES_SERVER_CONNECTION_URI=${{secrets.DO_PG_STRING}}
             PG_ENV_VARS_FOR_HASURA=CUSTOM_DB_1,CUSTOM_DB_2
         env:

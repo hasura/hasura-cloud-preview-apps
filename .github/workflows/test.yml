@@ -28,8 +28,8 @@ jobs:
             HASURA_GRAPHQL_CORS_DOMAIN=*
             PG_DB_URL=posg.....
           postgresDBConfig: |
-            POSTGRES_SERVER_CONNECTION_URI=
-            PG_ENV_VARS_FOR_HASURA=CUSTOM_DB_1,CUSTOM_DB_2
+            POSTGRES_SERVER_CONNECTION_URI=${{secrets.DO_PG_STRING}}
+            PG_ENV_VARS_FORR_HASURA=CUSTOM_DB_1,CUSTOM_DB_2
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}

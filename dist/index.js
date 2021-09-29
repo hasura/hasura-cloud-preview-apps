@@ -4995,6 +4995,55 @@ const recreatePreviewApp = (context) => __awaiter(void 0, void 0, void 0, functi
         throw e;
     }
 });
+const deletePreviewApp = (context) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const getTenantIdResp = yield context.client.query({
+            query: `
+        query getTenantId ($projectName: String!) {
+          projects (
+            where: {
+              name: {
+                _eq: $projectName
+              }
+            }
+          ) {
+            id
+            tenant {
+              id
+            }
+          }
+        }
+      `,
+            variables: {
+                projectName: context.parameters.NAME
+            }
+        });
+        if (getTenantIdResp.projects.length) {
+            yield context.client.query({
+                query: `
+          mutation deleteTenant ($tenantId: uuid!) {
+            deleteTenant(tenantId: $tenantId) {
+              status
+            }
+          }
+        `,
+                variables: {
+                    tenantId: getTenantIdResp.projects[0].tenant.id
+                }
+            });
+            return {};
+        }
+        else {
+            throw new Error('Could not delete the preview app because the given app does not exist.');
+        }
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            throw new Error(`Could not delete the preview app. ${e.message}`);
+        }
+        throw e;
+    }
+});
 
 ;// CONCATENATED MODULE: ./src/tasks.ts
 var tasks_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -5120,6 +5169,10 @@ var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _
 
 const handler = (context) => handler_awaiter(void 0, void 0, void 0, function* () {
     const exists = yield doesProjectExist(context);
+    if (context.parameters.SHOULD_DELETE) {
+        const deleteResp = yield deletePreviewApp(context);
+        return deleteResp;
+    }
     if (exists) {
         context.logger.log('A project with the given name exists. Triggering redeployment.');
         const recreateResp = yield recreatePreviewApp(context);
@@ -5161,10 +5214,11 @@ const createLogger = () => ({
 ;// CONCATENATED MODULE: ./src/errors.ts
 const errors = {
     validation: {
-        name: 'preview app name is mandatory; please provide it in the action inputs',
-        hasuraCloudPAT: 'hasura cloud personal access token is required for creating preview apps; please provide it in the action inputs',
-        githubToken: 'GitHub access token is required for Hasura Cloud to access metadata/migrations from your branch; please pass it in the GITHUB_TOKEN env var of the github action'
-    }
+        name: 'Preview app name is mandatory. Please provide it in the action input "name"',
+        hasuraCloudPAT: 'Hasura Cloud Personal access token is required for creating preview apps. Please pass it in the HASURA_CLOUD_ACCESS_TOKEN env var of the GitHub action.',
+        githubToken: 'GitHub access token is required for Hasura Cloud to access metadata/migrations from your branch. Please pass it in the GITHUB_TOKEN env var of the GitHub action.'
+    },
+    unexpected: 'Unexpected error occured.'
 };
 
 ;// CONCATENATED MODULE: ./src/parameters.ts
@@ -5204,7 +5258,8 @@ const parameters = {
     GITHUB_REPO_NAME,
     GITHUB_OWNER,
     GITHUB_BRANCH_NAME,
-    HASURA_ENV_VARS: getHasuraEnvVars(core.getInput('hasuraEnv'))
+    HASURA_ENV_VARS: getHasuraEnvVars(core.getInput('hasuraEnv')),
+    SHOULD_DELETE: [true, 'true'].includes(core.getInput('delete'))
 };
 const validateParameters = (params) => {
     if (!params.NAME) {
@@ -7157,6 +7212,7 @@ var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 
 
 
+
 const run = (context) => main_awaiter(void 0, void 0, void 0, function* () {
     try {
         const outputVars = yield handler(context);
@@ -7170,7 +7226,7 @@ const run = (context) => main_awaiter(void 0, void 0, void 0, function* () {
             context.logger.terminate(error.message);
         }
         else {
-            context.logger.terminate('unexpected error occured');
+            context.logger.terminate(errors.unexpected);
         }
         process.exit(1);
     }
@@ -7185,7 +7241,7 @@ catch (e) {
         logger.terminate(e.message);
     }
     else {
-        logger.terminate('unexpected error occured');
+        logger.terminate(errors.unexpected);
     }
     process.exit(1);
 }

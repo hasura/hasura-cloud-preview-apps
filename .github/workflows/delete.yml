@@ -17,4 +17,4 @@ jobs:
             PG_DB_URL=posg.....
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          HASURA_CLOUD_ACCESS_TOKEN: "U9xLhtW2rmx0W82VAAjdzYUj3CEWUHtMdQMxELpVF2fUKRh8qbz20fxWLd6hIl4q" 
+          HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}

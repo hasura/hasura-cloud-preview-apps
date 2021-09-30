@@ -90,6 +90,8 @@ jobs:
     POSTGRES_SERVER_CONNECTION_URI=${{secrets.PG_STRING}}
     PG_ENV_VARS_FOR_HASURA=PG_DB_URL_1,PG_DB_URL_2
   ```
+  This action constructs the database name from the provided preview app, followed by making `DROP DATABASE IF EXISTS` and `CREATE DATABASE` queries with the given credentials in the POSTGRES_SERVER_CONNECTION_URI.
+
   Please make sure that this db config is also present in the deletion workflow so that this action also deletes the temporarily created databases when the PR is closed.
 
 

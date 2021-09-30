@@ -14320,7 +14320,8 @@ const getOutputVars = (createResp, params) => {
     return {
         consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
         graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
-        jobId: createResp.githubDeploymentJobID
+        projectId: createResp.projectId,
+        projectName: params.NAME
     };
 };
 const waitFor = (time) => utils_awaiter(void 0, void 0, void 0, function* () {
@@ -16659,8 +16660,8 @@ const run = (context) => main_awaiter(void 0, void 0, void 0, function* () {
     try {
         const outputVars = yield handler(context);
         const outputVarKeys = Object.keys(outputVars);
-        for (let i = 0; i < outputVarKeys.length; i++) {
-            context.logger.output(outputVarKeys[i], outputVars[outputVarKeys[i]]);
+        for (const outputVarKey of outputVarKeys) {
+            context.logger.output(outputVarKey, outputVars[outputVarKey]);
         }
     }
     catch (error) {

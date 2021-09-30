@@ -104,6 +104,8 @@ This action outputs the following output variables that you can use in the subse
 
 - **graphQLEndpoint**: The GraphQL endpoint of the created Hasura preview app.
 - **consoleURL**: The URL to the console UI of the created Hasura preview app.
+- **projectName**: The name of the created Hasura preview app
+- **projectId**: The hasura cloud project ID of the created Hasura preview app
 
 You can access these output variables and use [this GitHub Action](https://github.com/hasura/comment-progress) for commenting on the pull requests.
 

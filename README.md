@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: hasura/hasura-cloud-preview-apps
+      - uses: hasura/hasura-cloud-preview-apps@v0.0.2
         with:
           name: "project-name-pr-${{github.event.number}}" # name of the preview app to created
           hasuraProjectDirectoryPath: hasura # path to the Hasura project directory in the repo
@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: hasura/hasura-cloud-preview-apps
+      - uses: hasura/hasura-cloud-preview-apps@v0.0.2
         with:
           name: "project-name-pr-${{github.event.number}}" # name of the preview app to deleted
           delete: true

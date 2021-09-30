@@ -23,7 +23,7 @@ jobs:
         uses: hmarr/debug-action@v2
       - uses: ./
         with:
-          name: 'preview-app-ci-internal${{github.event.number}}'
+          name: 'hc-preview-app-internal${{github.event.number}}'
           hasuraCloudGraphQLEndpoint: 'https://data.pro.arusah.com/v1/graphql'
           hasuraProjectDirectoryPath: hasura
           region: 'ap-south-1'

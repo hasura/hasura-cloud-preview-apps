@@ -1,4 +1,4 @@
-name: 'Hasura Cloud Preview App'
+name: 'Hasura Cloud Preview Apps'
 description: 'Get Hasura Cloud preview apps with metadata and migrations from GitHub branches'
 inputs:
   name:

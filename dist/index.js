@@ -14231,7 +14231,7 @@ const recreatePreviewApp = (context) => __awaiter(void 0, void 0, void 0, functi
                 cloud: $cloud,
                 region: $region,
                 plan: $plan
-                appName: $appName
+                name: $appName
                 envVars: $env 
               }
             }

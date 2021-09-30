@@ -11,7 +11,7 @@ jobs:
       - uses: ./
         with:
           name: 'tenant1'
-          hasuraCloudGraphQLEndpoint: 'https://8109-106-51-72-39.ngrok.io/v1/graphql'
+          hasuraCloudGraphQLEndpoint: 'https://data.pro.arusah.com/v1/graphql'
           delete: true
           postgresDBConfig: |
             POSTGRES_SERVER_CONNECTION_URI=${{secrets.DO_PG_STRING}}

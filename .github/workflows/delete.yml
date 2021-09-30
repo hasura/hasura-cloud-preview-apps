@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          name: 'tenant1'
+          name: 'preview-app-ci-internal${{github.event.number}}'
           hasuraCloudGraphQLEndpoint: 'https://data.pro.arusah.com/v1/graphql'
           delete: true
           postgresDBConfig: |

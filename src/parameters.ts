@@ -123,7 +123,7 @@ export const getParameters = async (logger: Logger) => {
         try {
           await createEphemeralDb(postgresMetadata.pgString, dbName)
           parameters.HASURA_ENV_VARS = [
-            ...parameters.HASURA_ENV_VARS,
+            ...parameters.HASURA_ENV_VARS.filter(e => e.key !== env),
             {
               key: env,
               value: changeDbInPgString(postgresMetadata.pgString, dbName)

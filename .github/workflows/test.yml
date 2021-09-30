@@ -29,7 +29,6 @@ jobs:
           region: 'ap-south-1'
           hasuraEnv: |
             HASURA_GRAPHQL_CORS_DOMAIN=*
-            PG_DB_URL=posg.....
           postgresDBConfig: |
             POSTGRES_SERVER_CONNECTION_URI=${{secrets.DO_PG_STRING}}
             PG_ENV_VARS_FOR_HASURA=PG_DATABASE_URL

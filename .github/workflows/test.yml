@@ -25,7 +25,7 @@ jobs:
         with:
           name: 'hc-preview-app-internal${{github.event.number}}'
           hasuraCloudGraphQLEndpoint: 'https://data.pro.arusah.com/v1/graphql'
-          hasuraProjectDirectoryPath: hasura
+          hasuraProjectDirectoryPath: hasurav2
           region: 'ap-south-1'
           hasuraEnv: |
             HASURA_GRAPHQL_CORS_DOMAIN=*

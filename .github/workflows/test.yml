@@ -23,9 +23,10 @@ jobs:
         uses: hmarr/debug-action@v2
       - uses: ./
         with:
-          name: 'tenant1'
-          hasuraCloudGraphQLEndpoint: 'https://8109-106-51-72-39.ngrok.io/v1/graphql'
+          name: 'preview-app-ci-internal${{github.event.number}}'
+          hasuraCloudGraphQLEndpoint: 'https://data.pro.arusah.com/v1/graphql'
           hasuraProjectDirectoryPath: hasura
+          region: 'ap-south-1'
           hasuraEnv: |
             HASURA_GRAPHQL_CORS_DOMAIN=*
             PG_DB_URL=posg.....
@@ -35,3 +36,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
+          ACTIONS_RUNNER_DEBUG: true

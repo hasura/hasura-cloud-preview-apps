@@ -39,7 +39,8 @@ export type RecreatePreviewAppVariables = CreatePreviewAppVariables
 export type OutputVars = {
   graphQLEndpoint: string
   consoleURL: string
-  jobId: string
+  projectId: string
+  projectName: string
 }
 
 export type DeleteOutputVars = {

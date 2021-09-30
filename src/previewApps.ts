@@ -134,7 +134,7 @@ export const recreatePreviewApp = async (
                 cloud: $cloud,
                 region: $region,
                 plan: $plan
-                appName: $appName
+                name: $appName
                 envVars: $env 
               }
             }

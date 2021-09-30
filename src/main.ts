@@ -7,8 +7,8 @@ const run = async (context): Promise<void> => {
   try {
     const outputVars: Record<string, string> = await handler(context)
     const outputVarKeys = Object.keys(outputVars)
-    for (let i = 0; i < outputVarKeys.length; i++) {
-      context.logger.output(outputVarKeys[i], outputVars[outputVarKeys[i]])
+    for (const outputVarKey of outputVarKeys) {
+      context.logger.output(outputVarKey, outputVars[outputVarKey])
     }
   } catch (error) {
     if (error instanceof Error) {

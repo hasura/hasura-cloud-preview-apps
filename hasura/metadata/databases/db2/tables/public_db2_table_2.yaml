@@ -1,7 +1,0 @@
-table:
-  name: db2_table_2
-  schema: public
-object_relationships:
-- name: db2_table_1
-  using:
-    foreign_key_constraint_on: table1_id

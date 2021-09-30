@@ -1,0 +1,7 @@
+table:
+  name: article
+  schema: public
+configuration:
+  custom_column_names: {}
+  custom_name: articles
+  custom_root_fields: {}

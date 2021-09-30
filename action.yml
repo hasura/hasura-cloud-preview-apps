@@ -1,5 +1,5 @@
 name: 'Hasura Cloud Preview App'
-description: 'Hasura Cloud preview app with metadata migrations from your GitHub branch'
+description: 'Get Hasura Cloud preview apps with metadata and migrations from GitHub branches'
 inputs:
   name:
     description: 'Name of the preview app'

@@ -126,6 +126,7 @@ export const recreatePreviewApp = async (
           $cloud: String!
           $plan: String!
           $env: [UpdateEnvsObject]
+          $githubDir: String!
         ) {
           recreateGitHubPreviewApp (
             payload: {
@@ -136,6 +137,9 @@ export const recreatePreviewApp = async (
                 plan: $plan
                 name: $appName
                 envVars: $env 
+              }
+              githubRepoDetails: {
+                directory: $githubDir
               }
             }
           ) {
@@ -150,7 +154,8 @@ export const recreatePreviewApp = async (
         cloud: 'aws',
         region: context.parameters.REGION,
         plan: context.parameters.PLAN,
-        env: context.parameters.HASURA_ENV_VARS
+        env: context.parameters.HASURA_ENV_VARS,
+        githubDir: context.parameters.HASURA_PROJECT_DIR
       }
     })
     return {

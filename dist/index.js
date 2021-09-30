@@ -14223,6 +14223,7 @@ const recreatePreviewApp = (context) => __awaiter(void 0, void 0, void 0, functi
           $cloud: String!
           $plan: String!
           $env: [UpdateEnvsObject]
+          $githubDir: String!
         ) {
           recreateGitHubPreviewApp (
             payload: {
@@ -14233,6 +14234,9 @@ const recreatePreviewApp = (context) => __awaiter(void 0, void 0, void 0, functi
                 plan: $plan
                 name: $appName
                 envVars: $env 
+              }
+              githubRepoDetails: {
+                directory: $githubDir
               }
             }
           ) {
@@ -14247,7 +14251,8 @@ const recreatePreviewApp = (context) => __awaiter(void 0, void 0, void 0, functi
                 cloud: 'aws',
                 region: context.parameters.REGION,
                 plan: context.parameters.PLAN,
-                env: context.parameters.HASURA_ENV_VARS
+                env: context.parameters.HASURA_ENV_VARS,
+                githubDir: context.parameters.HASURA_PROJECT_DIR
             }
         });
         return Object.assign({}, resp.recreateGitHubPreviewApp);

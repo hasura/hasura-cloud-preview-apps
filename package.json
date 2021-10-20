@@ -10,6 +10,7 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
+    "main": "npm run package && node dist/index.js",
     "test": "jest",
     "yaml-test": "echo 'Validating action.yml syntax' && yaml-validator action.yml",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test && npm run yaml-test"

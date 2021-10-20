@@ -110,12 +110,14 @@ const getPostgresServerMetadata = (rawMetadata: string) => {
   }
 }
 
-export const getParameters = async (logger: Logger) => {
-  const parameters = getBaseParameters()
-
+export const getParameters = async (
+  logger: Logger,
+  parameters = getBaseParameters()
+) => {
   const postgresMetadata = getPostgresServerMetadata(
     core.getInput('postgresDBConfig')
   )
+
   if (postgresMetadata) {
     for (const env of postgresMetadata.envVars) {
       const dbName = parameters.NAME.replace(/[^A-Z0-9]/gi, '_')

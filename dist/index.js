@@ -14087,6 +14087,23 @@ module.exports = require("util");
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -14109,6 +14126,11 @@ var __webpack_exports__ = {};
 "use strict";
 // ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
+
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "run": () => (/* binding */ run)
+});
 
 ;// CONCATENATED MODULE: ./src/previewApps.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -14675,8 +14697,7 @@ const getPostgresServerMetadata = (rawMetadata) => {
             .filter(envVar => !!envVar)
     };
 };
-const getParameters = (logger) => parameters_awaiter(void 0, void 0, void 0, function* () {
-    const parameters = getBaseParameters();
+const getParameters = (logger, parameters = getBaseParameters()) => parameters_awaiter(void 0, void 0, void 0, function* () {
     const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresDBConfig'));
     if (postgresMetadata) {
         for (const env of postgresMetadata.envVars) {

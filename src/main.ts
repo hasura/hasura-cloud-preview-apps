@@ -1,9 +1,9 @@
 import {handler} from './handler'
-import {createContext} from './context'
+import {createContext, Context} from './context'
 import {createLogger} from './logger'
 import {errors} from './errors'
 
-const run = async (context): Promise<void> => {
+export const run = async (context: Context): Promise<void> => {
   try {
     const outputVars: Record<string, string> = await handler(context)
     const outputVarKeys = Object.keys(outputVars)

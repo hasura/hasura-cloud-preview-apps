@@ -24,7 +24,7 @@ jobs:
       - uses: ./
         with:
           name: 'hc-preview-app-internal${{github.event.number}}'
-          hasuraCloudGraphQLEndpoint: 'https://5589-2402-3a80-520-1f06-baef-c256-84e9-46d6.ngrok.io/v1/graphql'
+          hasuraCloudGraphQLEndpoint: 'https://cb24-116-73-105-66.ngrok.io/v1/graphql'
           hasuraProjectDirectoryPath: hasura
           region: 'ap-south-1'
           hasuraEnv: |

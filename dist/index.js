@@ -14267,7 +14267,7 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => __awaiter(v
               task_events {
                 id
                 event_type
-                event_data_public
+                public_event_data
               }
             }
           }

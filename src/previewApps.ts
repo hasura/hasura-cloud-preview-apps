@@ -156,6 +156,7 @@ export const pollPreviewAppCreationJob = async (
                 id
                 event_type
                 public_event_data
+                error
               }
             }
           }

@@ -14268,6 +14268,7 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => __awaiter(v
                 id
                 event_type
                 public_event_data
+                error
               }
             }
           }

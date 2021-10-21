@@ -179,9 +179,9 @@ export const pollPreviewAppCreationJob = async (
         throw new Error('unexpected; no job success task event')
       }
       return {
-        projectId: successEvent.event_data_public.projectId,
+        projectId: successEvent.public_event_data?.projectId || '',
         githubDeploymentJobID:
-          successEvent.event_data_public.githubDeploymentJobID
+          successEvent.public_event_data?.githubDeploymentJobID || ''
       }
     }
 

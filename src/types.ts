@@ -97,7 +97,7 @@ export type GetPreviewAppCreationJobResponse = {
       task_events: {
         id
         event_type
-        event_data_public
+        public_event_data
         error
       }[]
     }[]

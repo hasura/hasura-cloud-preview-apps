@@ -13,8 +13,7 @@ export type Job = {
 
 export type CreatePreviewAppResponse = {
   createGitHubPreviewApp: {
-    projectId: string
-    githubDeploymentJobID: string
+    githubPreviewAppJobID: string
   }
 }
 
@@ -88,3 +87,23 @@ export type DeleteTenantVariables = {
 }
 
 export type PGClient = any
+
+export type GetPreviewAppCreationJobResponse = {
+  jobs_by_pk?: {
+    id: string
+    status: string
+    tasks: {
+      id: string
+      task_events: {
+        id
+        event_type
+        event_data_public
+        error
+      }[]
+    }[]
+  } | null
+}
+
+export type GetPreviewAppCreationJobVariables = {
+  jobId: string
+}

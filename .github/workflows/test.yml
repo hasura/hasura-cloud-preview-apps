@@ -24,7 +24,7 @@ jobs:
       - uses: ./
         with:
           name: 'hc-preview-app-internal${{github.event.number}}'
-          hasuraCloudGraphQLEndpoint: 'https://data.pro.arusah.com/v1/graphql'
+          hasuraCloudGraphQLEndpoint: 'https://5589-2402-3a80-520-1f06-baef-c256-84e9-46d6.ngrok.io/v1/graphql'
           hasuraProjectDirectoryPath: hasura
           region: 'ap-south-1'
           hasuraEnv: |
@@ -34,5 +34,5 @@ jobs:
             PG_ENV_VARS_FOR_HASURA=PG_DATABASE_URL
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
+          HASURA_CLOUD_ACCESS_TOKEN: "JKejuYriP3Om9ROiYn9hctovPMyX0VTUpm2Ov3AS7OxbJ7tJ4GBcDE3suiTD8Fp1"
           ACTIONS_RUNNER_DEBUG: true

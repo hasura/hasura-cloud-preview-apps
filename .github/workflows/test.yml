@@ -26,7 +26,7 @@ jobs:
           name: 'hc-preview-app-internal${{github.event.number}}'
           hasuraCloudGraphQLEndpoint: 'https://cb24-116-73-105-66.ngrok.io/v1/graphql'
           hasuraProjectDirectoryPath: hasura
-          region: 'ap-south-1'
+          region: 'us-east-2'
           hasuraEnv: |
             HASURA_GRAPHQL_CORS_DOMAIN=*
           postgresDBConfig: |

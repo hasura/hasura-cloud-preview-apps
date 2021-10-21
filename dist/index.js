@@ -14465,7 +14465,7 @@ const handler = (context) => handler_awaiter(void 0, void 0, void 0, function* (
     context.logger.log(`Applying metadata and migrations from the branch...`);
     const jobStatus = yield getRealtimeLogs(previewAppCreationMetadata.githubDeploymentJobID, context);
     if (jobStatus === 'failed') {
-        context.logger.log('Preview app has been created, but applying metadata and migrations failed');
+        throw new Error('Preview app has been created, but applying metadata and migrations failed');
     }
     return getOutputVars(previewAppCreationMetadata, context.parameters);
 });

@@ -37,7 +37,7 @@ export const handler = async (context: Context): Promise<OutputVars | {}> => {
     context
   )
   if (jobStatus === 'failed') {
-    context.logger.log(
+    throw new Error(
       'Preview app has been created, but applying metadata and migrations failed'
     )
   }

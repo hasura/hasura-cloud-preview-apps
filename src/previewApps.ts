@@ -171,6 +171,9 @@ export const pollPreviewAppCreationJob = async (
     }
 
     if (response.jobs_by_pk.status === 'success') {
+      console.log('===================')
+      console.log(response.jobs_by_pk)
+      console.log('===================')
       const successEvent = response.jobs_by_pk.tasks[0].task_events.find(
         te => te.event_type === 'success'
       )

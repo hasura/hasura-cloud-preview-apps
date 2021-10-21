@@ -14282,6 +14282,9 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => __awaiter(v
             throw new Error('No such preview app creation job exists');
         }
         if (response.jobs_by_pk.status === 'success') {
+            console.log('===================');
+            console.log(response.jobs_by_pk);
+            console.log('===================');
             const successEvent = response.jobs_by_pk.tasks[0].task_events.find(te => te.event_type === 'success');
             if (!successEvent) {
                 throw new Error('unexpected; no job success task event');

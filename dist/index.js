@@ -14295,6 +14295,9 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => __awaiter(v
             };
         }
         if (response.jobs_by_pk.status === 'failed') {
+            console.log('===================');
+            console.log(response.jobs_by_pk);
+            console.log('===================');
             const failedEvent = response.jobs_by_pk.tasks[0].task_events.find(te => te.event_type === 'failed');
             if (!failedEvent) {
                 throw new Error('unexpected; no job failure task event');

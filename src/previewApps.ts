@@ -49,8 +49,7 @@ export const createPreviewApp = async (
               }
             }
           ) {
-            githubDeploymentJobID
-            projectId
+            githubPreviewAppJobID
           }
         }
       `,

@@ -11,12 +11,13 @@ jobs:
       - uses: ./
         with:
           name: 'preview-app-ci-internal${{github.event.number}}'
-          hasuraCloudGraphQLEndpoint: 'https://data.pro.arusah.com/v1/graphql'
+          hasuraCloudGraphQLEndpoint: 'https://cb24-116-73-105-66.ngrok.io/v1/graphql'
           delete: true
           postgresDBConfig: |
             POSTGRES_SERVER_CONNECTION_URI=${{secrets.DO_PG_STRING}}
-            PG_ENV_VARS_FOR_HASURA=PG_DATABASE_URL
+            PG_ENV_VARS_FOR_HASURA=CUSTOM_DB_1,CUSTOM_DB_2
 
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
+          # HASURA_CLOUD_ACCESS_TOKEN: ${{secrets.HASURA_CLOUD_ACCESS_TOKEN}}
+          HASURA_CLOUD_ACCESS_TOKEN: "JKejuYriP3Om9ROiYn9hctovPMyX0VTUpm2Ov3AS7OxbJ7tJ4GBcDE3suiTD8Fp1"

@@ -9,6 +9,7 @@ import {
   GetPreviewAppCreationJobResponse,
   GetPreviewAppCreationJobVariables
 } from './types'
+import {waitFor} from './utils'
 
 export const createPreviewApp = async (
   context: Context
@@ -172,9 +173,6 @@ export const pollPreviewAppCreationJob = async (
     }
 
     if (response.jobs_by_pk.status === 'success') {
-      console.log('===================')
-      console.log(response.jobs_by_pk)
-      console.log('===================')
       const successEvent = response.jobs_by_pk.tasks[0].task_events.find(
         te => te.event_type === 'success'
       )
@@ -189,9 +187,6 @@ export const pollPreviewAppCreationJob = async (
     }
 
     if (response.jobs_by_pk.status === 'failed') {
-      console.log('===================')
-      console.log(response.jobs_by_pk)
-      console.log('===================')
       const failedEvent = response.jobs_by_pk.tasks[0].task_events.find(
         te => te.event_type === 'failed'
       )
@@ -201,6 +196,8 @@ export const pollPreviewAppCreationJob = async (
       }
       throw new Error(failedEvent.error)
     }
+
+    await waitFor(2000)
 
     return pollPreviewAppCreationJob(
       context,

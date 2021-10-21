@@ -14132,7 +14132,7 @@ __nccwpck_require__.d(__webpack_exports__, {
   "run": () => (/* binding */ run)
 });
 
-;// CONCATENATED MODULE: ./src/previewApps.ts
+;// CONCATENATED MODULE: ./src/utils.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14142,7 +14142,32 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const createPreviewApp = (context) => __awaiter(void 0, void 0, void 0, function* () {
+const getOutputVars = (createResp, params) => {
+    return {
+        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
+        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
+        projectId: createResp.projectId,
+        projectName: params.NAME
+    };
+};
+const waitFor = (time) => __awaiter(void 0, void 0, void 0, function* () {
+    return new Promise(resolve => {
+        setTimeout(resolve, time);
+    });
+});
+
+;// CONCATENATED MODULE: ./src/previewApps.ts
+var previewApps_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+const createPreviewApp = (context) => previewApps_awaiter(void 0, void 0, void 0, function* () {
     try {
         const resp = yield context.client.query({
             query: `
@@ -14199,7 +14224,7 @@ const createPreviewApp = (context) => __awaiter(void 0, void 0, void 0, function
         throw e;
     }
 });
-const deletePreviewApp = (context) => __awaiter(void 0, void 0, void 0, function* () {
+const deletePreviewApp = (context) => previewApps_awaiter(void 0, void 0, void 0, function* () {
     try {
         const getTenantIdResp = yield context.client.query({
             query: `
@@ -14248,7 +14273,7 @@ const deletePreviewApp = (context) => __awaiter(void 0, void 0, void 0, function
         throw e;
     }
 });
-const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => __awaiter(void 0, void 0, void 0, function* () {
+const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => previewApps_awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     if (timeLapse > 120000) {
         throw new Error('preview app creation timed out');
@@ -14283,9 +14308,6 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => __awaiter(v
             throw new Error('No such preview app creation job exists');
         }
         if (response.jobs_by_pk.status === 'success') {
-            console.log('===================');
-            console.log(response.jobs_by_pk);
-            console.log('===================');
             const successEvent = response.jobs_by_pk.tasks[0].task_events.find(te => te.event_type === 'success');
             if (!successEvent) {
                 throw new Error('unexpected; no job success task event');
@@ -14296,9 +14318,6 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => __awaiter(v
             };
         }
         if (response.jobs_by_pk.status === 'failed') {
-            console.log('===================');
-            console.log(response.jobs_by_pk);
-            console.log('===================');
             const failedEvent = response.jobs_by_pk.tasks[0].task_events.find(te => te.event_type === 'failed');
             console.log(failedEvent);
             if (!failedEvent) {
@@ -14306,35 +14325,12 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => __awaiter(v
             }
             throw new Error(failedEvent.error);
         }
+        yield waitFor(2000);
         return pollPreviewAppCreationJob(context, jobId, timeLapse + new Date().getTime() - reqStartTime);
     }
     catch (e) {
         throw e;
     }
-});
-
-;// CONCATENATED MODULE: ./src/utils.ts
-var utils_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-const getOutputVars = (createResp, params) => {
-    return {
-        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
-        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
-        projectId: createResp.projectId,
-        projectName: params.NAME
-    };
-};
-const waitFor = (time) => utils_awaiter(void 0, void 0, void 0, function* () {
-    return new Promise(resolve => {
-        setTimeout(resolve, time);
-    });
 });
 
 ;// CONCATENATED MODULE: ./src/tasks.ts

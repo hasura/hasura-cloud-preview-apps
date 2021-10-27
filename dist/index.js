@@ -14132,7 +14132,7 @@ __nccwpck_require__.d(__webpack_exports__, {
   "run": () => (/* binding */ run)
 });
 
-;// CONCATENATED MODULE: ./src/previewApps.ts
+;// CONCATENATED MODULE: ./src/utils.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -14142,41 +14142,32 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const doesProjectExist = (context) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const resp = yield context.client.query({
-            query: `
-				query getProjects ($name:String!) {
-				  projects( where: {name: {_eq: $name}}) {
-				    id
-				  	name
-				    endpoint
-				  }
-				}
-			`,
-            variables: {
-                name: context.parameters.NAME
-            }
-        });
-        if (resp.projects.length) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    catch (e) {
-        if (e instanceof Error) {
-            if (e.message &&
-                e.message.includes('projects') &&
-                e.message.includes('query_root')) {
-                throw new Error('invalid authorization to Hasura Cloud APIs');
-            }
-        }
-        throw e;
-    }
+const getOutputVars = (createResp, params) => {
+    return {
+        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
+        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
+        projectId: createResp.projectId,
+        projectName: params.NAME
+    };
+};
+const waitFor = (time) => __awaiter(void 0, void 0, void 0, function* () {
+    return new Promise(resolve => {
+        setTimeout(resolve, time);
+    });
 });
-const createPreviewApp = (context) => __awaiter(void 0, void 0, void 0, function* () {
+
+;// CONCATENATED MODULE: ./src/previewApps.ts
+var previewApps_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+const createPreviewApp = (context) => previewApps_awaiter(void 0, void 0, void 0, function* () {
     try {
         const resp = yield context.client.query({
             query: `
@@ -14210,8 +14201,7 @@ const createPreviewApp = (context) => __awaiter(void 0, void 0, void 0, function
               }
             }
           ) {
-            githubDeploymentJobID
-            projectId
+            githubPreviewAppJobID
           }
         }
       `,
@@ -14234,56 +14224,7 @@ const createPreviewApp = (context) => __awaiter(void 0, void 0, void 0, function
         throw e;
     }
 });
-const recreatePreviewApp = (context) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const resp = yield context.client.query({
-            query: `
-        mutation recreatePreviewApp (
-          $githubPAT: String!
-          $appName: String!
-          $region: String!
-          $cloud: String!
-          $plan: String!
-          $env: [UpdateEnvsObject]
-          $githubDir: String!
-        ) {
-          recreateGitHubPreviewApp (
-            payload: {
-              githubPersonalAccessToken: $githubPAT,
-              projectOptions: {
-                cloud: $cloud,
-                region: $region,
-                plan: $plan
-                name: $appName
-                envVars: $env 
-              }
-              githubRepoDetails: {
-                directory: $githubDir
-              }
-            }
-          ) {
-            githubDeploymentJobID
-            projectId
-          }
-        }
-      `,
-            variables: {
-                githubPAT: context.parameters.GITHUB_TOKEN,
-                appName: context.parameters.NAME,
-                cloud: 'aws',
-                region: context.parameters.REGION,
-                plan: context.parameters.PLAN,
-                env: context.parameters.HASURA_ENV_VARS,
-                githubDir: context.parameters.HASURA_PROJECT_DIR
-            }
-        });
-        return Object.assign({}, resp.recreateGitHubPreviewApp);
-    }
-    catch (e) {
-        throw e;
-    }
-});
-const deletePreviewApp = (context) => __awaiter(void 0, void 0, void 0, function* () {
+const deletePreviewApp = (context) => previewApps_awaiter(void 0, void 0, void 0, function* () {
     try {
         const getTenantIdResp = yield context.client.query({
             query: `
@@ -14332,29 +14273,64 @@ const deletePreviewApp = (context) => __awaiter(void 0, void 0, void 0, function
         throw e;
     }
 });
+const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => previewApps_awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    if (timeLapse > 120000) {
+        throw new Error('preview app creation timed out');
+    }
+    try {
+        const reqStartTime = new Date().getTime();
+        const response = yield context.client.query({
+            query: `
+        query getPreviewAppCreationJob($jobId: uuid!="GF12zEeQai1skCuOoVU3wyyiqj30nEnzt2hpZ0LRe368UdwE5JC7nrT4AIr85rmu") {
+          jobs_by_pk(id: $jobId) {
+            id
+            status
+            tasks {
+              id
+              name
+              task_events {
+                id
+                event_type
+                public_event_data
+                error
+              }
+            }
+          }
+        }
 
-;// CONCATENATED MODULE: ./src/utils.ts
-var utils_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-const getOutputVars = (createResp, params) => {
-    return {
-        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
-        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
-        projectId: createResp.projectId,
-        projectName: params.NAME
-    };
-};
-const waitFor = (time) => utils_awaiter(void 0, void 0, void 0, function* () {
-    return new Promise(resolve => {
-        setTimeout(resolve, time);
-    });
+      `,
+            variables: {
+                jobId
+            }
+        });
+        if (!response.jobs_by_pk) {
+            throw new Error('No such preview app creation job exists');
+        }
+        if (response.jobs_by_pk.status === 'success') {
+            const successEvent = response.jobs_by_pk.tasks[0].task_events.find(te => te.event_type === 'success');
+            if (!successEvent) {
+                throw new Error('unexpected; no job success task event');
+            }
+            return {
+                projectId: ((_a = successEvent.public_event_data) === null || _a === void 0 ? void 0 : _a.projectId) || '',
+                githubDeploymentJobID: ((_b = successEvent.public_event_data) === null || _b === void 0 ? void 0 : _b.githubDeploymentJobID) || ''
+            };
+        }
+        if (response.jobs_by_pk.status === 'failed') {
+            const failedEvent = response.jobs_by_pk.tasks[0].task_events.find(te => te.event_type === 'failed');
+            console.log(failedEvent);
+            if (!failedEvent) {
+                throw new Error('unexpected; no job failure task event');
+            }
+            throw new Error(failedEvent.error);
+        }
+        yield waitFor(2000);
+        return pollPreviewAppCreationJob(context, jobId, timeLapse + new Date().getTime() - reqStartTime);
+    }
+    catch (e) {
+        throw e;
+    }
 });
 
 ;// CONCATENATED MODULE: ./src/tasks.ts
@@ -14475,34 +14451,23 @@ var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _
 
 
 const handler = (context) => handler_awaiter(void 0, void 0, void 0, function* () {
-    const exists = yield doesProjectExist(context);
     if (context.parameters.SHOULD_DELETE) {
+        context.logger.log('Deleting Hasura Cloud preview app.');
         const deleteResp = yield deletePreviewApp(context);
         context.logger.log(`Preview app "${context.parameters.NAME}" deleted successfully.`);
         return deleteResp;
     }
-    if (exists) {
-        context.logger.log('A project with the given name exists. Triggering redeployment.');
-        const recreateResp = yield recreatePreviewApp(context);
-        context.logger.log(`Redeployed:\n${JSON.stringify(recreateResp, null, 2)}`);
-        context.logger.log(`Applying metadata and migrations from the branch...`);
-        const jobStatus = yield getRealtimeLogs(recreateResp.githubDeploymentJobID, context);
-        if (jobStatus === 'failed') {
-            context.logger.log('Preview app has been created, but applying metadata and migrations failed');
-        }
-        return getOutputVars(recreateResp, context.parameters);
+    context.logger.log('Creating Hasura Cloud preview app.');
+    const createResp = yield createPreviewApp(context);
+    context.logger.log(`Scheduled creation of preview app:\n${JSON.stringify(createResp, null, 2)}`);
+    context.logger.log(`Polling the preview app creation status...`);
+    const previewAppCreationMetadata = yield pollPreviewAppCreationJob(context, createResp.githubPreviewAppJobID);
+    context.logger.log(`Applying metadata and migrations from the branch...`);
+    const jobStatus = yield getRealtimeLogs(previewAppCreationMetadata.githubDeploymentJobID, context);
+    if (jobStatus === 'failed') {
+        throw new Error('Preview app has been created, but applying metadata and migrations failed');
     }
-    else {
-        context.logger.log('Creating Hasura Cloud preview app.');
-        const createResp = yield createPreviewApp(context);
-        context.logger.log(`Deployed:\n${JSON.stringify(createResp, null, 2)}`);
-        context.logger.log(`Applying metadata and migrations from the branch...`);
-        const jobStatus = yield getRealtimeLogs(createResp.githubDeploymentJobID, context);
-        if (jobStatus === 'failed') {
-            context.logger.log('Preview app has been created, but applying metadata and migrations failed');
-        }
-        return getOutputVars(createResp, context.parameters);
-    }
+    return getOutputVars(previewAppCreationMetadata, context.parameters);
 });
 
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js

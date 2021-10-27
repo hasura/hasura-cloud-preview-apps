@@ -1,56 +1,19 @@
 import {Context} from './context'
 import {
-  Project,
-  RecreatePreviewAppResponse,
   CreatePreviewAppVariables,
   CreatePreviewAppResponse,
   GetTenantIdResponse,
   GetTenantIdVariables,
   DeleteTenantResponse,
-  DeleteTenantVariables
+  DeleteTenantVariables,
+  GetPreviewAppCreationJobResponse,
+  GetPreviewAppCreationJobVariables
 } from './types'
-
-export const doesProjectExist = async (context: Context): Promise<boolean> => {
-  try {
-    const resp = await context.client.query<
-      {projects: Project[]},
-      {name: string}
-    >({
-      query: `
-				query getProjects ($name:String!) {
-				  projects( where: {name: {_eq: $name}}) {
-				    id
-				  	name
-				    endpoint
-				  }
-				}
-			`,
-      variables: {
-        name: context.parameters.NAME
-      }
-    })
-    if (resp.projects.length) {
-      return true
-    } else {
-      return false
-    }
-  } catch (e) {
-    if (e instanceof Error) {
-      if (
-        e.message &&
-        e.message.includes('projects') &&
-        e.message.includes('query_root')
-      ) {
-        throw new Error('invalid authorization to Hasura Cloud APIs')
-      }
-    }
-    throw e
-  }
-}
+import {waitFor} from './utils'
 
 export const createPreviewApp = async (
   context: Context
-): Promise<{githubDeploymentJobID: string; projectId: string}> => {
+): Promise<CreatePreviewAppResponse['createGitHubPreviewApp']> => {
   try {
     const resp = await context.client.query<
       CreatePreviewAppResponse,
@@ -87,8 +50,7 @@ export const createPreviewApp = async (
               }
             }
           ) {
-            githubDeploymentJobID
-            projectId
+            githubPreviewAppJobID
           }
         }
       `,
@@ -107,59 +69,6 @@ export const createPreviewApp = async (
     })
     return {
       ...resp.createGitHubPreviewApp
-    }
-  } catch (e) {
-    throw e
-  }
-}
-
-export const recreatePreviewApp = async (
-  context: Context
-): Promise<{githubDeploymentJobID: string; projectId: string}> => {
-  try {
-    const resp = await context.client.query<RecreatePreviewAppResponse, any>({
-      query: `
-        mutation recreatePreviewApp (
-          $githubPAT: String!
-          $appName: String!
-          $region: String!
-          $cloud: String!
-          $plan: String!
-          $env: [UpdateEnvsObject]
-          $githubDir: String!
-        ) {
-          recreateGitHubPreviewApp (
-            payload: {
-              githubPersonalAccessToken: $githubPAT,
-              projectOptions: {
-                cloud: $cloud,
-                region: $region,
-                plan: $plan
-                name: $appName
-                envVars: $env 
-              }
-              githubRepoDetails: {
-                directory: $githubDir
-              }
-            }
-          ) {
-            githubDeploymentJobID
-            projectId
-          }
-        }
-      `,
-      variables: {
-        githubPAT: context.parameters.GITHUB_TOKEN,
-        appName: context.parameters.NAME,
-        cloud: 'aws',
-        region: context.parameters.REGION,
-        plan: context.parameters.PLAN,
-        env: context.parameters.HASURA_ENV_VARS,
-        githubDir: context.parameters.HASURA_PROJECT_DIR
-      }
-    })
-    return {
-      ...resp.recreateGitHubPreviewApp
     }
   } catch (e) {
     throw e
@@ -215,6 +124,87 @@ export const deletePreviewApp = async (context: Context) => {
     if (e instanceof Error) {
       throw new Error(`Could not delete the preview app. ${e.message}`)
     }
+    throw e
+  }
+}
+
+export const pollPreviewAppCreationJob = async (
+  context: Context,
+  jobId: string,
+  timeLapse = 0
+): Promise<{
+  projectId: string
+  githubDeploymentJobID: string
+}> => {
+  if (timeLapse > 120000) {
+    throw new Error('preview app creation timed out')
+  }
+  try {
+    const reqStartTime = new Date().getTime()
+    const response = await context.client.query<
+      GetPreviewAppCreationJobResponse,
+      GetPreviewAppCreationJobVariables
+    >({
+      query: `
+        query getPreviewAppCreationJob($jobId: uuid!="GF12zEeQai1skCuOoVU3wyyiqj30nEnzt2hpZ0LRe368UdwE5JC7nrT4AIr85rmu") {
+          jobs_by_pk(id: $jobId) {
+            id
+            status
+            tasks {
+              id
+              name
+              task_events {
+                id
+                event_type
+                public_event_data
+                error
+              }
+            }
+          }
+        }
+
+      `,
+      variables: {
+        jobId
+      }
+    })
+    if (!response.jobs_by_pk) {
+      throw new Error('No such preview app creation job exists')
+    }
+
+    if (response.jobs_by_pk.status === 'success') {
+      const successEvent = response.jobs_by_pk.tasks[0].task_events.find(
+        te => te.event_type === 'success'
+      )
+      if (!successEvent) {
+        throw new Error('unexpected; no job success task event')
+      }
+      return {
+        projectId: successEvent.public_event_data?.projectId || '',
+        githubDeploymentJobID:
+          successEvent.public_event_data?.githubDeploymentJobID || ''
+      }
+    }
+
+    if (response.jobs_by_pk.status === 'failed') {
+      const failedEvent = response.jobs_by_pk.tasks[0].task_events.find(
+        te => te.event_type === 'failed'
+      )
+      console.log(failedEvent)
+      if (!failedEvent) {
+        throw new Error('unexpected; no job failure task event')
+      }
+      throw new Error(failedEvent.error)
+    }
+
+    await waitFor(2000)
+
+    return pollPreviewAppCreationJob(
+      context,
+      jobId,
+      timeLapse + new Date().getTime() - reqStartTime
+    )
+  } catch (e) {
     throw e
   }
 }

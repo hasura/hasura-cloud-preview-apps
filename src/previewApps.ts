@@ -186,6 +186,12 @@ export const pollPreviewAppCreationJob = async (
       }
     }
 
+    if (response.jobs_by_pk.status === 'skipped') {
+      throw new Error(
+        'This preview app creation was skipped due to another preview app creation being scheduled.'
+      )
+    }
+
     if (response.jobs_by_pk.status === 'failed') {
       const failedEvent = response.jobs_by_pk.tasks[0].task_events.find(
         te => te.event_type === 'failed'

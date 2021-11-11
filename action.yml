@@ -8,7 +8,7 @@ inputs:
   region:
     description: 'Region to deploy preview app in'
     required: false
-    default: 'us-east-2'
+    default: 'us-west-1'
   tier:
     description: 'Plan of the preview app'
     required: false

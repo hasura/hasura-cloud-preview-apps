@@ -14551,9 +14551,6 @@ const changeDbInPgString = (baseString, dbName) => {
 };
 const createPgClient = (connectionString, dbName) => {
     const { user, password, host, port } = (0,pg_connection_string.parse)(connectionString);
-    console.log('========================');
-    console.log(user, password, host, port);
-    console.log('========================');
     const pgClient = new lib.Client({
         user,
         password,

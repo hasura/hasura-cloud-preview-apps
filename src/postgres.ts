@@ -39,9 +39,6 @@ export const changeDbInPgString = (baseString: string, dbName: string) => {
 
 const createPgClient = (connectionString: string, dbName: string): PGClient => {
   const {user, password, host, port} = parsePGString(connectionString)
-  console.log('========================')
-  console.log(user, password, host, port)
-  console.log('========================')
   const pgClient = new Client({
     user,
     password,

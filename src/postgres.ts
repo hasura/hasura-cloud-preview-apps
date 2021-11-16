@@ -38,17 +38,17 @@ export const changeDbInPgString = (baseString: string, dbName: string) => {
 }
 
 const createPgClient = (connectionString: string): PGClient => {
-  const {user, password, host, port} = parsePGString(connectionString)
-  const pgClient = new Client({
-    user,
-    password,
-    host,
-    port,
+  const pgConfig = parsePGString(connectionString)
+  pgConfig.ssl = 'prefer'
+  console.log('=====================')
+  console.log(pgConfig.toString())
+  console.log('=====================')
+  return new Client({
+    connectionString: pgConfig.toString(),
     ssl: {
-      rejectUnauthorized: false
+      rejectUnauthorised: true
     }
   })
-  return pgClient
 }
 
 export const createEphemeralDb = async (

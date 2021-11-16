@@ -14550,17 +14550,17 @@ const changeDbInPgString = (baseString, dbName) => {
     return urlObj.toString();
 };
 const createPgClient = (connectionString) => {
-    const { user, password, host, port } = (0,pg_connection_string.parse)(connectionString);
-    const pgClient = new lib.Client({
-        user,
-        password,
-        host,
-        port,
+    const pgConfig = (0,pg_connection_string.parse)(connectionString);
+    pgConfig.ssl = 'prefer';
+    console.log('=====================');
+    console.log(pgConfig.toString());
+    console.log('=====================');
+    return new lib.Client({
+        connectionString: pgConfig.toString(),
         ssl: {
-            rejectUnauthorized: false
+            rejectUnauthorised: true
         }
     });
-    return pgClient;
 };
 const createEphemeralDb = (connectionString, dbName) => postgres_awaiter(void 0, void 0, void 0, function* () {
     try {

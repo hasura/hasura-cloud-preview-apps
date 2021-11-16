@@ -1,6 +1,6 @@
 {
   "name": "hasura-cloud-preview-apps",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "private": true,
   "description": "Create Hasura Cloud preview apps from metadata/migrations from your Git repo",
   "main": "src/main.ts",
@@ -33,7 +33,8 @@
   "dependencies": {
     "@actions/core": "^1.5.0",
     "node-fetch": "^3.0.0",
-    "pg": "^8.7.1"
+    "pg": "^8.7.1",
+    "pg-connection-string": "^2.5.0"
   },
   "devDependencies": {
     "@types/node": "^16.10.1",

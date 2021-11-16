@@ -1,6 +1,5 @@
 import {Client} from 'pg'
 import {PGClient} from './types'
-import {parse as parsePGString} from 'pg-connection-string'
 
 export const dropAndCreateDb = async (dbName: string, pgClient: PGClient) => {
   try {
@@ -37,15 +36,11 @@ export const changeDbInPgString = (baseString: string, dbName: string) => {
   return urlObj.toString()
 }
 
-const createPgClient = (connectionString: string, dbName: string): PGClient => {
-  const {user, password, host, port} = parsePGString(connectionString)
+const createPgClient = (connectionString: string): PGClient => {
+  const url = new URL(connectionString)
+  url.searchParams.set('sslmode', 'prefer')
   const pgClient = new Client({
-    user,
-    password,
-    host,
-    port,
-    database: dbName,
-    ssl: 'prefer'
+    connectionString: url.toString()
   })
   return pgClient
 }
@@ -55,7 +50,7 @@ export const createEphemeralDb = async (
   dbName: string
 ) => {
   try {
-    const pgClient = createPgClient(connectionString, dbName)
+    const pgClient = createPgClient(connectionString)
     await dropAndCreateDb(dbName, pgClient)
   } catch (e) {
     throw e

@@ -14499,8 +14499,6 @@ const errors = {
 
 // EXTERNAL MODULE: ./node_modules/pg/lib/index.js
 var lib = __nccwpck_require__(4194);
-// EXTERNAL MODULE: ./node_modules/pg-connection-string/index.js
-var pg_connection_string = __nccwpck_require__(8961);
 ;// CONCATENATED MODULE: ./src/postgres.ts
 var postgres_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -14511,7 +14509,6 @@ var postgres_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
 
 const dropAndCreateDb = (dbName, pgClient) => postgres_awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -14550,14 +14547,10 @@ const changeDbInPgString = (baseString, dbName) => {
     return urlObj.toString();
 };
 const createPgClient = (connectionString, dbName) => {
-    const { user, password, host, port } = (0,pg_connection_string.parse)(connectionString);
+    const url = new URL(connectionString);
+    url.searchParams.set('sslmode', 'prefer');
     const pgClient = new lib.Client({
-        user,
-        password,
-        host,
-        port,
-        database: dbName,
-        ssl: 'prefer'
+        connectionString: url.toString()
     });
     return pgClient;
 };

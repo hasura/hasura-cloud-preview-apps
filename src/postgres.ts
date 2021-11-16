@@ -38,12 +38,11 @@ export const changeDbInPgString = (baseString: string, dbName: string) => {
 
 const createPgClient = (connectionString: string): PGClient => {
   const pgURL = new URL(connectionString)
-  pgURL.searchParams.set('sslmode', 'prefer')
+  if (!pgURL.searchParams.get('sslmode')) {
+    pgURL.searchParams.set('sslmode', 'allow')
+  }
   return new Client({
-    connectionString: pgURL.toString(),
-    ssl: {
-      rejectUnauthorised: true
-    }
+    connectionString: pgURL.toString()
   })
 }
 

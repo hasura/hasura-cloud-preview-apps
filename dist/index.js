@@ -14548,12 +14548,11 @@ const changeDbInPgString = (baseString, dbName) => {
 };
 const createPgClient = (connectionString) => {
     const pgURL = new URL(connectionString);
-    pgURL.searchParams.set('sslmode', 'no-verify');
+    if (!pgURL.searchParams.get('sslmode')) {
+        pgURL.searchParams.set('sslmode', 'allow');
+    }
     return new lib.Client({
-        connectionString: pgURL.toString(),
-        ssl: {
-            rejectUnauthorised: true
-        }
+        connectionString: pgURL.toString()
     });
 };
 const createEphemeralDb = (connectionString, dbName) => postgres_awaiter(void 0, void 0, void 0, function* () {

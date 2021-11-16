@@ -14499,8 +14499,6 @@ const errors = {
 
 // EXTERNAL MODULE: ./node_modules/pg/lib/index.js
 var lib = __nccwpck_require__(4194);
-// EXTERNAL MODULE: ./node_modules/pg-connection-string/index.js
-var pg_connection_string = __nccwpck_require__(8961);
 ;// CONCATENATED MODULE: ./src/postgres.ts
 var postgres_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -14511,7 +14509,6 @@ var postgres_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
 
 const dropAndCreateDb = (dbName, pgClient) => postgres_awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -14550,13 +14547,11 @@ const changeDbInPgString = (baseString, dbName) => {
     return urlObj.toString();
 };
 const createPgClient = (connectionString) => {
-    const pgConfig = (0,pg_connection_string.parse)(connectionString);
-    pgConfig.ssl = 'prefer';
-    console.log('=====================');
-    console.log(pgConfig.toString());
-    console.log('=====================');
+    const pgURL = new URL(connectionString);
+    pgURL.searchParams.set('ssl', 'true');
+    pgURL.searchParams.set('sslmode', 'prefer');
     return new lib.Client({
-        connectionString: pgConfig.toString(),
+        connectionString: pgURL.toString(),
         ssl: {
             rejectUnauthorised: true
         }

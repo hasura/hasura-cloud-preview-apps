@@ -1,6 +1,5 @@
 import {Client} from 'pg'
 import {PGClient} from './types'
-import {parse as parsePGString} from 'pg-connection-string'
 
 export const dropAndCreateDb = async (dbName: string, pgClient: PGClient) => {
   try {
@@ -38,13 +37,11 @@ export const changeDbInPgString = (baseString: string, dbName: string) => {
 }
 
 const createPgClient = (connectionString: string): PGClient => {
-  const pgConfig = parsePGString(connectionString)
-  pgConfig.ssl = 'prefer'
-  console.log('=====================')
-  console.log(pgConfig.toString())
-  console.log('=====================')
+  const pgURL = new URL(connectionString)
+  pgURL.searchParams.set('ssl', 'true')
+  pgURL.searchParams.set('sslmode', 'prefer')
   return new Client({
-    connectionString: pgConfig.toString(),
+    connectionString: pgURL.toString(),
     ssl: {
       rejectUnauthorised: true
     }

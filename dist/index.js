@@ -14546,7 +14546,7 @@ const changeDbInPgString = (baseString, dbName) => {
     urlObj.pathname = dbName;
     return urlObj.toString();
 };
-const createPgClient = (connectionString, dbName) => {
+const createPgClient = (connectionString) => {
     const url = new URL(connectionString);
     url.searchParams.set('sslmode', 'prefer');
     const pgClient = new lib.Client({
@@ -14556,7 +14556,7 @@ const createPgClient = (connectionString, dbName) => {
 };
 const createEphemeralDb = (connectionString, dbName) => postgres_awaiter(void 0, void 0, void 0, function* () {
     try {
-        const pgClient = createPgClient(connectionString, dbName);
+        const pgClient = createPgClient(connectionString);
         yield dropAndCreateDb(dbName, pgClient);
     }
     catch (e) {
@@ -14565,7 +14565,7 @@ const createEphemeralDb = (connectionString, dbName) => postgres_awaiter(void 0,
 });
 const dropEphemeralDb = (connectionString, dbName) => postgres_awaiter(void 0, void 0, void 0, function* () {
     try {
-        const pgClient = createPgClient(connectionString, dbName);
+        const pgClient = createPgClient(connectionString);
         yield dropDB(dbName, pgClient);
     }
     catch (e) {

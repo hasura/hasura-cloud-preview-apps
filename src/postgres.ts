@@ -62,7 +62,7 @@ export const dropEphemeralDb = async (
   dbName: string
 ) => {
   try {
-    const pgClient = createPgClient(connectionString, dbName)
+    const pgClient = createPgClient(connectionString)
     await dropDB(dbName, pgClient)
   } catch (e) {
     throw e

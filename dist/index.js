@@ -14548,8 +14548,7 @@ const changeDbInPgString = (baseString, dbName) => {
 };
 const createPgClient = (connectionString) => {
     const pgURL = new URL(connectionString);
-    pgURL.searchParams.set('ssl', 'true');
-    pgURL.searchParams.set('sslmode', 'prefer');
+    pgURL.searchParams.set('sslmode', 'no-verify');
     return new lib.Client({
         connectionString: pgURL.toString(),
         ssl: {

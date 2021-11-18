@@ -36,23 +36,14 @@ export const changeDbInPgString = (baseString: string, dbName: string) => {
   return urlObj.toString()
 }
 
-const createPgClient = (connectionString: string): PGClient => {
-  const pgURL = new URL(connectionString)
-  pgURL.searchParams.set('sslmode', 'no-verify')
-  return new Client({
-    connectionString: pgURL.toString(),
-    ssl: {
-      rejectUnauthorised: true
-    }
-  })
-}
-
 export const createEphemeralDb = async (
   connectionString: string,
   dbName: string
 ) => {
+  const pgClient = new Client({
+    connectionString
+  })
   try {
-    const pgClient = createPgClient(connectionString)
     await dropAndCreateDb(dbName, pgClient)
   } catch (e) {
     throw e
@@ -63,8 +54,10 @@ export const dropEphemeralDb = async (
   connectionString: string,
   dbName: string
 ) => {
+  const pgClient = new Client({
+    connectionString
+  })
   try {
-    const pgClient = createPgClient(connectionString)
     await dropDB(dbName, pgClient)
   } catch (e) {
     throw e

@@ -14317,9 +14317,6 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => previewApps
                 githubDeploymentJobID: ((_b = successEvent.public_event_data) === null || _b === void 0 ? void 0 : _b.githubDeploymentJobID) || ''
             };
         }
-        if (response.jobs_by_pk.status === 'skipped') {
-            throw new Error('This preview app creation was skipped due to another preview app creation being scheduled.');
-        }
         if (response.jobs_by_pk.status === 'failed') {
             const failedEvent = response.jobs_by_pk.tasks[0].task_events.find(te => te.event_type === 'failed');
             console.log(failedEvent);
@@ -14546,19 +14543,11 @@ const changeDbInPgString = (baseString, dbName) => {
     urlObj.pathname = dbName;
     return urlObj.toString();
 };
-const createPgClient = (connectionString) => {
-    const pgURL = new URL(connectionString);
-    pgURL.searchParams.set('sslmode', 'no-verify');
-    return new lib.Client({
-        connectionString: pgURL.toString(),
-        ssl: {
-            rejectUnauthorised: true
-        }
-    });
-};
 const createEphemeralDb = (connectionString, dbName) => postgres_awaiter(void 0, void 0, void 0, function* () {
+    const pgClient = new lib.Client({
+        connectionString
+    });
     try {
-        const pgClient = createPgClient(connectionString);
         yield dropAndCreateDb(dbName, pgClient);
     }
     catch (e) {
@@ -14566,8 +14555,10 @@ const createEphemeralDb = (connectionString, dbName) => postgres_awaiter(void 0,
     }
 });
 const dropEphemeralDb = (connectionString, dbName) => postgres_awaiter(void 0, void 0, void 0, function* () {
+    const pgClient = new lib.Client({
+        connectionString
+    });
     try {
-        const pgClient = createPgClient(connectionString);
         yield dropDB(dbName, pgClient);
     }
     catch (e) {

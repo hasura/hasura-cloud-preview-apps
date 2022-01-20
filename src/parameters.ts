@@ -47,6 +47,7 @@ const getBaseParameters = () => ({
   PLAN: core.getInput('tier'),
   REGION: core.getInput('region'),
   NAME: core.getInput('name') || '',
+  DOMAIN: core.getInput('domain') || '',
   GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
   HASURA_CLOUD_PAT: process.env.HASURA_CLOUD_ACCESS_TOKEN || '',
   CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint'),
@@ -61,6 +62,9 @@ const getBaseParameters = () => ({
 export const validateParameters = (params: Parameters): void => {
   if (!params.NAME) {
     throw new Error(errors.validation.name)
+  }
+  if (!params.DOMAIN) {
+    throw new Error(errors.validation.domain)
   }
   if (!params.HASURA_CLOUD_PAT) {
     throw new Error(errors.validation.hasuraCloudPAT)

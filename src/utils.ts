@@ -7,7 +7,7 @@ export const getOutputVars = (
 ): OutputVars => {
   return {
     consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
-    graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
+    graphQLEndpoint: `https://${params.NAME}.${params.DOMAIN}/v1/graphql`,
     projectId: createResp.projectId,
     projectName: params.NAME
   }

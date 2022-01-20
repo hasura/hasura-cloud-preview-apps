@@ -13938,7 +13938,7 @@ try {
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"_from":"pg","_id":"pg@8.7.1","_inBundle":false,"_integrity":"sha512-7bdYcv7V6U3KAtWjpQJJBww0UEsWuh4yQ/EjNf2HeO/NnvKjpvhEIe/A/TleP6wtmSKnUnghs5A9jUoK6iDdkA==","_location":"/pg","_phantomChildren":{},"_requested":{"type":"tag","registry":true,"raw":"pg","name":"pg","escapedName":"pg","rawSpec":"","saveSpec":null,"fetchSpec":"latest"},"_requiredBy":["#USER","/"],"_resolved":"https://registry.npmjs.org/pg/-/pg-8.7.1.tgz","_shasum":"9ea9d1ec225980c36f94e181d009ab9f4ce4c471","_spec":"pg","_where":"/home/rishichandra/oss/hasura-cloud-preview-apps","author":{"name":"Brian Carlson","email":"brian.m.carlson@gmail.com"},"bugs":{"url":"https://github.com/brianc/node-postgres/issues"},"bundleDependencies":false,"dependencies":{"buffer-writer":"2.0.0","packet-reader":"1.0.0","pg-connection-string":"^2.5.0","pg-pool":"^3.4.1","pg-protocol":"^1.5.0","pg-types":"^2.1.0","pgpass":"1.x"},"deprecated":false,"description":"PostgreSQL client - pure javascript & libpq with the same API","devDependencies":{"async":"0.9.0","bluebird":"3.5.2","co":"4.6.0","pg-copy-streams":"0.3.0"},"engines":{"node":">= 8.0.0"},"files":["lib","SPONSORS.md"],"gitHead":"92b4d37926c276d343bfe56447ff6f526af757cf","homepage":"https://github.com/brianc/node-postgres","keywords":["database","libpq","pg","postgre","postgres","postgresql","rdbms"],"license":"MIT","main":"./lib","name":"pg","peerDependencies":{"pg-native":">=2.0.0"},"peerDependenciesMeta":{"pg-native":{"optional":true}},"repository":{"type":"git","url":"git://github.com/brianc/node-postgres.git","directory":"packages/pg"},"scripts":{"test":"make test-all"},"version":"8.7.1"}');
+module.exports = JSON.parse('{"name":"pg","version":"8.7.1","description":"PostgreSQL client - pure javascript & libpq with the same API","keywords":["database","libpq","pg","postgre","postgres","postgresql","rdbms"],"homepage":"https://github.com/brianc/node-postgres","repository":{"type":"git","url":"git://github.com/brianc/node-postgres.git","directory":"packages/pg"},"author":"Brian Carlson <brian.m.carlson@gmail.com>","main":"./lib","dependencies":{"buffer-writer":"2.0.0","packet-reader":"1.0.0","pg-connection-string":"^2.5.0","pg-pool":"^3.4.1","pg-protocol":"^1.5.0","pg-types":"^2.1.0","pgpass":"1.x"},"devDependencies":{"async":"0.9.0","bluebird":"3.5.2","co":"4.6.0","pg-copy-streams":"0.3.0"},"peerDependencies":{"pg-native":">=2.0.0"},"peerDependenciesMeta":{"pg-native":{"optional":true}},"scripts":{"test":"make test-all"},"files":["lib","SPONSORS.md"],"license":"MIT","engines":{"node":">= 8.0.0"},"gitHead":"92b4d37926c276d343bfe56447ff6f526af757cf"}');
 
 /***/ }),
 
@@ -14145,7 +14145,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 const getOutputVars = (createResp, params) => {
     return {
         consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
-        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
+        graphQLEndpoint: `https://${params.NAME}.${params.DOMAIN}/v1/graphql`,
         projectId: createResp.projectId,
         projectName: params.NAME
     };
@@ -14316,6 +14316,9 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => previewApps
                 projectId: ((_a = successEvent.public_event_data) === null || _a === void 0 ? void 0 : _a.projectId) || '',
                 githubDeploymentJobID: ((_b = successEvent.public_event_data) === null || _b === void 0 ? void 0 : _b.githubDeploymentJobID) || ''
             };
+        }
+        if (response.jobs_by_pk.status === 'skipped') {
+            throw new Error('This preview app creation was skipped due to another preview app creation being scheduled.');
         }
         if (response.jobs_by_pk.status === 'failed') {
             const failedEvent = response.jobs_by_pk.tasks[0].task_events.find(te => te.event_type === 'failed');
@@ -14488,6 +14491,7 @@ const createLogger = () => ({
 const errors = {
     validation: {
         name: 'Preview app name is mandatory. Please provide it in the action input "name"',
+        domain: 'Preview app domain is mandatory. Please provide it in the action input "domain"',
         hasuraCloudPAT: 'Hasura Cloud Personal access token is required for creating preview apps. Please pass it in the HASURA_CLOUD_ACCESS_TOKEN env var of the GitHub action.',
         githubToken: 'GitHub access token is required for Hasura Cloud to access metadata/migrations from your branch. Please pass it in the GITHUB_TOKEN env var of the GitHub action.'
     },
@@ -14615,6 +14619,7 @@ const getBaseParameters = () => ({
     PLAN: core.getInput('tier'),
     REGION: core.getInput('region'),
     NAME: core.getInput('name') || '',
+    DOMAIN: core.getInput('domain') || '',
     GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
     HASURA_CLOUD_PAT: process.env.HASURA_CLOUD_ACCESS_TOKEN || '',
     CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint'),
@@ -14628,6 +14633,9 @@ const getBaseParameters = () => ({
 const validateParameters = (params) => {
     if (!params.NAME) {
         throw new Error(errors.validation.name);
+    }
+    if (!params.DOMAIN) {
+        throw new Error(errors.validation.domain);
     }
     if (!params.HASURA_CLOUD_PAT) {
         throw new Error(errors.validation.hasuraCloudPAT);

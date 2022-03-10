@@ -1,6 +1,6 @@
 {
   "name": "hasura-cloud-preview-apps",
-  "version": "0.1.1",
+  "version": "0.1.5",
   "private": true,
   "description": "Create Hasura Cloud preview apps from metadata/migrations from your Git repo",
   "main": "src/main.ts",
@@ -9,7 +9,7 @@
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
+    "package": "rm -rf dist & ncc build --source-map --license licenses.txt",
     "main": "npm run package && node dist/index.js",
     "test": "jest",
     "yaml-test": "echo 'Validating action.yml syntax' && yaml-validator action.yml",
@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/node": "^16.10.1",
     "@typescript-eslint/parser": "^4.28.3",
-    "@vercel/ncc": "^0.29.0",
+    "@vercel/ncc": "^0.33.3",
     "eslint": "^7.32.0",
     "eslint-plugin-github": "^4.1.1",
     "eslint-plugin-jest": "^24.3.6",

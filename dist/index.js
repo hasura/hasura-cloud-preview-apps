@@ -27,7 +27,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.issue = exports.issueCommand = void 0;
-const os = __importStar(__nccwpck_require__(2087));
+const os = __importStar(__nccwpck_require__(2037));
 const utils_1 = __nccwpck_require__(5278);
 /**
  * Commands
@@ -138,8 +138,8 @@ exports.getState = exports.saveState = exports.group = exports.endGroup = export
 const command_1 = __nccwpck_require__(7351);
 const file_command_1 = __nccwpck_require__(717);
 const utils_1 = __nccwpck_require__(5278);
-const os = __importStar(__nccwpck_require__(2087));
-const path = __importStar(__nccwpck_require__(5622));
+const os = __importStar(__nccwpck_require__(2037));
+const path = __importStar(__nccwpck_require__(1017));
 /**
  * The code to exit an action
  */
@@ -441,8 +441,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.issueCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const fs = __importStar(__nccwpck_require__(5747));
-const os = __importStar(__nccwpck_require__(2087));
+const fs = __importStar(__nccwpck_require__(7147));
+const os = __importStar(__nccwpck_require__(2037));
 const utils_1 = __nccwpck_require__(5278);
 function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
@@ -572,7 +572,7 @@ module.exports = dataUriToBuffer;
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 try {
-  var util = __nccwpck_require__(1669);
+  var util = __nccwpck_require__(3837);
   /* istanbul ignore next */
   if (typeof util.inherits !== 'function') throw '';
   module.exports = util.inherits;
@@ -624,8 +624,8 @@ if (typeof Object.create === 'function') {
 "use strict";
 
 
-var url = __nccwpck_require__(8835)
-var fs = __nccwpck_require__(5747)
+var url = __nccwpck_require__(7310)
+var fs = __nccwpck_require__(7147)
 
 //Parse method copied from https://github.com/brianc/node-postgres
 //Copyright (c) 2010-2014 Brian Carlson (brian.m.carlson@gmail.com)
@@ -845,7 +845,7 @@ module.exports = readInt8;
 
 "use strict";
 
-const EventEmitter = __nccwpck_require__(8614).EventEmitter
+const EventEmitter = (__nccwpck_require__(2361).EventEmitter)
 
 const NOOP = function () {}
 
@@ -931,7 +931,7 @@ class Pool extends EventEmitter {
     this.options.maxUses = this.options.maxUses || Infinity
     this.options.allowExitOnIdle = this.options.allowExitOnIdle || false
     this.log = this.options.log || function () {}
-    this.Client = this.options.Client || Client || __nccwpck_require__(4194).Client
+    this.Client = this.options.Client || Client || (__nccwpck_require__(4194).Client)
     this.Promise = this.options.Promise || global.Promise
 
     if (typeof this.options.idleTimeoutMillis === 'undefined') {
@@ -1615,7 +1615,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Parser = void 0;
 const messages_1 = __nccwpck_require__(6359);
 const buffer_reader_1 = __nccwpck_require__(320);
-const assert_1 = __importDefault(__nccwpck_require__(2357));
+const assert_1 = __importDefault(__nccwpck_require__(9491));
 // every message is prefixed with a single bye
 const CODE_LENGTH = 1;
 // every message has an int32 length which includes itself but does
@@ -2758,8 +2758,8 @@ module.exports = {
 "use strict";
 
 
-var EventEmitter = __nccwpck_require__(8614).EventEmitter
-var util = __nccwpck_require__(1669)
+var EventEmitter = (__nccwpck_require__(2361).EventEmitter)
+var util = __nccwpck_require__(3837)
 var utils = __nccwpck_require__(6419)
 var sasl = __nccwpck_require__(9481)
 var pgPass = __nccwpck_require__(9713)
@@ -3387,11 +3387,11 @@ module.exports = Client
 "use strict";
 
 
-var dns = __nccwpck_require__(881)
+var dns = __nccwpck_require__(9523)
 
 var defaults = __nccwpck_require__(7886)
 
-var parse = __nccwpck_require__(8961).parse // parses a connection string
+var parse = (__nccwpck_require__(8961).parse) // parses a connection string
 
 var val = function (key, config, envVar) {
   if (envVar === undefined) {
@@ -3561,8 +3561,8 @@ module.exports = ConnectionParameters
 "use strict";
 
 
-var net = __nccwpck_require__(1631)
-var EventEmitter = __nccwpck_require__(8614).EventEmitter
+var net = __nccwpck_require__(1808)
+var EventEmitter = (__nccwpck_require__(2361).EventEmitter)
 
 const { parse, serialize } = __nccwpck_require__(1113)
 
@@ -3635,7 +3635,7 @@ class Connection extends EventEmitter {
           self.stream.end()
           return self.emit('error', new Error('There was an error establishing an SSL connection'))
       }
-      var tls = __nccwpck_require__(4016)
+      var tls = __nccwpck_require__(4404)
       const options = {
         socket: self.stream,
       }
@@ -3944,9 +3944,9 @@ if (typeof process.env.NODE_PG_FORCE_NATIVE !== 'undefined') {
 // eslint-disable-next-line
 var Native = __nccwpck_require__(8889)
 var TypeOverrides = __nccwpck_require__(8873)
-var pkg = __nccwpck_require__(257)
-var EventEmitter = __nccwpck_require__(8614).EventEmitter
-var util = __nccwpck_require__(1669)
+var pkg = __nccwpck_require__(2466)
+var EventEmitter = (__nccwpck_require__(2361).EventEmitter)
+var util = __nccwpck_require__(3837)
 var ConnectionParameters = __nccwpck_require__(9112)
 
 var NativeQuery = __nccwpck_require__(1886)
@@ -4256,8 +4256,8 @@ module.exports = __nccwpck_require__(1094)
 "use strict";
 
 
-var EventEmitter = __nccwpck_require__(8614).EventEmitter
-var util = __nccwpck_require__(1669)
+var EventEmitter = (__nccwpck_require__(2361).EventEmitter)
+var util = __nccwpck_require__(3837)
 var utils = __nccwpck_require__(6419)
 
 var NativeQuery = (module.exports = function (config, values, callback) {
@@ -4429,7 +4429,7 @@ NativeQuery.prototype.submit = function (client) {
 "use strict";
 
 
-const { EventEmitter } = __nccwpck_require__(8614)
+const { EventEmitter } = __nccwpck_require__(2361)
 
 const Result = __nccwpck_require__(6736)
 const utils = __nccwpck_require__(6419)
@@ -4778,7 +4778,7 @@ module.exports = Result
 
 "use strict";
 
-const crypto = __nccwpck_require__(6417)
+const crypto = __nccwpck_require__(6113)
 
 function startSession(mechanisms) {
   if (mechanisms.indexOf('SCRAM-SHA-256') === -1) {
@@ -5039,7 +5039,7 @@ module.exports = TypeOverrides
 "use strict";
 
 
-const crypto = __nccwpck_require__(6417)
+const crypto = __nccwpck_require__(6113)
 
 const defaults = __nccwpck_require__(7886)
 
@@ -5234,10 +5234,10 @@ module.exports = {
 "use strict";
 
 
-var path = __nccwpck_require__(5622)
-  , Stream = __nccwpck_require__(2413).Stream
+var path = __nccwpck_require__(1017)
+  , Stream = (__nccwpck_require__(2781).Stream)
   , split = __nccwpck_require__(5000)
-  , util = __nccwpck_require__(1669)
+  , util = __nccwpck_require__(3837)
   , defaultPort = 5432
   , isWin = (process.platform === 'win32')
   , warnStream = process.stderr
@@ -5475,8 +5475,8 @@ var isValidEntry = module.exports.isValidEntry = function(entry){
 "use strict";
 
 
-var path = __nccwpck_require__(5622)
-  , fs = __nccwpck_require__(5747)
+var path = __nccwpck_require__(1017)
+  , fs = __nccwpck_require__(7147)
   , helper = __nccwpck_require__(6926)
 ;
 
@@ -5905,7 +5905,7 @@ function parse (interval) {
 /***/ ((module, exports, __nccwpck_require__) => {
 
 /* eslint-disable node/no-deprecated-api */
-var buffer = __nccwpck_require__(4293)
+var buffer = __nccwpck_require__(4300)
 var Buffer = buffer.Buffer
 
 // alternative to using Object.keys for old browsers
@@ -5993,7 +5993,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 
 const { Transform } = __nccwpck_require__(3654)
-const { StringDecoder } = __nccwpck_require__(4304)
+const { StringDecoder } = __nccwpck_require__(1576)
 const kLast = Symbol('last')
 const kDecoder = Symbol('decoder')
 
@@ -6461,7 +6461,7 @@ var Duplex;
 Readable.ReadableState = ReadableState;
 /*<replacement>*/
 
-var EE = __nccwpck_require__(8614).EventEmitter;
+var EE = (__nccwpck_require__(2361).EventEmitter);
 
 var EElistenerCount = function EElistenerCount(emitter, type) {
   return emitter.listeners(type).length;
@@ -6475,7 +6475,7 @@ var Stream = __nccwpck_require__(2319);
 /*</replacement>*/
 
 
-var Buffer = __nccwpck_require__(4293).Buffer;
+var Buffer = (__nccwpck_require__(4300).Buffer);
 
 var OurUint8Array = global.Uint8Array || function () {};
 
@@ -6489,7 +6489,7 @@ function _isUint8Array(obj) {
 /*<replacement>*/
 
 
-var debugUtil = __nccwpck_require__(1669);
+var debugUtil = __nccwpck_require__(3837);
 
 var debug;
 
@@ -6508,7 +6508,7 @@ var destroyImpl = __nccwpck_require__(4481);
 var _require = __nccwpck_require__(2932),
     getHighWaterMark = _require.getHighWaterMark;
 
-var _require$codes = __nccwpck_require__(2752)/* .codes */ .q,
+var _require$codes = (__nccwpck_require__(2752)/* .codes */ .q),
     ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE,
     ERR_STREAM_PUSH_AFTER_EOF = _require$codes.ERR_STREAM_PUSH_AFTER_EOF,
     ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
@@ -6592,7 +6592,7 @@ function ReadableState(options, stream, isDuplex) {
   this.encoding = null;
 
   if (options.encoding) {
-    if (!StringDecoder) StringDecoder = __nccwpck_require__(4841)/* .StringDecoder */ .s;
+    if (!StringDecoder) StringDecoder = (__nccwpck_require__(4841)/* .StringDecoder */ .s);
     this.decoder = new StringDecoder(options.encoding);
     this.encoding = options.encoding;
   }
@@ -6754,7 +6754,7 @@ Readable.prototype.isPaused = function () {
 
 
 Readable.prototype.setEncoding = function (enc) {
-  if (!StringDecoder) StringDecoder = __nccwpck_require__(4841)/* .StringDecoder */ .s;
+  if (!StringDecoder) StringDecoder = (__nccwpck_require__(4841)/* .StringDecoder */ .s);
   var decoder = new StringDecoder(enc);
   this._readableState.decoder = decoder; // If setEncoding(null), decoder.encoding equals utf8
 
@@ -7626,7 +7626,7 @@ function indexOf(xs, x) {
 
 module.exports = Transform;
 
-var _require$codes = __nccwpck_require__(2752)/* .codes */ .q,
+var _require$codes = (__nccwpck_require__(2752)/* .codes */ .q),
     ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
     ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK,
     ERR_TRANSFORM_ALREADY_TRANSFORMING = _require$codes.ERR_TRANSFORM_ALREADY_TRANSFORMING,
@@ -7838,7 +7838,7 @@ var Stream = __nccwpck_require__(2319);
 /*</replacement>*/
 
 
-var Buffer = __nccwpck_require__(4293).Buffer;
+var Buffer = (__nccwpck_require__(4300).Buffer);
 
 var OurUint8Array = global.Uint8Array || function () {};
 
@@ -7855,7 +7855,7 @@ var destroyImpl = __nccwpck_require__(4481);
 var _require = __nccwpck_require__(2932),
     getHighWaterMark = _require.getHighWaterMark;
 
-var _require$codes = __nccwpck_require__(2752)/* .codes */ .q,
+var _require$codes = (__nccwpck_require__(2752)/* .codes */ .q),
     ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE,
     ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
     ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK,
@@ -8701,10 +8701,10 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var _require = __nccwpck_require__(4293),
+var _require = __nccwpck_require__(4300),
     Buffer = _require.Buffer;
 
-var _require2 = __nccwpck_require__(1669),
+var _require2 = __nccwpck_require__(3837),
     inspect = _require2.inspect;
 
 var custom = inspect && inspect.custom || 'inspect';
@@ -9020,7 +9020,7 @@ module.exports = {
 // permission from the author, Mathias Buus (@mafintosh).
 
 
-var ERR_STREAM_PREMATURE_CLOSE = __nccwpck_require__(2752)/* .codes.ERR_STREAM_PREMATURE_CLOSE */ .q.ERR_STREAM_PREMATURE_CLOSE;
+var ERR_STREAM_PREMATURE_CLOSE = (__nccwpck_require__(2752)/* .codes.ERR_STREAM_PREMATURE_CLOSE */ .q.ERR_STREAM_PREMATURE_CLOSE);
 
 function once(callback) {
   var called = false;
@@ -9139,7 +9139,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var ERR_INVALID_ARG_TYPE = __nccwpck_require__(2752)/* .codes.ERR_INVALID_ARG_TYPE */ .q.ERR_INVALID_ARG_TYPE;
+var ERR_INVALID_ARG_TYPE = (__nccwpck_require__(2752)/* .codes.ERR_INVALID_ARG_TYPE */ .q.ERR_INVALID_ARG_TYPE);
 
 function from(Readable, iterable, opts) {
   var iterator;
@@ -9213,7 +9213,7 @@ function once(callback) {
   };
 }
 
-var _require$codes = __nccwpck_require__(2752)/* .codes */ .q,
+var _require$codes = (__nccwpck_require__(2752)/* .codes */ .q),
     ERR_MISSING_ARGS = _require$codes.ERR_MISSING_ARGS,
     ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED;
 
@@ -9304,7 +9304,7 @@ module.exports = pipeline;
 "use strict";
 
 
-var ERR_INVALID_OPT_VALUE = __nccwpck_require__(2752)/* .codes.ERR_INVALID_OPT_VALUE */ .q.ERR_INVALID_OPT_VALUE;
+var ERR_INVALID_OPT_VALUE = (__nccwpck_require__(2752)/* .codes.ERR_INVALID_OPT_VALUE */ .q.ERR_INVALID_OPT_VALUE);
 
 function highWaterMarkFrom(options, isDuplex, duplexKey) {
   return options.highWaterMark != null ? options.highWaterMark : isDuplex ? options[duplexKey] : null;
@@ -9335,7 +9335,7 @@ module.exports = {
 /***/ 2319:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-module.exports = __nccwpck_require__(2413);
+module.exports = __nccwpck_require__(2781);
 
 
 /***/ }),
@@ -9343,7 +9343,7 @@ module.exports = __nccwpck_require__(2413);
 /***/ 3654:
 /***/ ((module, exports, __nccwpck_require__) => {
 
-var Stream = __nccwpck_require__(2413);
+var Stream = __nccwpck_require__(2781);
 if (process.env.READABLE_STREAM === 'disable' && Stream) {
   module.exports = Stream.Readable;
   Object.assign(module.exports, Stream);
@@ -9392,7 +9392,7 @@ if (process.env.READABLE_STREAM === 'disable' && Stream) {
 
 /*<replacement>*/
 
-var Buffer = __nccwpck_require__(1867).Buffer;
+var Buffer = (__nccwpck_require__(1867).Buffer);
 /*</replacement>*/
 
 var isEncoding = Buffer.isEncoding || function (encoding) {
@@ -9674,7 +9674,7 @@ function simpleEnd(buf) {
  * For Node.js, simply re-export the core `util.deprecate` function.
  */
 
-module.exports = __nccwpck_require__(1669).deprecate;
+module.exports = __nccwpck_require__(3837).deprecate;
 
 
 /***/ }),
@@ -13874,266 +13874,12 @@ function extend(target) {
 
 /***/ }),
 
-/***/ 8889:
-/***/ ((module) => {
-
-module.exports = eval("require")("pg-native");
-
-
-/***/ }),
-
-/***/ 9081:
-/***/ ((module) => {
-
-module.exports = eval("require")("stream/web");
-
-
-/***/ }),
-
-/***/ 8010:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
-
-/* c8 ignore start */
-// 64 KiB (same size chrome slice theirs blob into Uint8array's)
-const POOL_SIZE = 65536;
-
-if (!globalThis.ReadableStream) {
-  try {
-    Object.assign(globalThis, __nccwpck_require__(9081))
-  } catch (error) {
-		// TODO: Remove when only supporting node >= 16.5.0
-    Object.assign(globalThis, __nccwpck_require__(1452))
-  }
-}
-
-try {
-  const {Blob} = __nccwpck_require__(4293)
-  if (Blob && !Blob.prototype.stream) {
-		Blob.prototype.stream = function name(params) {
-			let position = 0;
-			const blob = this;
-
-			return new ReadableStream({
-				type: 'bytes',
-				async pull(ctrl) {
-					const chunk = blob.slice(position, Math.min(blob.size, position + POOL_SIZE));
-					const buffer = await chunk.arrayBuffer();
-					position += buffer.byteLength;
-					ctrl.enqueue(new Uint8Array(buffer))
-
-					if (position === blob.size) {
-						ctrl.close()
-					}
-				}
-			})
-		}
-	}
-} catch (error) {}
-/* c8 ignore end */
-
-
-/***/ }),
-
-/***/ 257:
-/***/ ((module) => {
+/***/ 4970:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
-module.exports = JSON.parse('{"_from":"pg","_id":"pg@8.7.1","_inBundle":false,"_integrity":"sha512-7bdYcv7V6U3KAtWjpQJJBww0UEsWuh4yQ/EjNf2HeO/NnvKjpvhEIe/A/TleP6wtmSKnUnghs5A9jUoK6iDdkA==","_location":"/pg","_phantomChildren":{},"_requested":{"type":"tag","registry":true,"raw":"pg","name":"pg","escapedName":"pg","rawSpec":"","saveSpec":null,"fetchSpec":"latest"},"_requiredBy":["#USER","/"],"_resolved":"https://registry.npmjs.org/pg/-/pg-8.7.1.tgz","_shasum":"9ea9d1ec225980c36f94e181d009ab9f4ce4c471","_spec":"pg","_where":"/home/rishichandra/oss/hasura-cloud-preview-apps","author":{"name":"Brian Carlson","email":"brian.m.carlson@gmail.com"},"bugs":{"url":"https://github.com/brianc/node-postgres/issues"},"bundleDependencies":false,"dependencies":{"buffer-writer":"2.0.0","packet-reader":"1.0.0","pg-connection-string":"^2.5.0","pg-pool":"^3.4.1","pg-protocol":"^1.5.0","pg-types":"^2.1.0","pgpass":"1.x"},"deprecated":false,"description":"PostgreSQL client - pure javascript & libpq with the same API","devDependencies":{"async":"0.9.0","bluebird":"3.5.2","co":"4.6.0","pg-copy-streams":"0.3.0"},"engines":{"node":">= 8.0.0"},"files":["lib","SPONSORS.md"],"gitHead":"92b4d37926c276d343bfe56447ff6f526af757cf","homepage":"https://github.com/brianc/node-postgres","keywords":["database","libpq","pg","postgre","postgres","postgresql","rdbms"],"license":"MIT","main":"./lib","name":"pg","peerDependencies":{"pg-native":">=2.0.0"},"peerDependenciesMeta":{"pg-native":{"optional":true}},"repository":{"type":"git","url":"git://github.com/brianc/node-postgres.git","directory":"packages/pg"},"scripts":{"test":"make test-all"},"version":"8.7.1"}');
 
-/***/ }),
-
-/***/ 2357:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("assert");
-
-/***/ }),
-
-/***/ 4293:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("buffer");
-
-/***/ }),
-
-/***/ 6417:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("crypto");
-
-/***/ }),
-
-/***/ 881:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("dns");
-
-/***/ }),
-
-/***/ 8614:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("events");
-
-/***/ }),
-
-/***/ 5747:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("fs");
-
-/***/ }),
-
-/***/ 1631:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("net");
-
-/***/ }),
-
-/***/ 2087:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("os");
-
-/***/ }),
-
-/***/ 5622:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("path");
-
-/***/ }),
-
-/***/ 2413:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("stream");
-
-/***/ }),
-
-/***/ 4304:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("string_decoder");
-
-/***/ }),
-
-/***/ 4016:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("tls");
-
-/***/ }),
-
-/***/ 8835:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("url");
-
-/***/ }),
-
-/***/ 1669:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("util");
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __nccwpck_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		var threw = true;
-/******/ 		try {
-/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __nccwpck_require__);
-/******/ 			threw = false;
-/******/ 		} finally {
-/******/ 			if(threw) delete __webpack_module_cache__[moduleId];
-/******/ 		}
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nccwpck_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__nccwpck_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/compat */
-/******/ 	
-/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-// ESM COMPAT FLAG
-__nccwpck_require__.r(__webpack_exports__);
-
-// EXPORTS
-__nccwpck_require__.d(__webpack_exports__, {
-  "run": () => (/* binding */ run)
-});
-
-;// CONCATENATED MODULE: ./src/utils.ts
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -14142,22 +13888,53 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const getOutputVars = (createResp, params) => {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createGqlClient = void 0;
+const node_fetch_1 = __importDefault(__nccwpck_require__(7974));
+const createGqlClient = (parameters, logger) => {
+    const query = (opts) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        try {
+            logger.debug('Making GraphQL query to Hasura Cloud API...');
+            const respRaw = yield node_fetch_1.default(parameters.CLOUD_DATA_GRAPHQL, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    authorization: `pat ${parameters.HASURA_CLOUD_PAT}`
+                },
+                body: JSON.stringify({ query: opts.query, variables: opts.variables })
+            });
+            logger.debug(`Received response: ${JSON.stringify(respRaw, null, 4)}`);
+            logger.debug(`Getting response body JSON...`);
+            const result = yield respRaw.json();
+            if (result.errors) {
+                throw new Error(((_a = result.errors[0]) === null || _a === void 0 ? void 0 : _a.message) || 'unexpected graphql error');
+            }
+            logger.debug(`Response body JSON: ${JSON.stringify(result, null, 4)}`);
+            return result.data;
+        }
+        catch (e) {
+            throw e;
+        }
+    });
     return {
-        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
-        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
-        projectId: createResp.projectId,
-        projectName: params.NAME
+        query
     };
 };
-const waitFor = (time) => __awaiter(void 0, void 0, void 0, function* () {
-    return new Promise(resolve => {
-        setTimeout(resolve, time);
-    });
-});
+exports.createGqlClient = createGqlClient;
 
-;// CONCATENATED MODULE: ./src/previewApps.ts
-var previewApps_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+
+/***/ }),
+
+/***/ 8954:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -14166,8 +13943,466 @@ var previewApps_awaiter = (undefined && undefined.__awaiter) || function (thisAr
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createContext = void 0;
+const logger_1 = __nccwpck_require__(4636);
+const parameters_1 = __nccwpck_require__(3232);
+const client_1 = __nccwpck_require__(4970);
+const createContext = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const logger = logger_1.createLogger();
+        const parameters = yield parameters_1.getParameters(logger);
+        const client = client_1.createGqlClient(parameters, logger);
+        return {
+            logger,
+            parameters,
+            client
+        };
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.createContext = createContext;
 
-const createPreviewApp = (context) => previewApps_awaiter(void 0, void 0, void 0, function* () {
+
+/***/ }),
+
+/***/ 6976:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.errors = void 0;
+exports.errors = {
+    validation: {
+        name: 'Preview app name is mandatory. Please provide it in the action input "name"',
+        hasuraCloudPAT: 'Hasura Cloud Personal access token is required for creating preview apps. Please pass it in the HASURA_CLOUD_ACCESS_TOKEN env var of the GitHub action.',
+        githubToken: 'GitHub access token is required for Hasura Cloud to access metadata/migrations from your branch. Please pass it in the GITHUB_TOKEN env var of the GitHub action.'
+    },
+    unexpected: 'Unexpected error occured.'
+};
+
+
+/***/ }),
+
+/***/ 8502:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.handler = void 0;
+const previewApps_1 = __nccwpck_require__(9019);
+const tasks_1 = __nccwpck_require__(824);
+const utils_1 = __nccwpck_require__(1314);
+const handler = (context) => __awaiter(void 0, void 0, void 0, function* () {
+    if (context.parameters.SHOULD_DELETE) {
+        context.logger.log('Deleting Hasura Cloud preview app.');
+        const deleteResp = yield previewApps_1.deletePreviewApp(context);
+        context.logger.log(`Preview app "${context.parameters.NAME}" deleted successfully.`);
+        return deleteResp;
+    }
+    context.logger.log('Creating Hasura Cloud preview app.');
+    const createResp = yield previewApps_1.createPreviewApp(context);
+    context.logger.log(`Scheduled creation of preview app:\n${JSON.stringify(createResp, null, 2)}`);
+    context.logger.log(`Polling the preview app creation status...`);
+    const previewAppCreationMetadata = yield previewApps_1.pollPreviewAppCreationJob(context, createResp.githubPreviewAppJobID);
+    context.logger.log(`Applying metadata and migrations from the branch...`);
+    const jobStatus = yield tasks_1.getRealtimeLogs(previewAppCreationMetadata.githubDeploymentJobID, context);
+    if (jobStatus === 'failed') {
+        throw new Error('Preview app has been created, but applying metadata and migrations failed');
+    }
+    return utils_1.getOutputVars(previewAppCreationMetadata, context.parameters);
+});
+exports.handler = handler;
+
+
+/***/ }),
+
+/***/ 4636:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createLogger = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const createLogger = () => ({
+    log: (log, linebreak = true) => {
+        console.log(`${log}${linebreak ? '\n' : ''}`);
+    },
+    error: console.error,
+    debug: core.debug,
+    output: core.setOutput,
+    terminate: core.setFailed
+});
+exports.createLogger = createLogger;
+
+
+/***/ }),
+
+/***/ 399:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.run = void 0;
+const handler_1 = __nccwpck_require__(8502);
+const context_1 = __nccwpck_require__(8954);
+const logger_1 = __nccwpck_require__(4636);
+const errors_1 = __nccwpck_require__(6976);
+const run = (context) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const outputVars = yield handler_1.handler(context);
+        const outputVarKeys = Object.keys(outputVars);
+        for (const outputVarKey of outputVarKeys) {
+            context.logger.output(outputVarKey, outputVars[outputVarKey]);
+        }
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            context.logger.terminate(error.message);
+        }
+        else {
+            context.logger.terminate(errors_1.errors.unexpected);
+        }
+        process.exit(1);
+    }
+});
+exports.run = run;
+context_1.createContext()
+    .then(context => {
+    exports.run(context);
+})
+    .catch(e => {
+    const logger = logger_1.createLogger();
+    if (e instanceof Error) {
+        logger.terminate(e.message);
+    }
+    else {
+        logger.terminate(errors_1.errors.unexpected);
+    }
+    process.exit(1);
+});
+
+
+/***/ }),
+
+/***/ 3232:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getParameters = exports.validateParameters = exports.getHasuraEnvVars = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const errors_1 = __nccwpck_require__(6976);
+const postgres_1 = __nccwpck_require__(6297);
+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || '';
+const GITHUB_OWNER = GITHUB_REPOSITORY.split('/')[0];
+const GITHUB_REPO_NAME = GITHUB_REPOSITORY.split('/')[1] || '';
+const getBranchName = () => {
+    let branchName = process.env.GITHUB_HEAD_REF || '';
+    if (!branchName) {
+        const refName = process.env.GITHUB_REF || '';
+        branchName = refName.split('refs/heads/')[1];
+    }
+    return branchName || '';
+};
+const GITHUB_BRANCH_NAME = getBranchName();
+const getHasuraEnvVars = (rawEnvVars) => {
+    return rawEnvVars
+        .trim()
+        .split('\n')
+        .map(rawEnvVar => {
+        const envMetadata = rawEnvVar.trim().split(';');
+        if (envMetadata.length > 0) {
+            const [key, value = ''] = envMetadata[0].trim().split('=');
+            return {
+                key,
+                value
+            };
+        }
+        return {
+            key: '',
+            value: ''
+        };
+    })
+        .filter(env => !!env.key);
+};
+exports.getHasuraEnvVars = getHasuraEnvVars;
+const getBaseParameters = () => ({
+    PLAN: core.getInput('tier'),
+    REGION: core.getInput('region'),
+    NAME: core.getInput('name') || '',
+    GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
+    HASURA_CLOUD_PAT: process.env.HASURA_CLOUD_ACCESS_TOKEN || '',
+    CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint'),
+    HASURA_PROJECT_DIR: core.getInput('hasuraProjectDirectoryPath') || '',
+    GITHUB_REPO_NAME,
+    GITHUB_OWNER,
+    GITHUB_BRANCH_NAME,
+    HASURA_ENV_VARS: exports.getHasuraEnvVars(core.getInput('hasuraEnv')),
+    SHOULD_DELETE: [true, 'true'].includes(core.getInput('delete'))
+});
+const validateParameters = (params) => {
+    if (!params.NAME) {
+        throw new Error(errors_1.errors.validation.name);
+    }
+    if (!params.HASURA_CLOUD_PAT) {
+        throw new Error(errors_1.errors.validation.hasuraCloudPAT);
+    }
+    if (!params.GITHUB_TOKEN) {
+        throw new Error(errors_1.errors.validation.githubToken);
+    }
+};
+exports.validateParameters = validateParameters;
+const getPostgresServerMetadata = (rawMetadata) => {
+    if (!rawMetadata.trim()) {
+        return null;
+    }
+    const metadataLines = rawMetadata.trim().split('\n');
+    if (metadataLines.length < 2) {
+        throw new Error('Invalid Postgres DB config. ');
+    }
+    const [pgStringLabel, pgString] = metadataLines[0].trim().split('=');
+    if (pgStringLabel !== 'POSTGRES_SERVER_CONNECTION_URI' || !pgString.trim()) {
+        throw new Error('Could not find PG_SERVER_CONNECTION_URI in the Postgres DB config');
+    }
+    const [envVarsForHasuraLabel, commaSeparatedEnvVars] = metadataLines[1].trim().split('=');
+    if (envVarsForHasuraLabel !== 'PG_ENV_VARS_FOR_HASURA' ||
+        !commaSeparatedEnvVars.trim()) {
+        throw new Error('Could not find valid PG_ENV_VARS_FOR_HASURA in Postgres DB config');
+    }
+    return {
+        pgString: pgString.trim(),
+        envVars: commaSeparatedEnvVars
+            .trim()
+            .split(',')
+            .map(envVar => envVar.trim())
+            .filter(envVar => !!envVar)
+    };
+};
+const getParameters = (logger, parameters = getBaseParameters()) => __awaiter(void 0, void 0, void 0, function* () {
+    const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresDBConfig'));
+    if (postgresMetadata) {
+        for (const env of postgresMetadata.envVars) {
+            const dbName = parameters.NAME.replace(/[^A-Z0-9]/gi, '_');
+            if (!parameters.SHOULD_DELETE) {
+                try {
+                    yield postgres_1.createEphemeralDb(postgresMetadata.pgString, dbName);
+                    parameters.HASURA_ENV_VARS = [
+                        ...parameters.HASURA_ENV_VARS.filter(e => e.key !== env),
+                        {
+                            key: env,
+                            value: postgres_1.changeDbInPgString(postgresMetadata.pgString, dbName)
+                        }
+                    ];
+                }
+                catch (e) {
+                    if (e instanceof Error) {
+                        throw new Error(`Could not create ephemeral database(s). ${e.message}`);
+                    }
+                    throw e;
+                }
+            }
+            else {
+                try {
+                    yield postgres_1.dropEphemeralDb(postgresMetadata.pgString, dbName);
+                }
+                catch (e) {
+                    if (e instanceof Error) {
+                        throw new Error(`Could not delete ephemeral database(s). ${e.message}`);
+                    }
+                    throw e;
+                }
+            }
+        }
+    }
+    try {
+        exports.validateParameters(parameters);
+    }
+    catch (e) {
+        throw e;
+    }
+    logger.debug(`Received parameters:\n${JSON.stringify(Object.assign(Object.assign({}, parameters), { HASURA_ENV_VARS: '***', HASURA_CLOUD_PAT: '***', GITHUB_TOKEN: '***' }), null, 4)}`);
+    return parameters;
+});
+exports.getParameters = getParameters;
+
+
+/***/ }),
+
+/***/ 6297:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.dropEphemeralDb = exports.createEphemeralDb = exports.changeDbInPgString = exports.dropDB = exports.dropAndCreateDb = void 0;
+const pg_1 = __nccwpck_require__(4194);
+const dropAndCreateDb = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        pgClient.connect();
+        yield pgClient.query(`
+			DROP DATABASE IF EXISTS "${dbName}";
+		`);
+        yield pgClient.query(`
+			CREATE DATABASE "${dbName}";
+		`);
+    }
+    catch (e) {
+        throw e;
+    }
+    finally {
+        pgClient.end();
+    }
+});
+exports.dropAndCreateDb = dropAndCreateDb;
+const dropDB = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        pgClient.connect();
+        yield pgClient.query(`
+			DROP DATABASE IF EXISTS "${dbName}";
+		`);
+    }
+    catch (e) {
+        throw e;
+    }
+    finally {
+        pgClient.end();
+    }
+});
+exports.dropDB = dropDB;
+const changeDbInPgString = (baseString, dbName) => {
+    const urlObj = new URL(baseString);
+    urlObj.pathname = dbName;
+    return urlObj.toString();
+};
+exports.changeDbInPgString = changeDbInPgString;
+const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
+    const pgClient = new pg_1.Client({
+        connectionString
+    });
+    try {
+        yield exports.dropAndCreateDb(dbName, pgClient);
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.createEphemeralDb = createEphemeralDb;
+const dropEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
+    const pgClient = new pg_1.Client({
+        connectionString
+    });
+    try {
+        yield exports.dropDB(dbName, pgClient);
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.dropEphemeralDb = dropEphemeralDb;
+
+
+/***/ }),
+
+/***/ 9019:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.pollPreviewAppCreationJob = exports.deletePreviewApp = exports.createPreviewApp = void 0;
+const utils_1 = __nccwpck_require__(1314);
+const createPreviewApp = (context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const resp = yield context.client.query({
             query: `
@@ -14224,7 +14459,8 @@ const createPreviewApp = (context) => previewApps_awaiter(void 0, void 0, void 0
         throw e;
     }
 });
-const deletePreviewApp = (context) => previewApps_awaiter(void 0, void 0, void 0, function* () {
+exports.createPreviewApp = createPreviewApp;
+const deletePreviewApp = (context) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const getTenantIdResp = yield context.client.query({
             query: `
@@ -14273,7 +14509,8 @@ const deletePreviewApp = (context) => previewApps_awaiter(void 0, void 0, void 0
         throw e;
     }
 });
-const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => previewApps_awaiter(void 0, void 0, void 0, function* () {
+exports.deletePreviewApp = deletePreviewApp;
+const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     if (timeLapse > 120000) {
         throw new Error('preview app creation timed out');
@@ -14317,6 +14554,9 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => previewApps
                 githubDeploymentJobID: ((_b = successEvent.public_event_data) === null || _b === void 0 ? void 0 : _b.githubDeploymentJobID) || ''
             };
         }
+        if (response.jobs_by_pk.status === 'skipped') {
+            throw new Error('This preview app creation was skipped due to another preview app creation being scheduled.');
+        }
         if (response.jobs_by_pk.status === 'failed') {
             const failedEvent = response.jobs_by_pk.tasks[0].task_events.find(te => te.event_type === 'failed');
             console.log(failedEvent);
@@ -14325,16 +14565,24 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => previewApps
             }
             throw new Error(failedEvent.error);
         }
-        yield waitFor(2000);
-        return pollPreviewAppCreationJob(context, jobId, timeLapse + new Date().getTime() - reqStartTime);
+        yield utils_1.waitFor(2000);
+        return exports.pollPreviewAppCreationJob(context, jobId, timeLapse + new Date().getTime() - reqStartTime);
     }
     catch (e) {
         throw e;
     }
 });
+exports.pollPreviewAppCreationJob = pollPreviewAppCreationJob;
 
-;// CONCATENATED MODULE: ./src/tasks.ts
-var tasks_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+
+/***/ }),
+
+/***/ 824:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -14343,7 +14591,9 @@ var tasks_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _ar
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getRealtimeLogs = void 0;
+const utils_1 = __nccwpck_require__(1314);
 const getTaskName = (taskName) => {
     switch (taskName) {
         case 'gh-validation':
@@ -14368,7 +14618,7 @@ const getTaskStatus = (status) => {
     }
     return status;
 };
-const getJobStatus = (jobId, context) => tasks_awaiter(void 0, void 0, void 0, function* () {
+const getJobStatus = (jobId, context) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
         const resp = yield context.client.query({
@@ -14423,9 +14673,9 @@ const getJobStatus = (jobId, context) => tasks_awaiter(void 0, void 0, void 0, f
         throw e;
     }
 });
-const getRealtimeLogs = (jobId, context, retryCount = 0) => tasks_awaiter(void 0, void 0, void 0, function* () {
+const getRealtimeLogs = (jobId, context, retryCount = 0) => __awaiter(void 0, void 0, void 0, function* () {
     if (retryCount > 0) {
-        yield waitFor(2000);
+        yield utils_1.waitFor(2000);
     }
     const jobStatus = yield getJobStatus(jobId, context);
     if (jobStatus === 'success') {
@@ -14434,11 +14684,19 @@ const getRealtimeLogs = (jobId, context, retryCount = 0) => tasks_awaiter(void 0
     if (jobStatus === 'failed') {
         return 'failed';
     }
-    return getRealtimeLogs(jobId, context, retryCount + 1);
+    return exports.getRealtimeLogs(jobId, context, retryCount + 1);
 });
+exports.getRealtimeLogs = getRealtimeLogs;
 
-;// CONCATENATED MODULE: ./src/handler.ts
-var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+
+/***/ }),
+
+/***/ 1314:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -14447,265 +14705,215 @@ var handler_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
-
-
-const handler = (context) => handler_awaiter(void 0, void 0, void 0, function* () {
-    if (context.parameters.SHOULD_DELETE) {
-        context.logger.log('Deleting Hasura Cloud preview app.');
-        const deleteResp = yield deletePreviewApp(context);
-        context.logger.log(`Preview app "${context.parameters.NAME}" deleted successfully.`);
-        return deleteResp;
-    }
-    context.logger.log('Creating Hasura Cloud preview app.');
-    const createResp = yield createPreviewApp(context);
-    context.logger.log(`Scheduled creation of preview app:\n${JSON.stringify(createResp, null, 2)}`);
-    context.logger.log(`Polling the preview app creation status...`);
-    const previewAppCreationMetadata = yield pollPreviewAppCreationJob(context, createResp.githubPreviewAppJobID);
-    context.logger.log(`Applying metadata and migrations from the branch...`);
-    const jobStatus = yield getRealtimeLogs(previewAppCreationMetadata.githubDeploymentJobID, context);
-    if (jobStatus === 'failed') {
-        throw new Error('Preview app has been created, but applying metadata and migrations failed');
-    }
-    return getOutputVars(previewAppCreationMetadata, context.parameters);
-});
-
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(2186);
-;// CONCATENATED MODULE: ./src/logger.ts
-
-const createLogger = () => ({
-    log: (log, linebreak = true) => {
-        console.log(`${log}${linebreak ? '\n' : ''}`);
-    },
-    error: console.error,
-    debug: core.debug,
-    output: core.setOutput,
-    terminate: core.setFailed
-});
-
-;// CONCATENATED MODULE: ./src/errors.ts
-const errors = {
-    validation: {
-        name: 'Preview app name is mandatory. Please provide it in the action input "name"',
-        hasuraCloudPAT: 'Hasura Cloud Personal access token is required for creating preview apps. Please pass it in the HASURA_CLOUD_ACCESS_TOKEN env var of the GitHub action.',
-        githubToken: 'GitHub access token is required for Hasura Cloud to access metadata/migrations from your branch. Please pass it in the GITHUB_TOKEN env var of the GitHub action.'
-    },
-    unexpected: 'Unexpected error occured.'
-};
-
-// EXTERNAL MODULE: ./node_modules/pg/lib/index.js
-var lib = __nccwpck_require__(4194);
-;// CONCATENATED MODULE: ./src/postgres.ts
-var postgres_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-const dropAndCreateDb = (dbName, pgClient) => postgres_awaiter(void 0, void 0, void 0, function* () {
-    try {
-        pgClient.connect();
-        yield pgClient.query(`
-			DROP DATABASE IF EXISTS "${dbName}";
-		`);
-        yield pgClient.query(`
-			CREATE DATABASE "${dbName}";
-		`);
-    }
-    catch (e) {
-        throw e;
-    }
-    finally {
-        pgClient.end();
-    }
-});
-const dropDB = (dbName, pgClient) => postgres_awaiter(void 0, void 0, void 0, function* () {
-    try {
-        pgClient.connect();
-        yield pgClient.query(`
-			DROP DATABASE IF EXISTS "${dbName}";
-		`);
-    }
-    catch (e) {
-        throw e;
-    }
-    finally {
-        pgClient.end();
-    }
-});
-const changeDbInPgString = (baseString, dbName) => {
-    const urlObj = new URL(baseString);
-    urlObj.pathname = dbName;
-    return urlObj.toString();
-};
-const createEphemeralDb = (connectionString, dbName) => postgres_awaiter(void 0, void 0, void 0, function* () {
-    const pgClient = new lib.Client({
-        connectionString
-    });
-    try {
-        yield dropAndCreateDb(dbName, pgClient);
-    }
-    catch (e) {
-        throw e;
-    }
-});
-const dropEphemeralDb = (connectionString, dbName) => postgres_awaiter(void 0, void 0, void 0, function* () {
-    const pgClient = new lib.Client({
-        connectionString
-    });
-    try {
-        yield dropDB(dbName, pgClient);
-    }
-    catch (e) {
-        throw e;
-    }
-});
-
-;// CONCATENATED MODULE: ./src/parameters.ts
-var parameters_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || '';
-const GITHUB_OWNER = GITHUB_REPOSITORY.split('/')[0];
-const GITHUB_REPO_NAME = GITHUB_REPOSITORY.split('/')[1] || '';
-const getBranchName = () => {
-    let branchName = process.env.GITHUB_HEAD_REF || '';
-    if (!branchName) {
-        const refName = process.env.GITHUB_REF || '';
-        branchName = refName.split('refs/heads/')[1];
-    }
-    return branchName || '';
-};
-const GITHUB_BRANCH_NAME = getBranchName();
-const getHasuraEnvVars = (rawEnvVars) => {
-    return rawEnvVars
-        .trim()
-        .split('\n')
-        .map(rawEnvVar => {
-        const envMetadata = rawEnvVar.trim().split(';');
-        if (envMetadata.length > 0) {
-            const [key, value = ''] = envMetadata[0].trim().split('=');
-            return {
-                key,
-                value
-            };
-        }
-        return {
-            key: '',
-            value: ''
-        };
-    })
-        .filter(env => !!env.key);
-};
-const getBaseParameters = () => ({
-    PLAN: core.getInput('tier'),
-    REGION: core.getInput('region'),
-    NAME: core.getInput('name') || '',
-    GITHUB_TOKEN: process.env.GITHUB_TOKEN || '',
-    HASURA_CLOUD_PAT: process.env.HASURA_CLOUD_ACCESS_TOKEN || '',
-    CLOUD_DATA_GRAPHQL: core.getInput('hasuraCloudGraphQLEndpoint'),
-    HASURA_PROJECT_DIR: core.getInput('hasuraProjectDirectoryPath') || '',
-    GITHUB_REPO_NAME,
-    GITHUB_OWNER,
-    GITHUB_BRANCH_NAME,
-    HASURA_ENV_VARS: getHasuraEnvVars(core.getInput('hasuraEnv')),
-    SHOULD_DELETE: [true, 'true'].includes(core.getInput('delete'))
-});
-const validateParameters = (params) => {
-    if (!params.NAME) {
-        throw new Error(errors.validation.name);
-    }
-    if (!params.HASURA_CLOUD_PAT) {
-        throw new Error(errors.validation.hasuraCloudPAT);
-    }
-    if (!params.GITHUB_TOKEN) {
-        throw new Error(errors.validation.githubToken);
-    }
-};
-const getPostgresServerMetadata = (rawMetadata) => {
-    if (!rawMetadata.trim()) {
-        return null;
-    }
-    const metadataLines = rawMetadata.trim().split('\n');
-    if (metadataLines.length < 2) {
-        throw new Error('Invalid Postgres DB config. ');
-    }
-    const [pgStringLabel, pgString] = metadataLines[0].trim().split('=');
-    if (pgStringLabel !== 'POSTGRES_SERVER_CONNECTION_URI' || !pgString.trim()) {
-        throw new Error('Could not find PG_SERVER_CONNECTION_URI in the Postgres DB config');
-    }
-    const [envVarsForHasuraLabel, commaSeparatedEnvVars] = metadataLines[1].trim().split('=');
-    if (envVarsForHasuraLabel !== 'PG_ENV_VARS_FOR_HASURA' ||
-        !commaSeparatedEnvVars.trim()) {
-        throw new Error('Could not find valid PG_ENV_VARS_FOR_HASURA in Postgres DB config');
-    }
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.waitFor = exports.getOutputVars = void 0;
+const getOutputVars = (createResp, params) => {
     return {
-        pgString: pgString.trim(),
-        envVars: commaSeparatedEnvVars
-            .trim()
-            .split(',')
-            .map(envVar => envVar.trim())
-            .filter(envVar => !!envVar)
+        consoleURL: `https://cloud.hasura.io/project/${createResp.projectId}/console`,
+        graphQLEndpoint: `https://${params.NAME}.hasura.app/v1/graphql`,
+        projectId: createResp.projectId,
+        projectName: params.NAME
     };
 };
-const getParameters = (logger, parameters = getBaseParameters()) => parameters_awaiter(void 0, void 0, void 0, function* () {
-    const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresDBConfig'));
-    if (postgresMetadata) {
-        for (const env of postgresMetadata.envVars) {
-            const dbName = parameters.NAME.replace(/[^A-Z0-9]/gi, '_');
-            if (!parameters.SHOULD_DELETE) {
-                try {
-                    yield createEphemeralDb(postgresMetadata.pgString, dbName);
-                    parameters.HASURA_ENV_VARS = [
-                        ...parameters.HASURA_ENV_VARS.filter(e => e.key !== env),
-                        {
-                            key: env,
-                            value: changeDbInPgString(postgresMetadata.pgString, dbName)
-                        }
-                    ];
-                }
-                catch (e) {
-                    if (e instanceof Error) {
-                        throw new Error(`Could not create ephemeral database(s). ${e.message}`);
-                    }
-                    throw e;
-                }
-            }
-            else {
-                try {
-                    yield dropEphemeralDb(postgresMetadata.pgString, dbName);
-                }
-                catch (e) {
-                    if (e instanceof Error) {
-                        throw new Error(`Could not delete ephemeral database(s). ${e.message}`);
-                    }
-                    throw e;
-                }
-            }
-        }
-    }
-    try {
-        validateParameters(parameters);
-    }
-    catch (e) {
-        throw e;
-    }
-    logger.debug(`Received parameters:\n${JSON.stringify(Object.assign(Object.assign({}, parameters), { HASURA_ENV_VARS: '***', HASURA_CLOUD_PAT: '***', GITHUB_TOKEN: '***' }), null, 4)}`);
-    return parameters;
+exports.getOutputVars = getOutputVars;
+const waitFor = (time) => __awaiter(void 0, void 0, void 0, function* () {
+    return new Promise(resolve => {
+        setTimeout(resolve, time);
+    });
+});
+exports.waitFor = waitFor;
+
+
+/***/ }),
+
+/***/ 8889:
+/***/ ((module) => {
+
+module.exports = eval("require")("pg-native");
+
+
+/***/ }),
+
+/***/ 9491:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("assert");
+
+/***/ }),
+
+/***/ 4300:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("buffer");
+
+/***/ }),
+
+/***/ 6113:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("crypto");
+
+/***/ }),
+
+/***/ 9523:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("dns");
+
+/***/ }),
+
+/***/ 2361:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("events");
+
+/***/ }),
+
+/***/ 7147:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ 1808:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("net");
+
+/***/ }),
+
+/***/ 2037:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("os");
+
+/***/ }),
+
+/***/ 1017:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("path");
+
+/***/ }),
+
+/***/ 2781:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("stream");
+
+/***/ }),
+
+/***/ 5356:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("stream/web");
+
+/***/ }),
+
+/***/ 1576:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("string_decoder");
+
+/***/ }),
+
+/***/ 4404:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("tls");
+
+/***/ }),
+
+/***/ 7310:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("url");
+
+/***/ }),
+
+/***/ 3837:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("util");
+
+/***/ }),
+
+/***/ 8572:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
+
+/* c8 ignore start */
+// 64 KiB (same size chrome slice theirs blob into Uint8array's)
+const POOL_SIZE = 65536;
+
+if (!globalThis.ReadableStream) {
+  try {
+    Object.assign(globalThis, __nccwpck_require__(5356))
+  } catch (error) {
+		// TODO: Remove when only supporting node >= 16.5.0
+    Object.assign(globalThis, __nccwpck_require__(1452))
+  }
+}
+
+try {
+  const {Blob} = __nccwpck_require__(4300)
+  if (Blob && !Blob.prototype.stream) {
+		Blob.prototype.stream = function name(params) {
+			let position = 0;
+			const blob = this;
+
+			return new ReadableStream({
+				type: 'bytes',
+				async pull(ctrl) {
+					const chunk = blob.slice(position, Math.min(blob.size, position + POOL_SIZE));
+					const buffer = await chunk.arrayBuffer();
+					position += buffer.byteLength;
+					ctrl.enqueue(new Uint8Array(buffer))
+
+					if (position === blob.size) {
+						ctrl.close()
+					}
+				}
+			})
+		}
+	}
+} catch (error) {}
+/* c8 ignore end */
+
+
+/***/ }),
+
+/***/ 7974:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+// ESM COMPAT FLAG
+__nccwpck_require__.r(__webpack_exports__);
+
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "AbortError": () => (/* reexport */ AbortError),
+  "FetchError": () => (/* reexport */ FetchError),
+  "Headers": () => (/* reexport */ Headers),
+  "Request": () => (/* reexport */ Request),
+  "Response": () => (/* reexport */ Response),
+  "default": () => (/* binding */ fetch),
+  "isRedirect": () => (/* reexport */ isRedirect)
 });
 
 ;// CONCATENATED MODULE: external "http"
@@ -14715,13 +14923,13 @@ const external_https_namespaceObject = require("https");
 ;// CONCATENATED MODULE: external "zlib"
 const external_zlib_namespaceObject = require("zlib");
 // EXTERNAL MODULE: external "stream"
-var external_stream_ = __nccwpck_require__(2413);
+var external_stream_ = __nccwpck_require__(2781);
 // EXTERNAL MODULE: ./node_modules/data-uri-to-buffer/dist/src/index.js
 var src = __nccwpck_require__(2371);
 // EXTERNAL MODULE: external "util"
-var external_util_ = __nccwpck_require__(1669);
+var external_util_ = __nccwpck_require__(3837);
 // EXTERNAL MODULE: ./node_modules/fetch-blob/streams.cjs
-var streams = __nccwpck_require__(8010);
+var streams = __nccwpck_require__(8572);
 ;// CONCATENATED MODULE: ./node_modules/fetch-blob/index.js
 
 // TODO (jimmywarting): in the feature use conditional loading with top level await (requires 14.x)
@@ -15007,7 +15215,7 @@ class FetchError extends FetchBaseError {
 }
 
 // EXTERNAL MODULE: external "crypto"
-var external_crypto_ = __nccwpck_require__(6417);
+var external_crypto_ = __nccwpck_require__(6113);
 ;// CONCATENATED MODULE: ./node_modules/node-fetch/src/utils/is.js
 /**
  * Is.js
@@ -15977,7 +16185,7 @@ Object.defineProperties(Response.prototype, {
 });
 
 // EXTERNAL MODULE: external "url"
-var external_url_ = __nccwpck_require__(8835);
+var external_url_ = __nccwpck_require__(7310);
 ;// CONCATENATED MODULE: ./node_modules/node-fetch/src/utils/get-search.js
 const getSearch = parsedURL => {
 	if (parsedURL.search) {
@@ -16562,127 +16770,90 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
 	});
 }
 
-;// CONCATENATED MODULE: ./src/client.ts
-var client_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 
-const createGqlClient = (parameters, logger) => {
-    const query = (opts) => client_awaiter(void 0, void 0, void 0, function* () {
-        var _a;
-        try {
-            logger.debug('Making GraphQL query to Hasura Cloud API...');
-            const respRaw = yield fetch(parameters.CLOUD_DATA_GRAPHQL, {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                    authorization: `pat ${parameters.HASURA_CLOUD_PAT}`
-                },
-                body: JSON.stringify({ query: opts.query, variables: opts.variables })
-            });
-            logger.debug(`Received response: ${JSON.stringify(respRaw, null, 4)}`);
-            logger.debug(`Getting response body JSON...`);
-            const result = yield respRaw.json();
-            if (result.errors) {
-                throw new Error(((_a = result.errors[0]) === null || _a === void 0 ? void 0 : _a.message) || 'unexpected graphql error');
-            }
-            logger.debug(`Response body JSON: ${JSON.stringify(result, null, 4)}`);
-            return result.data;
-        }
-        catch (e) {
-            throw e;
-        }
-    });
-    return {
-        query
-    };
-};
+/***/ }),
 
-;// CONCATENATED MODULE: ./src/context.ts
-var context_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+/***/ 2466:
+/***/ ((module) => {
 
+"use strict";
+module.exports = JSON.parse('{"name":"pg","version":"8.7.1","description":"PostgreSQL client - pure javascript & libpq with the same API","keywords":["database","libpq","pg","postgre","postgres","postgresql","rdbms"],"homepage":"https://github.com/brianc/node-postgres","repository":{"type":"git","url":"git://github.com/brianc/node-postgres.git","directory":"packages/pg"},"author":"Brian Carlson <brian.m.carlson@gmail.com>","main":"./lib","dependencies":{"buffer-writer":"2.0.0","packet-reader":"1.0.0","pg-connection-string":"^2.5.0","pg-pool":"^3.4.1","pg-protocol":"^1.5.0","pg-types":"^2.1.0","pgpass":"1.x"},"devDependencies":{"async":"0.9.0","bluebird":"3.5.2","co":"4.6.0","pg-copy-streams":"0.3.0"},"peerDependencies":{"pg-native":">=2.0.0"},"peerDependenciesMeta":{"pg-native":{"optional":true}},"scripts":{"test":"make test-all"},"files":["lib","SPONSORS.md"],"license":"MIT","engines":{"node":">= 8.0.0"},"gitHead":"92b4d37926c276d343bfe56447ff6f526af757cf"}');
 
+/***/ })
 
-const createContext = () => context_awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const logger = createLogger();
-        const parameters = yield getParameters(logger);
-        const client = createGqlClient(parameters, logger);
-        return {
-            logger,
-            parameters,
-            client
-        };
-    }
-    catch (e) {
-        throw e;
-    }
-});
-
-;// CONCATENATED MODULE: ./src/main.ts
-var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-const run = (context) => main_awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const outputVars = yield handler(context);
-        const outputVarKeys = Object.keys(outputVars);
-        for (const outputVarKey of outputVarKeys) {
-            context.logger.output(outputVarKey, outputVars[outputVarKey]);
-        }
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            context.logger.terminate(error.message);
-        }
-        else {
-            context.logger.terminate(errors.unexpected);
-        }
-        process.exit(1);
-    }
-});
-createContext()
-    .then(context => {
-    run(context);
-})
-    .catch(e => {
-    const logger = createLogger();
-    if (e instanceof Error) {
-        logger.terminate(e.message);
-    }
-    else {
-        logger.terminate(errors.unexpected);
-    }
-    process.exit(1);
-});
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __nccwpck_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		var threw = true;
+/******/ 		try {
+/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __nccwpck_require__);
+/******/ 			threw = false;
+/******/ 		} finally {
+/******/ 			if(threw) delete __webpack_module_cache__[moduleId];
+/******/ 		}
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/compat */
+/******/ 	
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(399);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

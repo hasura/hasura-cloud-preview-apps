@@ -41,5 +41,5 @@ outputs:
   projectId:
     description: 'Project ID of the created preview app'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'

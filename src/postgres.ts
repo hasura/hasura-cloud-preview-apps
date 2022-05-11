@@ -41,7 +41,10 @@ export const createEphemeralDb = async (
   dbName: string
 ) => {
   const pgClient = new Client({
-    connectionString
+    connectionString,
+    ssl: {
+      rejectUnauthorized: false
+    }
   })
   try {
     await dropAndCreateDb(dbName, pgClient)

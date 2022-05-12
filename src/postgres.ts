@@ -49,7 +49,6 @@ export const createEphemeralDb = async (
   try {
     await dropAndCreateDb(dbName, pgClient)
   } catch (e) {
-    console.log('hit error with create db', e)
     throw e
   }
 }

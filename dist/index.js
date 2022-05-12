@@ -14359,7 +14359,10 @@ const changeDbInPgString = (baseString, dbName) => {
 exports.changeDbInPgString = changeDbInPgString;
 const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
     const pgClient = new pg_1.Client({
-        connectionString
+        connectionString,
+        ssl: {
+            rejectUnauthorized: false
+        }
     });
     try {
         yield exports.dropAndCreateDb(dbName, pgClient);

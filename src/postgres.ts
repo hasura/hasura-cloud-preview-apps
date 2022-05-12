@@ -49,6 +49,7 @@ export const createEphemeralDb = async (
       }
     : {connectionString}
 
+  console.log('hit', connectionParams)
   const pgClient = new Client(connectionParams)
 
   try {

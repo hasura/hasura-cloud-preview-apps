@@ -14366,6 +14366,7 @@ const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0
             }
         }
         : { connectionString };
+    console.log('hit', connectionParams);
     const pgClient = new pg_1.Client(connectionParams);
     try {
         yield exports.dropAndCreateDb(dbName, pgClient);

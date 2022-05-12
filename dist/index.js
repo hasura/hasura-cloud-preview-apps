@@ -14233,7 +14233,11 @@ const getPostgresServerMetadata = (rawMetadata) => {
     if (metadataLines.length < 2) {
         throw new Error('Invalid Postgres DB config. ');
     }
-    const [pgStringLabel, pgString] = metadataLines[0].trim().split('=');
+    const splitPos = metadataLines[0].trim().indexOf('=');
+    const [pgStringLabel, pgString] = [
+        metadataLines[0].trim().substring(0, splitPos),
+        metadataLines[0].trim().substring(splitPos + 1)
+    ];
     if (pgStringLabel !== 'POSTGRES_SERVER_CONNECTION_URI' || !pgString.trim()) {
         throw new Error('Could not find PG_SERVER_CONNECTION_URI in the Postgres DB config');
     }

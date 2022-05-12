@@ -14358,12 +14358,15 @@ const changeDbInPgString = (baseString, dbName) => {
 };
 exports.changeDbInPgString = changeDbInPgString;
 const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
-    const pgClient = new pg_1.Client({
-        connectionString,
-        ssl: {
-            rejectUnauthorized: false
+    const connectionParams = connectionString.includes('?sslmode=require')
+        ? {
+            connectionString: connectionString.replace('?sslmode=require', ''),
+            ssl: {
+                rejectUnauthorized: false
+            }
         }
-    });
+        : { connectionString };
+    const pgClient = new pg_1.Client(connectionParams);
     try {
         yield exports.dropAndCreateDb(dbName, pgClient);
     }

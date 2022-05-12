@@ -43,6 +43,7 @@ export const createEphemeralDb = async (
   const pgClient = new Client({
     connectionString,
     ssl: {
+      require: true,
       rejectUnauthorized: false
     }
   })

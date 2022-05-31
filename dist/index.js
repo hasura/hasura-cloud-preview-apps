@@ -14356,9 +14356,7 @@ const dropDB = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.dropDB = dropDB;
 const changeDbInPgString = (baseString, dbName) => {
-    const urlObj = new URL(baseString.includes('?sslmode=require')
-        ? baseString.replace('?sslmode=require', '')
-        : baseString);
+    const urlObj = new URL(baseString);
     urlObj.pathname = dbName;
     return urlObj.toString();
 };

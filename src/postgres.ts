@@ -31,11 +31,7 @@ export const dropDB = async (dbName: string, pgClient: PGClient) => {
 }
 
 export const changeDbInPgString = (baseString: string, dbName: string) => {
-  const urlObj = new URL(
-    baseString.includes('?sslmode=require')
-      ? baseString.replace('?sslmode=require', '')
-      : baseString
-  )
+  const urlObj = new URL(baseString)
   urlObj.pathname = dbName
   return urlObj.toString()
 }

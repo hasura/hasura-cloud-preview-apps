@@ -31,7 +31,11 @@ export const dropDB = async (dbName: string, pgClient: PGClient) => {
 }
 
 export const changeDbInPgString = (baseString: string, dbName: string) => {
-  const urlObj = new URL(baseString)
+  const urlObj = new URL(
+    baseString.includes('?sslmode=require')
+      ? baseString.replace('?sslmode=require', '')
+      : baseString
+  )
   urlObj.pathname = dbName
   return urlObj.toString()
 }
@@ -40,9 +44,17 @@ export const createEphemeralDb = async (
   connectionString: string,
   dbName: string
 ) => {
-  const pgClient = new Client({
-    connectionString
-  })
+  const connectionParams = connectionString.includes('?sslmode=require')
+    ? {
+        connectionString: connectionString.replace('?sslmode=require', ''),
+        ssl: {
+          rejectUnauthorized: false
+        }
+      }
+    : {connectionString}
+
+  const pgClient = new Client(connectionParams)
+
   try {
     await dropAndCreateDb(dbName, pgClient)
   } catch (e) {

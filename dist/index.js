@@ -14233,7 +14233,11 @@ const getPostgresServerMetadata = (rawMetadata) => {
     if (metadataLines.length < 2) {
         throw new Error('Invalid Postgres DB config. ');
     }
-    const [pgStringLabel, pgString] = metadataLines[0].trim().split('=');
+    const splitPos = metadataLines[0].trim().indexOf('=');
+    const [pgStringLabel, pgString] = [
+        metadataLines[0].trim().substring(0, splitPos),
+        metadataLines[0].trim().substring(splitPos + 1)
+    ];
     if (pgStringLabel !== 'POSTGRES_SERVER_CONNECTION_URI' || !pgString.trim()) {
         throw new Error('Could not find PG_SERVER_CONNECTION_URI in the Postgres DB config');
     }
@@ -14352,15 +14356,23 @@ const dropDB = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.dropDB = dropDB;
 const changeDbInPgString = (baseString, dbName) => {
-    const urlObj = new URL(baseString);
+    const urlObj = new URL(baseString.includes('?sslmode=require')
+        ? baseString.replace('?sslmode=require', '')
+        : baseString);
     urlObj.pathname = dbName;
     return urlObj.toString();
 };
 exports.changeDbInPgString = changeDbInPgString;
 const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
-    const pgClient = new pg_1.Client({
-        connectionString
-    });
+    const connectionParams = connectionString.includes('?sslmode=require')
+        ? {
+            connectionString: connectionString.replace('?sslmode=require', ''),
+            ssl: {
+                rejectUnauthorized: false
+            }
+        }
+        : { connectionString };
+    const pgClient = new pg_1.Client(connectionParams);
     try {
         yield exports.dropAndCreateDb(dbName, pgClient);
     }

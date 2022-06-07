@@ -94,6 +94,8 @@ jobs:
 
   Please make sure that this db config is also present in the deletion workflow so that this action also deletes the temporarily created databases when the PR is closed.
 
+  **Using Postgres in SSL mode**: To connect to Postgres in SSL mode, add the query parameter `sslmode=require` to your connection URI. Eg: `postgres://postgres:postgres@pgserver:25060/defaultdb?sslmode=require`
+
 
 ## Env Vars
 

@@ -14316,8 +14316,70 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.dropEphemeralDb = exports.createEphemeralDb = exports.changeDbInPgString = exports.dropDB = exports.dropAndCreateDb = void 0;
+exports.dropEphemeralDb = exports.createEphemeralDb = exports.changeDbInPgString = exports.dropDB = exports.dropAndCreateDb = exports.revokeExistingConnections = exports.disableNewConnections = exports.getPGVersion = void 0;
 const pg_1 = __nccwpck_require__(4194);
+const getPGVersion = (pgClient) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        pgClient.connect();
+        // Sample output SELECT VERSION();:
+        // PostgreSQL 14.3 (Ubuntu 14.3-1.pgdg22.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
+        // ^ We need 14.3 as the pg version string
+        const result = yield pgClient.query({
+            rowMode: 'array',
+            text: 'SELECT VERSION();'
+        });
+        const versionString = result.rows[0][0];
+        const pgVersionString = versionString.split(' ')[1];
+        return pgVersionString;
+    }
+    catch (e) {
+        throw e;
+    }
+    finally {
+        pgClient.end();
+    }
+});
+exports.getPGVersion = getPGVersion;
+const disableNewConnections = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        pgClient.connect();
+        yield pgClient.query(`
+      UPDATE pg_database SET datallowconn = 'false' WHERE datname = "${dbName}";
+		`);
+    }
+    catch (e) {
+        throw e;
+    }
+    finally {
+        pgClient.end();
+    }
+});
+exports.disableNewConnections = disableNewConnections;
+const revokeExistingConnections = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        pgClient.connect();
+        let pgStatActivityField = 'pid';
+        const pgVersionString = yield exports.getPGVersion(pgClient);
+        const versionSplit = pgVersionString.split('.');
+        if (Number(versionSplit[0]) < 9 ||
+            (Number(versionSplit[0]) === 9 && Number(versionSplit[1]) <= 1)) {
+            pgStatActivityField = 'procpid';
+        }
+        yield pgClient.query(`
+      SELECT pg_terminate_backend(pg_stat_activity.${pgStatActivityField})
+      FROM pg_stat_activity
+      WHERE pg_stat_activity.datname = '${dbName}'
+        AND ${pgStatActivityField} <> pg_backend_pid();
+		`);
+    }
+    catch (e) {
+        throw e;
+    }
+    finally {
+        pgClient.end();
+    }
+});
+exports.revokeExistingConnections = revokeExistingConnections;
 const dropAndCreateDb = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         pgClient.connect();
@@ -14339,6 +14401,8 @@ exports.dropAndCreateDb = dropAndCreateDb;
 const dropDB = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         pgClient.connect();
+        yield exports.disableNewConnections(dbName, pgClient);
+        yield exports.revokeExistingConnections(dbName, pgClient);
         yield pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`);

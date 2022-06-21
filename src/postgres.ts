@@ -1,30 +1,6 @@
 import {Client} from 'pg'
 import {PGClient} from './types'
 
-export const getPGVersion = async (pgClient: PGClient) => {
-  try {
-    pgClient.connect()
-    // Sample output SELECT VERSION();:
-    // PostgreSQL 14.3 (Ubuntu 14.3-1.pgdg22.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.2.0-19ubuntu1) 11.2.0, 64-bit
-    // ^ We need 14.3 as the pg version string
-
-    const result = await pgClient.query({
-      rowMode: 'array',
-      text: 'SELECT VERSION();'
-    })
-
-    const versionString: string = result.rows[0][0]
-
-    const pgVersionString: string = versionString.split(' ')[1]
-
-    return pgVersionString
-  } catch (e) {
-    throw e
-  } finally {
-    pgClient.end()
-  }
-}
-
 export const disableNewConnections = async (
   dbName: string,
   pgClient: PGClient
@@ -32,7 +8,7 @@ export const disableNewConnections = async (
   try {
     pgClient.connect()
     await pgClient.query(`
-      UPDATE pg_database SET datallowconn = 'false' WHERE datname = "${dbName}";
+      UPDATE pg_database SET datallowconn = 'false' WHERE datname = '${dbName}';
 		`)
   } catch (e) {
     throw e
@@ -48,11 +24,18 @@ export const revokeExistingConnections = async (
   try {
     pgClient.connect()
 
-    let pgStatActivityField = 'pid'
+    const result = await pgClient.query({
+      rowMode: 'array',
+      text: 'SELECT VERSION();'
+    })
 
-    const pgVersionString: string = await getPGVersion(pgClient)
+    const versionString: string = result.rows[0][0]
+
+    const pgVersionString: string = versionString.split(' ')[1]
+
     const versionSplit: string[] = pgVersionString.split('.')
 
+    let pgStatActivityField = 'pid'
     if (
       Number(versionSplit[0]) < 9 ||
       (Number(versionSplit[0]) === 9 && Number(versionSplit[1]) <= 1)
@@ -76,6 +59,7 @@ export const revokeExistingConnections = async (
 export const dropAndCreateDb = async (dbName: string, pgClient: PGClient) => {
   try {
     pgClient.connect()
+
     await pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`)
@@ -92,8 +76,7 @@ export const dropAndCreateDb = async (dbName: string, pgClient: PGClient) => {
 export const dropDB = async (dbName: string, pgClient: PGClient) => {
   try {
     pgClient.connect()
-    await disableNewConnections(dbName, pgClient)
-    await revokeExistingConnections(dbName, pgClient)
+
     await pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`)
@@ -128,11 +111,21 @@ export const dropEphemeralDb = async (
   connectionString: string,
   dbName: string
 ) => {
-  const pgClient = new Client({
-    connectionString
-  })
   try {
-    await dropDB(dbName, pgClient)
+    const revokeExistingConnectionsPgClient = new Client({
+      connectionString
+    })
+    await revokeExistingConnections(dbName, revokeExistingConnectionsPgClient)
+
+    const disableNewConnectionsPgClient = new Client({
+      connectionString
+    })
+    await disableNewConnections(dbName, disableNewConnectionsPgClient)
+
+    const dropDBPgClient = new Client({
+      connectionString
+    })
+    await dropDB(dbName, dropDBPgClient)
   } catch (e) {
     throw e
   }

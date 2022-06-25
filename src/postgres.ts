@@ -1,26 +1,7 @@
 import {Client} from 'pg'
 import {PGClient} from './types'
 
-export const disableNewConnections = async (
-  dbName: string,
-  pgClient: PGClient
-) => {
-  try {
-    pgClient.connect()
-    await pgClient.query(`
-      UPDATE pg_database SET datallowconn = 'false' WHERE datname = '${dbName}';
-		`)
-  } catch (e) {
-    throw e
-  } finally {
-    pgClient.end()
-  }
-}
-
-export const revokeExistingConnections = async (
-  dbName: string,
-  pgClient: PGClient
-) => {
+export const getPGVersion = async (pgClient: PGClient) => {
   try {
     pgClient.connect()
 
@@ -33,6 +14,20 @@ export const revokeExistingConnections = async (
 
     const pgVersionString: string = versionString.split(' ')[1]
 
+    return pgVersionString
+  } catch (e) {
+    throw e
+  } finally {
+    pgClient.end()
+  }
+}
+
+export const revokeExistingConnections = async (
+  dbName: string,
+  pgClient: PGClient,
+  pgVersionString: string
+) => {
+  try {
     const versionSplit: string[] = pgVersionString.split('.')
 
     let pgStatActivityField = 'pid'
@@ -77,6 +72,12 @@ export const dropDB = async (dbName: string, pgClient: PGClient) => {
   try {
     pgClient.connect()
 
+    // Disable new clients to connect to the database
+    // This is clubbed with  dropDB function a new PG client cannot be created after the following query is executed
+    await pgClient.query(`
+      UPDATE pg_database SET datallowconn = 'false' WHERE datname = '${dbName}';
+		`)
+
     await pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`)
@@ -111,20 +112,27 @@ export const dropEphemeralDb = async (
   connectionString: string,
   dbName: string
 ) => {
+  const pgVersionClient = new Client({
+    connectionString
+  })
+
+  const revokeExistingConnectionsPgClient = new Client({
+    connectionString
+  })
+  revokeExistingConnectionsPgClient.connect()
+
+  const dropDBPgClient = new Client({
+    connectionString
+  })
   try {
-    const revokeExistingConnectionsPgClient = new Client({
-      connectionString
-    })
-    await revokeExistingConnections(dbName, revokeExistingConnectionsPgClient)
+    const pgVersionString = await getPGVersion(pgVersionClient)
 
-    const disableNewConnectionsPgClient = new Client({
-      connectionString
-    })
-    await disableNewConnections(dbName, disableNewConnectionsPgClient)
+    await revokeExistingConnections(
+      dbName,
+      revokeExistingConnectionsPgClient,
+      pgVersionString
+    )
 
-    const dropDBPgClient = new Client({
-      connectionString
-    })
     await dropDB(dbName, dropDBPgClient)
   } catch (e) {
     throw e

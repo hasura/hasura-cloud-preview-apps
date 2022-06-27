@@ -14320,8 +14320,50 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.dropEphemeralDb = exports.createEphemeralDb = exports.changeDbInPgString = exports.dropDB = exports.dropAndCreateDb = void 0;
+exports.dropEphemeralDb = exports.createEphemeralDb = exports.changeDbInPgString = exports.dropDB = exports.dropAndCreateDb = exports.revokeExistingConnections = exports.getPGVersion = void 0;
 const pg_1 = __nccwpck_require__(4194);
+const getPGVersion = (pgClient) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        pgClient.connect();
+        const result = yield pgClient.query({
+            rowMode: 'array',
+            text: 'SELECT VERSION();'
+        });
+        const versionString = result.rows[0][0];
+        const pgVersionString = versionString.split(' ')[1];
+        return pgVersionString;
+    }
+    catch (e) {
+        throw e;
+    }
+    finally {
+        pgClient.end();
+    }
+});
+exports.getPGVersion = getPGVersion;
+const revokeExistingConnections = (dbName, pgClient, pgVersionString) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const versionSplit = pgVersionString.split('.');
+        let pgStatActivityField = 'pid';
+        if (Number(versionSplit[0]) < 9 ||
+            (Number(versionSplit[0]) === 9 && Number(versionSplit[1]) <= 1)) {
+            pgStatActivityField = 'procpid';
+        }
+        yield pgClient.query(`
+      SELECT pg_terminate_backend(pg_stat_activity.${pgStatActivityField})
+      FROM pg_stat_activity
+      WHERE pg_stat_activity.datname = '${dbName}'
+        AND ${pgStatActivityField} <> pg_backend_pid();
+		`);
+    }
+    catch (e) {
+        throw e;
+    }
+    finally {
+        pgClient.end();
+    }
+});
+exports.revokeExistingConnections = revokeExistingConnections;
 const dropAndCreateDb = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         pgClient.connect();
@@ -14343,6 +14385,11 @@ exports.dropAndCreateDb = dropAndCreateDb;
 const dropDB = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         pgClient.connect();
+        // Disable new clients to connect to the database
+        // This is clubbed with  dropDB function a new PG client cannot be created after the following query is executed
+        yield pgClient.query(`
+      UPDATE pg_database SET datallowconn = 'false' WHERE datname = '${dbName}';
+		`);
         yield pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`);
@@ -14372,8 +14419,13 @@ const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0
             }
         }
         : { connectionString };
+    const pgVersionClient = new pg_1.Client(connectionParams);
+    const revokeExistingConnectionsPgClient = new pg_1.Client(connectionParams);
+    revokeExistingConnectionsPgClient.connect();
     const pgClient = new pg_1.Client(connectionParams);
     try {
+        const pgVersionString = yield exports.getPGVersion(pgVersionClient);
+        yield exports.revokeExistingConnections(dbName, revokeExistingConnectionsPgClient, pgVersionString);
         yield exports.dropAndCreateDb(dbName, pgClient);
     }
     catch (e) {
@@ -14382,11 +14434,20 @@ const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0
 });
 exports.createEphemeralDb = createEphemeralDb;
 const dropEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
-    const pgClient = new pg_1.Client({
+    const pgVersionClient = new pg_1.Client({
+        connectionString
+    });
+    const revokeExistingConnectionsPgClient = new pg_1.Client({
+        connectionString
+    });
+    revokeExistingConnectionsPgClient.connect();
+    const dropDBPgClient = new pg_1.Client({
         connectionString
     });
     try {
-        yield exports.dropDB(dbName, pgClient);
+        const pgVersionString = yield exports.getPGVersion(pgVersionClient);
+        yield exports.revokeExistingConnections(dbName, revokeExistingConnectionsPgClient, pgVersionString);
+        yield exports.dropDB(dbName, dropDBPgClient);
     }
     catch (e) {
         throw e;

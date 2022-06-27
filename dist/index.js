@@ -14411,16 +14411,18 @@ const changeDbInPgString = (baseString, dbName) => {
 };
 exports.changeDbInPgString = changeDbInPgString;
 const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
-    const pgVersionClient = new pg_1.Client({
-        connectionString
-    });
-    const revokeExistingConnectionsPgClient = new pg_1.Client({
-        connectionString
-    });
+    const connectionParams = connectionString.includes('?sslmode=require')
+        ? {
+            connectionString: connectionString.replace('?sslmode=require', ''),
+            ssl: {
+                rejectUnauthorized: false
+            }
+        }
+        : { connectionString };
+    const pgVersionClient = new pg_1.Client(connectionParams);
+    const revokeExistingConnectionsPgClient = new pg_1.Client(connectionParams);
     revokeExistingConnectionsPgClient.connect();
-    const pgClient = new pg_1.Client({
-        connectionString
-    });
+    const pgClient = new pg_1.Client(connectionParams);
     try {
         const pgVersionString = yield exports.getPGVersion(pgVersionClient);
         yield exports.revokeExistingConnections(dbName, revokeExistingConnectionsPgClient, pgVersionString);

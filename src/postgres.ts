@@ -98,10 +98,27 @@ export const createEphemeralDb = async (
   connectionString: string,
   dbName: string
 ) => {
+  const pgVersionClient = new Client({
+    connectionString
+  })
+
+  const revokeExistingConnectionsPgClient = new Client({
+    connectionString
+  })
+  revokeExistingConnectionsPgClient.connect()
+
   const pgClient = new Client({
     connectionString
   })
   try {
+    const pgVersionString = await getPGVersion(pgVersionClient)
+
+    await revokeExistingConnections(
+      dbName,
+      revokeExistingConnectionsPgClient,
+      pgVersionString
+    )
+
     await dropAndCreateDb(dbName, pgClient)
   } catch (e) {
     throw e

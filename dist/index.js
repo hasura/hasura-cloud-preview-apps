@@ -14405,10 +14405,19 @@ const changeDbInPgString = (baseString, dbName) => {
 };
 exports.changeDbInPgString = changeDbInPgString;
 const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
+    const pgVersionClient = new pg_1.Client({
+        connectionString
+    });
+    const revokeExistingConnectionsPgClient = new pg_1.Client({
+        connectionString
+    });
+    revokeExistingConnectionsPgClient.connect();
     const pgClient = new pg_1.Client({
         connectionString
     });
     try {
+        const pgVersionString = yield exports.getPGVersion(pgVersionClient);
+        yield exports.revokeExistingConnections(dbName, revokeExistingConnectionsPgClient, pgVersionString);
         yield exports.dropAndCreateDb(dbName, pgClient);
     }
     catch (e) {

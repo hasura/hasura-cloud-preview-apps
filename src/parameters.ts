@@ -29,10 +29,10 @@ export const getHasuraEnvVars = (rawEnvVars: string) => {
     .map(rawEnvVar => {
       const envMetadata = rawEnvVar.trim().split(';')
       if (envMetadata.length > 0) {
-        const [key, value = ''] = envMetadata[0].trim().split('=')
+        const [key, value = '', ...rest] = envMetadata[0].trim().split('=')
         return {
           key,
-          value
+          value: value + (rest.length > 0 ? `=${rest.join('=')}` : '')
         }
       }
       return {
@@ -80,7 +80,11 @@ const getPostgresServerMetadata = (rawMetadata: string) => {
     throw new Error('Invalid Postgres DB config. ')
   }
 
-  const [pgStringLabel, pgString] = metadataLines[0].trim().split('=')
+  const splitPos = metadataLines[0].trim().indexOf('=')
+  const [pgStringLabel, pgString] = [
+    metadataLines[0].trim().substring(0, splitPos),
+    metadataLines[0].trim().substring(splitPos + 1)
+  ]
   if (pgStringLabel !== 'POSTGRES_SERVER_CONNECTION_URI' || !pgString.trim()) {
     throw new Error(
       'Could not find PG_SERVER_CONNECTION_URI in the Postgres DB config'

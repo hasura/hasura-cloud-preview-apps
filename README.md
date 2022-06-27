@@ -2,6 +2,8 @@
 
 This action helps you manage Hasura Cloud preview apps on pull requests through the Hasura Cloud APIs. If you have a Hasura project with metadata and migrations in a Git repo, this enables you to get preview Hasura Cloud instances with the metadata and migrations automatically applied.
 
+> Hasura Cloud Preview apps are currently in beta
+
 ### Sample usage
 
 #### Create preview apps on pull requests
@@ -23,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: hasura/hasura-cloud-preview-apps@v0.1.3
+      - uses: hasura/hasura-cloud-preview-apps@v0.1.7
         with:
           name: "project-name-pr-${{github.event.number}}" # name of the preview app to created
           hasuraProjectDirectoryPath: hasura # path to the Hasura project directory in the repo
@@ -54,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: hasura/hasura-cloud-preview-apps@v0.1.3
+      - uses: hasura/hasura-cloud-preview-apps@v0.1.7
         with:
           name: "project-name-pr-${{github.event.number}}" # name of the preview app to deleted
           delete: true
@@ -94,6 +96,8 @@ jobs:
 
   Please make sure that this db config is also present in the deletion workflow so that this action also deletes the temporarily created databases when the PR is closed.
 
+  **Using Postgres in SSL mode**: To connect to Postgres in SSL mode, add the query parameter `sslmode=require` to your connection URI. Eg: `postgres://postgres:postgres@pgserver:25060/defaultdb?sslmode=require`
+
 
 ## Env Vars
 
@@ -113,4 +117,4 @@ You can access these output variables and use [this GitHub Action](https://githu
 
 ## Reference:
 
-Refer to [Hasura Cloud docs](https://hasura.io/docs/latest/graphql/cloud/preview-apps.html) to see how this works.
+Refer to [Hasura Cloud docs](https://hasura.io/docs/latest/graphql/cloud/deployment/preview-apps-github-action/) to see how this works.

@@ -14390,9 +14390,13 @@ const dropDB = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function*
         yield pgClient.query(`
       UPDATE pg_database SET datallowconn = 'false' WHERE datname = '${dbName}';
 		`);
-        yield pgClient.query(`
+        let res = yield pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`);
+        console.log('Drop DB results...');
+        for (let row of res.rows) {
+            console.log(JSON.stringify(row));
+        }
     }
     catch (e) {
         throw e;

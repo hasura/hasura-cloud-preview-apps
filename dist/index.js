@@ -14370,7 +14370,7 @@ const dropAndCreateDb = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, 
         const res = yield pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`);
-        console.log('Drop DB results...');
+        console.log('Drop DB results: pg.ts:61', dbName);
         for (const row of res.rows) {
             console.log(JSON.stringify(row));
         }
@@ -14397,7 +14397,7 @@ const dropDB = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function*
         const res = yield pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`);
-        console.log('Drop DB results...');
+        console.log('Drop DB results: pg.ts:88', dbName);
         for (const row of res.rows) {
             console.log(JSON.stringify(row));
         }

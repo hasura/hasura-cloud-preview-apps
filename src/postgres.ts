@@ -78,11 +78,11 @@ export const dropDB = async (dbName: string, pgClient: PGClient) => {
       UPDATE pg_database SET datallowconn = 'false' WHERE datname = '${dbName}';
 		`)
 
-    let res = await pgClient.query(`
+    const res = await pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`)
     console.log('Drop DB results...')
-    for (let row of res.rows) {
+    for (const row of res.rows) {
       console.log(JSON.stringify(row))
     }
   } catch (e) {

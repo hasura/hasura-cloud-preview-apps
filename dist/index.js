@@ -14367,13 +14367,9 @@ exports.revokeExistingConnections = revokeExistingConnections;
 const dropAndCreateDb = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         pgClient.connect();
-        const res = yield pgClient.query(`
+        yield pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`);
-        console.log('Drop DB results: pg.ts:61', dbName);
-        for (const row of res.rows) {
-            console.log(JSON.stringify(row));
-        }
         yield pgClient.query(`
 			CREATE DATABASE "${dbName}";
 		`);
@@ -14394,13 +14390,9 @@ const dropDB = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function*
         yield pgClient.query(`
       UPDATE pg_database SET datallowconn = 'false' WHERE datname = '${dbName}';
 		`);
-        const res = yield pgClient.query(`
+        yield pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`);
-        console.log('Drop DB results: pg.ts:88', dbName);
-        for (const row of res.rows) {
-            console.log(JSON.stringify(row));
-        }
     }
     catch (e) {
         throw e;

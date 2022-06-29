@@ -55,13 +55,9 @@ export const dropAndCreateDb = async (dbName: string, pgClient: PGClient) => {
   try {
     pgClient.connect()
 
-    const res = await pgClient.query(`
+    await pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`)
-    console.log('Drop DB results: pg.ts:61', dbName)
-    for (const row of res.rows) {
-      console.log(JSON.stringify(row))
-    }
     await pgClient.query(`
 			CREATE DATABASE "${dbName}";
 		`)
@@ -82,13 +78,9 @@ export const dropDB = async (dbName: string, pgClient: PGClient) => {
       UPDATE pg_database SET datallowconn = 'false' WHERE datname = '${dbName}';
 		`)
 
-    const res = await pgClient.query(`
+    await pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`)
-    console.log('Drop DB results: pg.ts:88', dbName)
-    for (const row of res.rows) {
-      console.log(JSON.stringify(row))
-    }
   } catch (e) {
     throw e
   } finally {

@@ -55,9 +55,13 @@ export const dropAndCreateDb = async (dbName: string, pgClient: PGClient) => {
   try {
     pgClient.connect()
 
-    await pgClient.query(`
+    const res = await pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`)
+    console.log('Drop DB results...')
+    for (const row of res.rows) {
+      console.log(JSON.stringify(row))
+    }
     await pgClient.query(`
 			CREATE DATABASE "${dbName}";
 		`)

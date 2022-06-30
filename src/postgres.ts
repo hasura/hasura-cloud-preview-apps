@@ -88,12 +88,14 @@ export const dropDB = async (dbName: string, pgClient: PGClient) => {
   }
 }
 
+export const stripSSLParameter = baseString => {
+  const urlObj = new URL(baseString)
+  urlObj.searchParams.delete('sslmode')
+  return urlObj.toString()
+}
+
 export const changeDbInPgString = (baseString: string, dbName: string) => {
-  const urlObj = new URL(
-    baseString.includes('?sslmode=require')
-      ? baseString.replace('?sslmode=require', '')
-      : baseString
-  )
+  const urlObj = new URL(baseString)
   urlObj.pathname = dbName
   return urlObj.toString()
 }
@@ -102,9 +104,9 @@ export const createEphemeralDb = async (
   connectionString: string,
   dbName: string
 ) => {
-  const connectionParams = connectionString.includes('?sslmode=require')
+  const connectionParams = connectionString.includes('sslmode=require')
     ? {
-        connectionString: connectionString.replace('?sslmode=require', ''),
+        connectionString: stripSSLParameter(connectionString),
         ssl: {
           rejectUnauthorized: false
         }
@@ -137,18 +139,20 @@ export const dropEphemeralDb = async (
   connectionString: string,
   dbName: string
 ) => {
-  const pgVersionClient = new Client({
-    connectionString
-  })
+  const connectionParams = connectionString.includes('sslmode=require')
+    ? {
+        connectionString: stripSSLParameter(connectionString),
+        ssl: {
+          rejectUnauthorized: false
+        }
+      }
+    : {connectionString}
+  const pgVersionClient = new Client(connectionParams)
 
-  const revokeExistingConnectionsPgClient = new Client({
-    connectionString
-  })
+  const revokeExistingConnectionsPgClient = new Client(connectionParams)
   revokeExistingConnectionsPgClient.connect()
 
-  const dropDBPgClient = new Client({
-    connectionString
-  })
+  const dropDBPgClient = new Client(connectionParams)
   try {
     const pgVersionString = await getPGVersion(pgVersionClient)
 

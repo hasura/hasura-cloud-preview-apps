@@ -122,6 +122,16 @@ export const getParameters = async (
     core.getInput('postgresDBConfig')
   )
 
+  // change db name for key 'PG_DATABASE_URL'
+  const pgDbEnvEntry = parameters.HASURA_ENV_VARS.find(
+    e => e.key === 'PG_DATABASE_URL'
+  )
+  if (pgDbEnvEntry)
+    pgDbEnvEntry.value = changeDbInPgString(
+      pgDbEnvEntry.value,
+      parameters.NAME.replace(/[^A-Z0-9]/gi, '_')
+    )
+
   if (postgresMetadata) {
     for (const env of postgresMetadata.envVars) {
       const dbName = parameters.NAME.replace(/[^A-Z0-9]/gi, '_')
@@ -176,6 +186,7 @@ export const getParameters = async (
       4
     )}`
   )
+
   return parameters
 }
 

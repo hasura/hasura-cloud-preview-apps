@@ -14271,7 +14271,7 @@ const getParameters = (logger, parameters = getBaseParameters()) => __awaiter(vo
                         ...parameters.HASURA_ENV_VARS.filter(e => e.key !== env),
                         {
                             key: env,
-                            value: postgres_1.changeDbInPgString(postgres_1.stripSSLParameter(postgresMetadata.pgString), dbName)
+                            value: postgres_1.changeDbInPgString(postgresMetadata.pgString, dbName)
                         }
                     ];
                 }

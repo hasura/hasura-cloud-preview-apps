@@ -54,7 +54,7 @@ const getBaseParameters = () => ({
   GITHUB_REPO_NAME,
   GITHUB_OWNER,
   GITHUB_BRANCH_NAME,
-  HASURA_ENV_VARS: getHasuraEnvVars(core.getInput('hasuraEnv')), // POI
+  HASURA_ENV_VARS: getHasuraEnvVars(core.getInput('hasuraEnv')),
   SHOULD_DELETE: [true, 'true'].includes(core.getInput('delete'))
 })
 
@@ -119,7 +119,7 @@ export const getParameters = async (
   parameters = getBaseParameters()
 ) => {
   const postgresMetadata = getPostgresServerMetadata(
-    core.getInput('postgresDBConfig') // POI
+    core.getInput('postgresDBConfig')
   )
 
   // change db name for key 'PG_DATABASE_URL'
@@ -132,12 +132,8 @@ export const getParameters = async (
       parameters.NAME.replace(/[^A-Z0-9]/gi, '_')
     )
 
-  console.log('dbug postgresMetadata', postgresMetadata?.envVars)
-  console.log('dbug parameters before', parameters)
-
   if (postgresMetadata) {
     for (const env of postgresMetadata.envVars) {
-      console.log('dbug env', env)
       const dbName = parameters.NAME.replace(/[^A-Z0-9]/gi, '_')
       if (!parameters.SHOULD_DELETE) {
         try {
@@ -190,7 +186,6 @@ export const getParameters = async (
       4
     )}`
   )
-  console.log('dbug parameters after', parameters)
 
   return parameters
 }

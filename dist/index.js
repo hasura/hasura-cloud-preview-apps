@@ -14258,6 +14258,10 @@ const getPostgresServerMetadata = (rawMetadata) => {
 const getParameters = (logger, parameters = getBaseParameters()) => __awaiter(void 0, void 0, void 0, function* () {
     const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresDBConfig') // POI
     );
+    // change db name for key 'PG_DATABASE_URL'
+    const pgDbEnvEntry = parameters.HASURA_ENV_VARS.find(e => e.key === 'PG_DATABASE_URL');
+    if (pgDbEnvEntry)
+        pgDbEnvEntry.value = postgres_1.changeDbInPgString(pgDbEnvEntry.value, parameters.NAME.replace(/[^A-Z0-9]/gi, '_'));
     console.log('dbug postgresMetadata', postgresMetadata === null || postgresMetadata === void 0 ? void 0 : postgresMetadata.envVars);
     console.log('dbug parameters before', parameters);
     if (postgresMetadata) {

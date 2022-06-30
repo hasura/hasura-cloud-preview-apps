@@ -14256,9 +14256,12 @@ const getPostgresServerMetadata = (rawMetadata) => {
     };
 };
 const getParameters = (logger, parameters = getBaseParameters()) => __awaiter(void 0, void 0, void 0, function* () {
-    const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresDBConfig'));
+    const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresDBConfig') // POI
+    );
+    console.log('dbug postgresMetadata', postgresMetadata === null || postgresMetadata === void 0 ? void 0 : postgresMetadata.envVars);
     if (postgresMetadata) {
         for (const env of postgresMetadata.envVars) {
+            console.log('dbug env', env);
             const dbName = parameters.NAME.replace(/[^A-Z0-9]/gi, '_');
             if (!parameters.SHOULD_DELETE) {
                 try {

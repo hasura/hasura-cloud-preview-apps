@@ -14259,6 +14259,7 @@ const getParameters = (logger, parameters = getBaseParameters()) => __awaiter(vo
     const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresDBConfig') // POI
     );
     console.log('dbug postgresMetadata', postgresMetadata === null || postgresMetadata === void 0 ? void 0 : postgresMetadata.envVars);
+    console.log('dbug parameters before', parameters);
     if (postgresMetadata) {
         for (const env of postgresMetadata.envVars) {
             console.log('dbug env', env);
@@ -14301,6 +14302,7 @@ const getParameters = (logger, parameters = getBaseParameters()) => __awaiter(vo
         throw e;
     }
     logger.debug(`Received parameters:\n${JSON.stringify(Object.assign(Object.assign({}, parameters), { HASURA_ENV_VARS: '***', HASURA_CLOUD_PAT: '***', GITHUB_TOKEN: '***' }), null, 4)}`);
+    console.log('dbug parameters after', parameters);
     return parameters;
 });
 exports.getParameters = getParameters;
@@ -14414,6 +14416,7 @@ const changeDbInPgString = (baseString, dbName) => {
 };
 exports.changeDbInPgString = changeDbInPgString;
 const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('dbug: createEphemeralDb called');
     const connectionParams = connectionString.includes('?sslmode=require')
         ? {
             connectionString: connectionString.replace('?sslmode=require', ''),

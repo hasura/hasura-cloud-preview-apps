@@ -102,6 +102,7 @@ export const createEphemeralDb = async (
   connectionString: string,
   dbName: string
 ) => {
+  console.log('dbug: createEphemeralDb called')
   const connectionParams = connectionString.includes('?sslmode=require')
     ? {
         connectionString: connectionString.replace('?sslmode=require', ''),

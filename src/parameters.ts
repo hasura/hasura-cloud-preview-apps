@@ -123,6 +123,7 @@ export const getParameters = async (
   )
 
   console.log('dbug postgresMetadata', postgresMetadata?.envVars)
+  console.log('dbug parameters before', parameters)
 
   if (postgresMetadata) {
     for (const env of postgresMetadata.envVars) {
@@ -179,6 +180,8 @@ export const getParameters = async (
       4
     )}`
   )
+  console.log('dbug parameters after', parameters)
+
   return parameters
 }
 

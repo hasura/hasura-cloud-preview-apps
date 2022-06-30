@@ -4,7 +4,8 @@ import {Logger} from './logger'
 import {
   createEphemeralDb,
   changeDbInPgString,
-  dropEphemeralDb
+  dropEphemeralDb,
+  stripSSLParameter
 } from './postgres'
 
 const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || ''
@@ -142,7 +143,10 @@ export const getParameters = async (
             ...parameters.HASURA_ENV_VARS.filter(e => e.key !== env),
             {
               key: env,
-              value: changeDbInPgString(postgresMetadata.pgString, dbName)
+              value: changeDbInPgString(
+                stripSSLParameter(postgresMetadata.pgString),
+                dbName
+              )
             }
           ]
         } catch (e) {

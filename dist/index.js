@@ -14257,6 +14257,10 @@ const getPostgresServerMetadata = (rawMetadata) => {
 };
 const getParameters = (logger, parameters = getBaseParameters()) => __awaiter(void 0, void 0, void 0, function* () {
     const postgresMetadata = getPostgresServerMetadata(core.getInput('postgresDBConfig'));
+    // change db name for key 'PG_DATABASE_URL'
+    const pgDbEnvEntry = parameters.HASURA_ENV_VARS.find(e => e.key === 'PG_DATABASE_URL');
+    if (pgDbEnvEntry)
+        pgDbEnvEntry.value = postgres_1.changeDbInPgString(pgDbEnvEntry.value, parameters.NAME.replace(/[^A-Z0-9]/gi, '_'));
     if (postgresMetadata) {
         for (const env of postgresMetadata.envVars) {
             const dbName = parameters.NAME.replace(/[^A-Z0-9]/gi, '_');
@@ -14320,7 +14324,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.dropEphemeralDb = exports.createEphemeralDb = exports.changeDbInPgString = exports.dropDB = exports.dropAndCreateDb = exports.revokeExistingConnections = exports.getPGVersion = void 0;
+exports.dropEphemeralDb = exports.createEphemeralDb = exports.changeDbInPgString = exports.stripSSLParameter = exports.dropDB = exports.dropAndCreateDb = exports.revokeExistingConnections = exports.getPGVersion = void 0;
 const pg_1 = __nccwpck_require__(4194);
 const getPGVersion = (pgClient) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -14402,18 +14406,22 @@ const dropDB = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.dropDB = dropDB;
+const stripSSLParameter = baseString => {
+    const urlObj = new URL(baseString);
+    urlObj.searchParams.delete('sslmode');
+    return urlObj.toString();
+};
+exports.stripSSLParameter = stripSSLParameter;
 const changeDbInPgString = (baseString, dbName) => {
-    const urlObj = new URL(baseString.includes('?sslmode=require')
-        ? baseString.replace('?sslmode=require', '')
-        : baseString);
+    const urlObj = new URL(baseString);
     urlObj.pathname = dbName;
     return urlObj.toString();
 };
 exports.changeDbInPgString = changeDbInPgString;
 const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
-    const connectionParams = connectionString.includes('?sslmode=require')
+    const connectionParams = connectionString.includes('sslmode=require')
         ? {
-            connectionString: connectionString.replace('?sslmode=require', ''),
+            connectionString: exports.stripSSLParameter(connectionString),
             ssl: {
                 rejectUnauthorized: false
             }
@@ -14434,16 +14442,18 @@ const createEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0
 });
 exports.createEphemeralDb = createEphemeralDb;
 const dropEphemeralDb = (connectionString, dbName) => __awaiter(void 0, void 0, void 0, function* () {
-    const pgVersionClient = new pg_1.Client({
-        connectionString
-    });
-    const revokeExistingConnectionsPgClient = new pg_1.Client({
-        connectionString
-    });
+    const connectionParams = connectionString.includes('sslmode=require')
+        ? {
+            connectionString: exports.stripSSLParameter(connectionString),
+            ssl: {
+                rejectUnauthorized: false
+            }
+        }
+        : { connectionString };
+    const pgVersionClient = new pg_1.Client(connectionParams);
+    const revokeExistingConnectionsPgClient = new pg_1.Client(connectionParams);
     revokeExistingConnectionsPgClient.connect();
-    const dropDBPgClient = new pg_1.Client({
-        connectionString
-    });
+    const dropDBPgClient = new pg_1.Client(connectionParams);
     try {
         const pgVersionString = yield exports.getPGVersion(pgVersionClient);
         yield exports.revokeExistingConnections(dbName, revokeExistingConnectionsPgClient, pgVersionString);

@@ -75,7 +75,7 @@ export const dropDB = async (dbName: string, pgClient: PGClient) => {
     // Disable new clients to connect to the database
     // This is clubbed with  dropDB function a new PG client cannot be created after the following query is executed
     await pgClient.query(`
-      UPDATE pg_database SET datallowconn = 'false' WHERE datname = '${dbName}';
+      ALTER DATABASE ${dbName} CONNECTION LIMIT 0;
 		`)
 
     await pgClient.query(`

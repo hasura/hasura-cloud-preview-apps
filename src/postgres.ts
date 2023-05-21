@@ -28,6 +28,18 @@ export const revokeExistingConnections = async (
   pgVersionString: string
 ) => {
   try {
+    // Disable new clients to connect to the database
+    // This is clubbed with dropDB and dropAndCreateDb function so a new PG client cannot be created after the following query is executed
+    await pgClient.query(`
+    DO $$
+      BEGIN
+        IF EXISTS (SELECT FROM pg_catalog.pg_database where datname = '${dbName}') then 
+          ALTER DATABASE ${dbName} CONNECTION LIMIT 0;
+        END IF;
+      END
+    $$ ;
+		`)
+
     const versionSplit: string[] = pgVersionString.split('.')
 
     let pgStatActivityField = 'pid'
@@ -71,12 +83,6 @@ export const dropAndCreateDb = async (dbName: string, pgClient: PGClient) => {
 export const dropDB = async (dbName: string, pgClient: PGClient) => {
   try {
     pgClient.connect()
-
-    // Disable new clients to connect to the database
-    // This is clubbed with  dropDB function a new PG client cannot be created after the following query is executed
-    await pgClient.query(`
-      ALTER DATABASE ${dbName} CONNECTION LIMIT 0;
-		`)
 
     await pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";

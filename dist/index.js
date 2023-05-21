@@ -14347,6 +14347,17 @@ const getPGVersion = (pgClient) => __awaiter(void 0, void 0, void 0, function* (
 exports.getPGVersion = getPGVersion;
 const revokeExistingConnections = (dbName, pgClient, pgVersionString) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // Disable new clients to connect to the database
+        // This is clubbed with dropDB and dropAndCreateDb function so a new PG client cannot be created after the following query is executed
+        yield pgClient.query(`
+    DO $$
+      BEGIN
+        IF EXISTS (SELECT FROM pg_catalog.pg_database where datname = '${dbName}') then 
+          ALTER DATABASE ${dbName} CONNECTION LIMIT 0;
+        END IF;
+      END
+    $$ ;
+		`);
         const versionSplit = pgVersionString.split('.');
         let pgStatActivityField = 'pid';
         if (Number(versionSplit[0]) < 9 ||
@@ -14389,11 +14400,6 @@ exports.dropAndCreateDb = dropAndCreateDb;
 const dropDB = (dbName, pgClient) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         pgClient.connect();
-        // Disable new clients to connect to the database
-        // This is clubbed with  dropDB function a new PG client cannot be created after the following query is executed
-        yield pgClient.query(`
-      UPDATE pg_database SET datallowconn = 'false' WHERE datname = '${dbName}';
-		`);
         yield pgClient.query(`
 			DROP DATABASE IF EXISTS "${dbName}";
 		`);

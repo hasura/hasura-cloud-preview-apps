@@ -8,6 +8,10 @@ const getTaskName = (taskName?: string) => {
       return 'Fetching Metadata'
     case 'parse-metadata-migration':
       return 'Parsing metadata and migrations'
+    case 'parse-migration':
+      return 'Parsing migrations'
+    case 'parse-metadata':
+      return 'Parsing metadata'
     case 'apply-metadata':
       return 'Applying metadata'
     case 'apply-migration':

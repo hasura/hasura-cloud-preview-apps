@@ -14683,6 +14683,10 @@ const getTaskName = (taskName) => {
             return 'Fetching Metadata';
         case 'parse-metadata-migration':
             return 'Parsing metadata and migrations';
+        case 'parse-migration':
+            return 'Parsing migrations';
+        case 'parse-metadata':
+            return 'Parsing metadata';
         case 'apply-metadata':
             return 'Applying metadata';
         case 'apply-migration':
@@ -14727,6 +14731,7 @@ const getJobStatus = (jobId, context) => __awaiter(void 0, void 0, void 0, funct
                 jobId
             }
         });
+        context.logger.log(`resp - ${resp}`);
         if (!resp.jobs_by_pk) {
             throw new Error('could not find the GitHub job; the associated deployment was terminated');
         }
@@ -14736,6 +14741,7 @@ const getJobStatus = (jobId, context) => __awaiter(void 0, void 0, void 0, funct
             const taskEventsCount = latestTask === null || latestTask === void 0 ? void 0 : latestTask.task_events.length;
             if (latestTask && taskEventsCount && taskEventsCount > 0) {
                 const latestTaskEvent = latestTask.task_events[taskEventsCount - 1];
+                context.logger.log(`getTaskName - ${latestTask.name}`);
                 context.logger.log(`${getTaskName(latestTask.name)}: ${getTaskStatus(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.event_type)}`, false);
                 if (latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.github_detail) {
                     context.logger.log(latestTaskEvent === null || latestTaskEvent === void 0 ? void 0 : latestTaskEvent.github_detail, false);
@@ -14750,6 +14756,7 @@ const getJobStatus = (jobId, context) => __awaiter(void 0, void 0, void 0, funct
         return resp.jobs_by_pk.status;
     }
     catch (e) {
+        context.logger.log(`error - ${e}`);
         if (e instanceof Error) {
             context.logger.log(e.message);
         }

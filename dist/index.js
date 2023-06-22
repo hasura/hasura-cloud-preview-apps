@@ -14731,7 +14731,7 @@ const getJobStatus = (jobId, context) => __awaiter(void 0, void 0, void 0, funct
                 jobId
             }
         });
-        context.logger.log(`resp - ${resp}`);
+        context.logger.log(`resp - ${{ resp }}`);
         if (!resp.jobs_by_pk) {
             throw new Error('could not find the GitHub job; the associated deployment was terminated');
         }
@@ -16867,7 +16867,7 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"pg","version":"8.7.1","description":"PostgreSQL client - pure javascript & libpq with the same API","keywords":["database","libpq","pg","postgre","postgres","postgresql","rdbms"],"homepage":"https://github.com/brianc/node-postgres","repository":{"type":"git","url":"git://github.com/brianc/node-postgres.git","directory":"packages/pg"},"author":"Brian Carlson <brian.m.carlson@gmail.com>","main":"./lib","dependencies":{"buffer-writer":"2.0.0","packet-reader":"1.0.0","pg-connection-string":"^2.5.0","pg-pool":"^3.4.1","pg-protocol":"^1.5.0","pg-types":"^2.1.0","pgpass":"1.x"},"devDependencies":{"async":"0.9.0","bluebird":"3.5.2","co":"4.6.0","pg-copy-streams":"0.3.0"},"peerDependencies":{"pg-native":">=2.0.0"},"peerDependenciesMeta":{"pg-native":{"optional":true}},"scripts":{"test":"make test-all"},"files":["lib","SPONSORS.md"],"license":"MIT","engines":{"node":">= 8.0.0"},"gitHead":"92b4d37926c276d343bfe56447ff6f526af757cf"}');
+module.exports = JSON.parse('{"_args":[["pg@8.7.1","/Users/varundey/Desktop/hasura/hasura-cloud-preview-apps"]],"_from":"pg@8.7.1","_id":"pg@8.7.1","_inBundle":false,"_integrity":"sha512-7bdYcv7V6U3KAtWjpQJJBww0UEsWuh4yQ/EjNf2HeO/NnvKjpvhEIe/A/TleP6wtmSKnUnghs5A9jUoK6iDdkA==","_location":"/pg","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"pg@8.7.1","name":"pg","escapedName":"pg","rawSpec":"8.7.1","saveSpec":null,"fetchSpec":"8.7.1"},"_requiredBy":["/"],"_resolved":"https://registry.npmjs.org/pg/-/pg-8.7.1.tgz","_spec":"8.7.1","_where":"/Users/varundey/Desktop/hasura/hasura-cloud-preview-apps","author":{"name":"Brian Carlson","email":"brian.m.carlson@gmail.com"},"bugs":{"url":"https://github.com/brianc/node-postgres/issues"},"dependencies":{"buffer-writer":"2.0.0","packet-reader":"1.0.0","pg-connection-string":"^2.5.0","pg-pool":"^3.4.1","pg-protocol":"^1.5.0","pg-types":"^2.1.0","pgpass":"1.x"},"description":"PostgreSQL client - pure javascript & libpq with the same API","devDependencies":{"async":"0.9.0","bluebird":"3.5.2","co":"4.6.0","pg-copy-streams":"0.3.0"},"engines":{"node":">= 8.0.0"},"files":["lib","SPONSORS.md"],"gitHead":"92b4d37926c276d343bfe56447ff6f526af757cf","homepage":"https://github.com/brianc/node-postgres","keywords":["database","libpq","pg","postgre","postgres","postgresql","rdbms"],"license":"MIT","main":"./lib","name":"pg","peerDependencies":{"pg-native":">=2.0.0"},"peerDependenciesMeta":{"pg-native":{"optional":true}},"repository":{"type":"git","url":"git://github.com/brianc/node-postgres.git","directory":"packages/pg"},"scripts":{"test":"make test-all"},"version":"8.7.1"}');
 
 /***/ })
 

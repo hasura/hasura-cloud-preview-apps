@@ -90,6 +90,7 @@ const getJobStatus = async (jobId: string, context: Context) => {
     }
     return resp.jobs_by_pk.status
   } catch (e) {
+    context.logger.log(`error - ${e}`)
     if (e instanceof Error) {
       context.logger.log(e.message)
     }

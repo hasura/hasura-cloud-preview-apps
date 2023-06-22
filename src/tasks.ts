@@ -57,7 +57,7 @@ const getJobStatus = async (jobId: string, context: Context) => {
         jobId
       }
     })
-    context.logger.log(`resp - ${{resp}}`)
+    context.logger.log(`resp - ${JSON.stringify(resp)}`)
     if (!resp.jobs_by_pk) {
       throw new Error(
         'could not find the GitHub job; the associated deployment was terminated'

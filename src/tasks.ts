@@ -57,7 +57,6 @@ const getJobStatus = async (jobId: string, context: Context) => {
         jobId
       }
     })
-    context.logger.log(`resp - ${JSON.stringify(resp)}`)
     if (!resp.jobs_by_pk) {
       throw new Error(
         'could not find the GitHub job; the associated deployment was terminated'
@@ -69,7 +68,6 @@ const getJobStatus = async (jobId: string, context: Context) => {
       const taskEventsCount = latestTask?.task_events.length
       if (latestTask && taskEventsCount && taskEventsCount > 0) {
         const latestTaskEvent = latestTask.task_events[taskEventsCount - 1]
-        context.logger.log(`getTaskName - ${latestTask.name}`)
         context.logger.log(
           `${getTaskName(latestTask.name)}: ${getTaskStatus(
             latestTaskEvent?.event_type
@@ -90,7 +88,6 @@ const getJobStatus = async (jobId: string, context: Context) => {
     }
     return resp.jobs_by_pk.status
   } catch (e) {
-    context.logger.log(`error - ${e}`)
     if (e instanceof Error) {
       context.logger.log(e.message)
     }

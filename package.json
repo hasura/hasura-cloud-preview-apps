@@ -1,6 +1,6 @@
 {
   "name": "hasura-cloud-preview-apps",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "private": true,
   "description": "Create Hasura Cloud preview apps from metadata/migrations from your Git repo",
   "main": "src/main.ts",

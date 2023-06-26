@@ -101,6 +101,7 @@ export const getRealtimeLogs = async (
   context: Context,
   retryCount = 0
 ) => {
+  context.logger.log(`getRealtimeLogs - ${jobId}`)
   if (retryCount > 0) {
     await waitFor(2000)
   }

@@ -31,7 +31,9 @@ export const handler = async (context: Context): Promise<OutputVars | {}> => {
   )
 
   context.logger.log(`Applying metadata and migrations from the branch...`)
-
+  context.logger.log(
+    `previewAppCreationMetadata - ${JSON.stringify(previewAppCreationMetadata)}`
+  )
   const jobStatus = await getRealtimeLogs(
     previewAppCreationMetadata.githubDeploymentJobID,
     context

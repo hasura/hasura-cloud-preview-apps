@@ -14019,6 +14019,7 @@ const handler = (context) => __awaiter(void 0, void 0, void 0, function* () {
     context.logger.log(`Polling the preview app creation status...`);
     const previewAppCreationMetadata = yield previewApps_1.pollPreviewAppCreationJob(context, createResp.githubPreviewAppJobID);
     context.logger.log(`Applying metadata and migrations from the branch...`);
+    context.logger.log(`previewAppCreationMetadata - ${JSON.stringify(previewAppCreationMetadata)}`);
     const jobStatus = yield tasks_1.getRealtimeLogs(previewAppCreationMetadata.githubDeploymentJobID, context);
     if (jobStatus === 'failed') {
         throw new Error('Preview app has been created, but applying metadata and migrations failed');
@@ -14762,6 +14763,7 @@ const getJobStatus = (jobId, context) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 const getRealtimeLogs = (jobId, context, retryCount = 0) => __awaiter(void 0, void 0, void 0, function* () {
+    context.logger.log(`getRealtimeLogs - ${jobId}`);
     if (retryCount > 0) {
         yield utils_1.waitFor(2000);
     }

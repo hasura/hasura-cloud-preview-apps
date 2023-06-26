@@ -33,6 +33,7 @@ const getTaskStatus = (status: string) => {
 }
 
 const getJobStatus = async (jobId: string, context: Context) => {
+  context.logger.log(`jobId - ${jobId}`)
   try {
     const resp = await context.client.query<JobDetails, {jobId: string}>({
       query: `

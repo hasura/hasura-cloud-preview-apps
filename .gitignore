@@ -93,6 +93,7 @@ typings/
 # OS metadata
 .DS_Store
 Thumbs.db
+.idea
 
 # Ignore built ts files
 __tests__/runner/*

@@ -14707,6 +14707,7 @@ const getTaskStatus = (status) => {
 };
 const getJobStatus = (jobId, context) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
+    context.logger.log(`jobId - ${jobId}`);
     try {
         const resp = yield context.client.query({
             query: `

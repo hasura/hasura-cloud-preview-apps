@@ -14602,14 +14602,14 @@ const pollPreviewAppCreationJob = (context, jobId, timeLapse = 0) => __awaiter(v
         const reqStartTime = new Date().getTime();
         const response = yield context.client.query({
             query: `
-        query getPreviewAppCreationJob($jobId: uuid!="GF12zEeQai1skCuOoVU3wyyiqj30nEnzt2hpZ0LRe368UdwE5JC7nrT4AIr85rmu") {
+        query getPreviewAppCreationJob($jobId: uuid!) {
           jobs_by_pk(id: $jobId) {
             id
             status
             tasks {
               id
               name
-              task_events {
+              task_events(order_by: { created_at: desc }) {
                 id
                 event_type
                 public_event_data

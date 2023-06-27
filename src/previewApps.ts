@@ -176,7 +176,6 @@ export const pollPreviewAppCreationJob = async (
       const successEvent = response.jobs_by_pk.tasks[0].task_events.find(
         te => te.event_type === 'success'
       )
-      context.logger.log(`successEvent - ${JSON.stringify(successEvent)}`)
       if (!successEvent) {
         throw new Error('unexpected; no job success task event')
       }

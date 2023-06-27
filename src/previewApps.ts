@@ -146,14 +146,14 @@ export const pollPreviewAppCreationJob = async (
       GetPreviewAppCreationJobVariables
     >({
       query: `
-        query getPreviewAppCreationJob($jobId: uuid!="GF12zEeQai1skCuOoVU3wyyiqj30nEnzt2hpZ0LRe368UdwE5JC7nrT4AIr85rmu") {
+        query getPreviewAppCreationJob($jobId: uuid!) {
           jobs_by_pk(id: $jobId) {
             id
             status
             tasks {
               id
               name
-              task_events {
+              task_events(order_by: { created_at: desc }) {
                 id
                 event_type
                 public_event_data

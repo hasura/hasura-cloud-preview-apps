@@ -103,12 +103,17 @@ export const getRealtimeLogs = async (
   if (retryCount > 0) {
     await waitFor(2000)
   }
-  const jobStatus = await getJobStatus(jobId, context)
-  if (jobStatus === 'success') {
-    return 'success'
+
+  try {
+    const jobStatus = await getJobStatus(jobId, context)
+    if (jobStatus === 'success') {
+      return 'success'
+    }
+    if (jobStatus === 'failed') {
+      return 'failed'
+    }
+    throw new Error('error to trigger retry')
+  } catch (error) {
+    return getRealtimeLogs(jobId, context, retryCount + 1)
   }
-  if (jobStatus === 'failed') {
-    return 'failed'
-  }
-  return getRealtimeLogs(jobId, context, retryCount + 1)
 }

@@ -1,4 +1,4 @@
-export type Plan = 'cloud_free' | 'cloud_payg'
+export type Plan = 'cloud_free_v2' | 'cloud_shared'
 
 export type Project = {
   name: string

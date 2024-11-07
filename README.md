@@ -74,7 +74,7 @@ jobs:
 
 - **region**: (optional, default: "us-east-2") AWS region to deploy the Hasura Cloud preview app on. You can check the supported regions in the new project form at https://cloud.hasura.io/projects.
 
-- **tier**: (optional, default: "cloud_free") The tier of the the preview app. Use `cloud_free` for free tier and `cloud_payg` for Standard tier. A valid payment method is required at https://cloud.hasura.io/billing for creating Standard tier projects.
+- **tier**: (optional, default: "cloud_free_v2") The tier of the the preview app. Use `cloud_free_v2` for free tier and `cloud_shared` for Standard tier. A valid payment method is required at https://cloud.hasura.io/billing for creating Standard tier projects.
 
 - **hasuraEnv**: (optional, default: "") The environment variables that you want to set for the Hasura Cloud preview app. These must be `KEY=value` pairs with each env var on a new line. For example:
 	```yaml

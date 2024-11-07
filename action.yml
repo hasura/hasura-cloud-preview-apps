@@ -12,7 +12,7 @@ inputs:
   tier:
     description: 'Plan of the preview app'
     required: false
-    default: 'cloud_free'
+    default: 'cloud_free_v2'
   hasuraCloudGraphQLEndpoint:
     description: 'GraphQL endpoint of Hasura Cloud data service'
     required: false

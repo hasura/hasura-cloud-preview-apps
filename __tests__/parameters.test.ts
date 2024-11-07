@@ -7,7 +7,7 @@ import {expect, test} from '@jest/globals'
 
 const paramsBase: Parameters = {
   REGION: 'us-east-2',
-  PLAN: 'cloud_free',
+  PLAN: 'cloud_free_v2',
   GITHUB_TOKEN: 'test_token',
   CLOUD_DATA_GRAPHQL: 'https://data.pro.hasura.io/v1/graphql',
   NAME: 'sample-name',
